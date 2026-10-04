@@ -135,8 +135,8 @@ npm run build
 
 ### Environment
 - Backend `.env`: `APP_URL=http://localhost:8000`, `FRONTEND_URL=http://localhost:3000`, `SANCTUM_STATEFUL_DOMAINS=localhost:3000,127.0.0.1:3000`, `SESSION_DOMAIN=localhost`, `SESSION_DRIVER=database`, `DB_CONNECTION=mysql`, `APP_DEMO_MODE=true|false`.
-- `config/cors.php`: `paths` must include `api/*`, `login`, `logout`, `register`, `sanctum/csrf-cookie`; `supports_credentials => true`; `allowed_origins => [env('FRONTEND_URL')]`.
-- Frontend `.env.local`: `NEXT_PUBLIC_BACKEND_URL=http://localhost:8000`.
+- `config/cors.php`: `paths` must include `api/*` (login, register and logout live under `/api/v1/auth/*`), `sanctum/csrf-cookie`, and Breeze's `forgot-password`, `reset-password`, `verify-email/*`, `email/verification-notification`; `supports_credentials => true`; `allowed_origins => [env('FRONTEND_URL')]`.
+- Frontend `.env.local`: `NEXT_PUBLIC_BACKEND_URL=http://localhost:8000`, `NEXT_PUBLIC_DEMO_MODE=true|false`.
 - Use `localhost` consistently on both sides (never mix `localhost` and `127.0.0.1`) or the session cookie will not be sent.
 - Never commit `.env` files or secrets. Never print secrets in logs or responses.
 
@@ -155,13 +155,16 @@ npm run build
 
 - Each login endpoint accepts **only its own role**. A super admin posting to the company endpoint (or the reverse) is rejected with 403 and a clear message — never logged in and redirected.
 - Registration creates a `company` user only. The endpoint can never set `type`, `plan_id`, or any admin field from request input.
-- Flow: `GET /sanctum/csrf-cookie` → login → `GET /api/v1/me` (returns user, role, plan, limits, usage).
+- Flow: `GET /sanctum/csrf-cookie` → login → `GET /api/v1/me` (returns `UserResource`: id, name, email, role, avatar, status; plan, limits and usage are added by the plans milestone).
+- Login responses: wrong password → 422 with `errors.email`; wrong role or disabled account → 403 `{ message }` with no session created; already signed in → 409; rate-limited → 429. The `guest` alias is overridden (`EnsureGuest`) to answer JSON instead of redirecting.
+- Breeze's generic `/login`, `/register` and `/logout` web routes are removed on purpose — a role-agnostic login would bypass the one-role-per-endpoint rule. Breeze's forgot/reset-password and email-verification endpoints remain in `routes/auth.php`.
 - Logout: `POST /api/v1/auth/logout` — invalidates the session, regenerates the CSRF token, clears client auth state, redirects to the role's login page.
 - Backend route groups:
   - `/api/v1/admin/*` → `auth:sanctum`, `role:super_admin`
   - `/api/v1/*` (company) → `auth:sanctum`, `role:company` (+ `plan.active` once plans exist)
   - `/api/v1/auth/*`, `/api/v1/public/*` → guest / public
 - Frontend `proxy.ts` + server-side layout guards block cross-role access: a company user hitting `/admin/*` is redirected to `/dashboard`, a super admin hitting company routes is redirected to `/admin/dashboard`, and unauthenticated users go to the matching login page. **The backend is the real guard; the frontend is only UX.**
+  - Both `src/proxy.ts` and the layout guards (`requireRole()` in `features/auth/server.ts`) learn the role from `GET /api/v1/me`, forwarding the browser's cookies — the Laravel session cookie is encrypted, so there is nothing to read from it directly. If the API is unreachable the proxy passes the request through and the layout guard fails closed (error page, nothing protected rendered).
 - Disabled companies (`is_login_enabled = false`) are rejected at login: "Your account is disabled. Contact the administrator."
 - Login is rate-limited (5 attempts/min per email+IP).
 - Quick Access demo login buttons render only when demo mode is on.

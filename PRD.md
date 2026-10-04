@@ -42,12 +42,21 @@ It is modeled on WorkDo's Task SaaS: businesses create dedicated workspaces, man
 | `company` | Tenant account. Owns all its workspace data. Bound by its active plan. | User (Company) Dashboard |
 
 ### 2.2 Authentication Requirements
-- **Single login page** for both roles (`/login`). After login, redirect by role:
-  - `super_admin` → `/admin/dashboard`
-  - `company` → `/dashboard`
-- Login form: Email*, Password*, "Remember me", "Forgot password?" link, Log in button.
-- **Quick Access** demo buttons: "Login as Super Admin" and "Login as Company" — only rendered when `APP_DEMO_MODE=true`.
-- Language switcher (top-right) on the login page.
+- **Two login pages, one per role.** Each page posts to its own endpoint, and each endpoint accepts **only its own role**:
+
+  | | Company | Super Admin |
+  |---|---|---|
+  | Login page | `/login` | `/admin/login` |
+  | Register page | `/register` | none — the account is seeded |
+  | Login API | `POST /api/v1/auth/login` | `POST /api/v1/admin/auth/login` |
+  | After login | `/dashboard` | `/admin/dashboard` |
+
+- Logging in through the other role's page fails with **403 "These credentials do not match our records."** and creates no session. A wrong password returns 422 with the message under the Email field.
+- **Registration** (`/register`, `POST /api/v1/auth/register`) always creates a `company` user and logs it in; the role can never be set from the request.
+- **Logout** (`POST /api/v1/auth/logout`, both roles) invalidates the session, regenerates the CSRF token, clears client state and returns the user to their role's login page.
+- Login form: Email*, Password*, "Remember me", "Forgot password?" link, Log in button. Login is rate-limited to 5 failed attempts per minute per email + IP (429 with a "try again in N seconds" message).
+- **Quick Access** demo buttons — "Login as Company" on `/login`, "Login as Super Admin" on `/admin/login` — only rendered when demo mode is on (`APP_DEMO_MODE=true` backend, `NEXT_PUBLIC_DEMO_MODE=true` frontend).
+- Language switcher and dark-mode toggle (top-right) on every auth page.
 - Forgot password → email reset link → reset password page (Breeze flow).
 - Auth mechanism: **Laravel Breeze API stack → Sanctum SPA cookie authentication** (CSRF cookie + session). No tokens in localStorage.
 - A company whose login is disabled by the admin (`is_login_enabled = false`) cannot log in — show "Your account is disabled. Contact the administrator."
