@@ -12,10 +12,16 @@ const TONES = [
   'bg-stat-amber text-stat-amber-label',
 ] as const
 
+/** First letters of the first two words ("Tech Solutions Inc" → "TS"), or the first two
+ *  letters of a single word ("Company" → "CO") — the convention in the dashboard designs. */
 export function initialsOf(name: string): string {
   const words = name.trim().split(/\s+/).filter(Boolean)
-  const letters = words.length > 1 ? words[0][0] + words[words.length - 1][0] : (words[0] ?? '?').slice(0, 2)
+  const letters = words.length > 1 ? words[0][0] + words[1][0] : (words[0] ?? '?').slice(0, 2)
   return letters.toUpperCase()
+}
+
+function toneIndex(seed: number): number {
+  return Math.abs(seed) % TONES.length
 }
 
 export function Avatar({
@@ -34,7 +40,7 @@ export function Avatar({
     <span
       className={cn(
         'relative inline-flex size-avatar shrink-0 items-center justify-center overflow-hidden rounded-full text-[13px] font-semibold',
-        TONES[Math.abs(seed) % TONES.length],
+        TONES[toneIndex(seed)],
         className,
       )}
       aria-hidden="true"

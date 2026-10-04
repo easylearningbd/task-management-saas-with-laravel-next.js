@@ -16,11 +16,101 @@
     "mainNavigation": "Main navigation",
     "breadcrumb": "Breadcrumb",
     "userMenu": "Account menu",
+    "searchMenu": "Search menu...",
+    "noMenuResults": "No menu items match.",
+    "expandSection": "Show {item} pages",
     "sections": {
-      "overview": "Overview"
+      "overview": "Overview",
+      "management": "Management",
+      "systemControl": "System Control"
     },
     "nav": {
-      "dashboard": "Dashboard"
+      "dashboard": "Dashboard",
+      "companies": "Companies",
+      "mediaLibrary": "Media Library",
+      "plans": "Plans",
+      "planRequests": "Plan Requests",
+      "planOrders": "Plan Orders",
+      "coupons": "Coupons",
+      "currency": "Currency",
+      "referralProgram": "Referral Program",
+      "landingPage": "Landing Page",
+      "emailTemplates": "Email Templates",
+      "settings": "Settings"
+    }
+  },
+  "adminDashboard": {
+    "title": "Dashboard",
+    "subtitle": "System overview — companies, revenue, plans and recent activity.",
+    "refresh": "Refresh",
+    "viewAll": "View all",
+    "yearLabel": "Year",
+    "hero": {
+      "morning": "Good morning,",
+      "afternoon": "Good afternoon,",
+      "evening": "Good evening,",
+      "tagline": "Here’s what’s happening across your platform today.",
+      "registeredCompanies": "{count, plural, one {# registered company} other {# registered companies}}",
+      "companies": "Companies",
+      "growth": "Growth",
+      "shortcuts": "Shortcuts",
+      "coupons": "Coupons",
+      "referral": "Referral",
+      "settings": "Settings"
+    },
+    "stats": {
+      "totalRevenue": "Total Revenue",
+      "totalRevenueCaption": "from approved orders",
+      "totalCompanies": "Total Companies",
+      "totalCompaniesCaption": "{growth} this month",
+      "activePlans": "Active Plans",
+      "activePlansCaption": "subscription plans",
+      "monthlyGrowth": "Monthly Growth",
+      "monthlyGrowthCaption": "vs last month",
+      "pendingRequests": "Pending Requests",
+      "pendingRequestsCaption": "awaiting approval",
+      "actionNeeded": "Action needed"
+    },
+    "recentCompanies": {
+      "title": "Recently Registered Companies",
+      "subtitle": "Latest companies that joined the platform",
+      "active": "Active",
+      "inactive": "Inactive",
+      "emptyTitle": "No companies yet",
+      "emptyDescription": "Companies appear here as soon as they sign up."
+    },
+    "topPlans": {
+      "title": "Top Plans",
+      "subtitle": "By revenue generated",
+      "subscribers": "{count, plural, one {# subscriber} other {# subscribers}}",
+      "revenue": "revenue",
+      "share": "{plan} revenue share",
+      "emptyTitle": "No plans yet",
+      "emptyDescription": "Plans appear here once companies subscribe."
+    },
+    "companiesChart": {
+      "title": "New Companies Registered",
+      "subtitle": "Companies joined per month — {year}",
+      "total": "{count} total",
+      "tooltip": "Companies : {count}",
+      "emptyTitle": "No registrations in {year}",
+      "emptyDescription": "New companies will show here month by month."
+    },
+    "revenueChart": {
+      "title": "Monthly Revenue",
+      "subtitle": "Approved plan orders — {year}",
+      "emptyTitle": "No revenue in {year}",
+      "emptyDescription": "Approved plan orders will show here month by month."
+    },
+    "chartTable": {
+      "month": "Month",
+      "companies": "Companies",
+      "revenue": "Revenue"
+    },
+    "loadError": {
+      "title": "Couldn't load the dashboard",
+      "description": "Something went wrong while fetching the figures.",
+      "retry": "Try again"
     }
   },
   "errorPage": {

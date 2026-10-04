@@ -25,6 +25,31 @@ function CardDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return <p className={cn('text-body-sm text-muted-foreground', className)} {...props} />
 }
 
+/* The dashboard card head from design/admin-dashboard (components/ui/primitives.tsx
+   CardHeader): `title-card` + a `caption` subtitle on the left, an action slot on the right
+   (a "View all" link, a badge + year select), wrapping on narrow screens. */
+function CardHeading({
+  title,
+  subtitle,
+  action,
+  className,
+}: {
+  title: string
+  subtitle?: string
+  action?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div className={cn('flex flex-wrap items-start justify-between gap-x-4 gap-y-2 p-card pb-0', className)}>
+      <div className="min-w-0">
+        <h2 className="text-title-card">{title}</h2>
+        {subtitle ? <p className="text-caption font-normal text-muted-foreground">{subtitle}</p> : null}
+      </div>
+      {action ? <div className="flex shrink-0 items-center gap-2">{action}</div> : null}
+    </div>
+  )
+}
+
 function CardContent({ className, ...props }: React.ComponentProps<'div'>) {
   return <div className={cn('p-card', className)} {...props} />
 }
@@ -33,4 +58,4 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return <div className={cn('border-t border-border p-card', className)} {...props} />
 }
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
+export { Card, CardHeader, CardHeading, CardTitle, CardDescription, CardContent, CardFooter }
