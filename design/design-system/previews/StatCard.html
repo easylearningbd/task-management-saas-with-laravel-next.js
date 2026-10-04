@@ -1,0 +1,85 @@
+<!-- @dsCard group="Data display" height=404 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>StatCard — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+body{background:var(--background)}
+.grid{display:flex;gap:18px;flex-wrap:wrap}
+.sc{position:relative;width:298px;height:164px;border-radius:var(--radius-xl);padding:20px;overflow:hidden;
+  border:1px solid transparent}
+.sc .c1{position:absolute;right:-26px;top:-26px;width:92px;height:92px;border-radius:var(--radius-full);
+  opacity:.55;background:currentColor}
+.sc .c2{position:absolute;right:26px;bottom:-18px;width:44px;height:44px;border-radius:var(--radius-full);
+  opacity:.45;background:currentColor}
+.tile{position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:var(--stat-tile-size);height:var(--stat-tile-size);border-radius:var(--radius-tile)}
+.lab{position:relative;margin-top:16px;font-size:12px;line-height:16px;font-weight:500}
+.val{position:relative;margin-top:4px;font-size:24px;line-height:32px;font-weight:700;letter-spacing:-.01em}
+.cap2{position:relative;margin-top:2px;font-size:12px;line-height:16px;font-weight:500;opacity:.85}
+.arr{position:absolute;right:18px;top:20px}
+.chip{position:absolute;right:14px;top:14px;display:inline-flex;align-items:center;height:22px;padding:0 8px;
+  border-radius:var(--radius-md);font-size:11px;font-weight:500;background:var(--warning-soft);color:var(--warning);
+  box-shadow:0 0 0 1px rgba(166,95,0,.18)}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="grid">
+<div class="sc" style="background:var(--stat-emerald);color:var(--stat-emerald-icon-bg)">
+  <span class="c1"></span><span class="c2"></span>
+  <span class="tile" style="background:var(--stat-emerald-icon-bg);color:var(--stat-emerald-icon)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span>
+  <span class="arr" style="color:var(--stat-emerald-icon)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+  <div class="lab" style="color:var(--stat-emerald-label)">Total Revenue</div>
+  <div class="val" style="color:var(--stat-emerald-value)">$2,961.20</div>
+  <div class="cap2" style="color:var(--stat-emerald-label)">from approved orders</div>
+</div>
+<div class="sc" style="background:var(--stat-blue);color:var(--stat-blue-icon-bg)">
+  <span class="c1"></span><span class="c2"></span>
+  <span class="tile" style="background:var(--stat-blue-icon-bg);color:var(--stat-blue-icon)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></span>
+  
+  <div class="lab" style="color:var(--stat-blue-label)">Total Companies</div>
+  <div class="val" style="color:var(--stat-blue-value)">7</div>
+  <div class="cap2" style="color:var(--stat-blue-label)">+55% this month</div>
+</div>
+<div class="sc" style="background:var(--stat-violet);color:var(--stat-violet-icon-bg)">
+  <span class="c1"></span><span class="c2"></span>
+  <span class="tile" style="background:var(--stat-violet-icon-bg);color:var(--stat-violet-icon)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg></span>
+  
+  <div class="lab" style="color:var(--stat-violet-label)">Active Plans</div>
+  <div class="val" style="color:var(--stat-violet-value)">3</div>
+  <div class="cap2" style="color:var(--stat-violet-label)">subscription plans</div>
+</div>
+</div>
+<div class="grid" style="margin-top:18px">
+<div class="sc" style="background:var(--stat-indigo);color:var(--stat-indigo-icon-bg)">
+  <span class="c1"></span><span class="c2"></span>
+  <span class="tile" style="background:var(--stat-indigo-icon-bg);color:var(--stat-indigo-icon)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+  
+  <div class="lab" style="color:var(--stat-indigo-label)">Monthly Growth</div>
+  <div class="val" style="color:var(--stat-indigo-value)">+55%</div>
+  <div class="cap2" style="color:var(--stat-indigo-label)">vs last month</div>
+</div>
+<div class="sc" style="background:var(--stat-amber);color:var(--stat-amber-icon-bg)">
+  <span class="c1"></span><span class="c2"></span>
+  <span class="tile" style="background:var(--stat-amber-icon-bg);color:var(--stat-amber-icon)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></span>
+  <span class="chip">Action needed</span>
+  <div class="lab" style="color:var(--stat-amber-label)">Pending Requests</div>
+  <div class="val" style="color:var(--stat-amber-value)">6</div>
+  <div class="cap2" style="color:var(--stat-amber-label)">awaiting approval</div>
+</div>
+</div>
+
+</body>
+</html>

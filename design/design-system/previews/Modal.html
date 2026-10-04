@@ -1,0 +1,60 @@
+<!-- @dsCard group="Overlays" height=370 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>Modal — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+body{padding:0;background:var(--background)}
+.scrim{position:relative;height:360px;background:var(--overlay);display:flex;align-items:center;justify-content:center;
+  background-image:linear-gradient(var(--overlay),var(--overlay))}
+.sheet{width:468px;background:var(--card);border-radius:var(--radius-xl);box-shadow:var(--shadow-xl);overflow:hidden}
+.hd{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:22px 24px 18px}
+.t{font-size:18px;line-height:26px;font-weight:600}
+.x{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(--radius-lg);
+  color:var(--muted-foreground)}
+.bd{padding:0 24px 22px;display:flex;flex-direction:column;gap:18px}
+.f{display:flex;flex-direction:column;gap:6px}
+.lbl{font-size:14px;font-weight:500}
+.req{color:var(--destructive);margin-left:2px}
+.ctl{display:flex;align-items:center;height:var(--control-height);padding:0 12px;background:var(--card);
+  border:1px solid var(--input);border-radius:var(--radius-lg);font-size:14px;color:var(--muted-foreground)}
+.ctl.focus{border-color:var(--ring);box-shadow:var(--shadow-focus);color:var(--foreground)}
+.sw{position:relative;display:inline-block;width:44px;height:24px;border-radius:var(--radius-full);background:var(--track)}
+.sw i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:var(--radius-full);background:#fff;
+  box-shadow:var(--shadow-sm)}
+.inline{display:flex;align-items:center;gap:12px}
+.ft{display:flex;align-items:center;justify-content:flex-end;gap:10px;border-top:1px solid var(--border);
+  padding:14px 24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:var(--control-height);padding:0 16px;
+  border-radius:var(--radius-lg);font-size:14px;font-weight:500;border:1px solid transparent;box-shadow:var(--shadow-sm)}
+.out{background:var(--card);border-color:var(--border);color:var(--foreground)}
+.pri{background:var(--primary);color:var(--primary-foreground)}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="scrim">
+  <div class="sheet">
+    <div class="hd"><span class="t">Add New Company</span><span class="x"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span></div>
+    <div class="bd">
+      <div class="f"><span class="lbl">Company Name<span class="req">*</span></span><span class="ctl">enter company name</span></div>
+      <div class="f"><span class="lbl">Email<span class="req">*</span></span><span class="ctl focus">admin@healthcare.com</span></div>
+      <div class="inline"><span class="lbl">Enable Login</span><span class="sw"><i></i></span></div>
+    </div>
+    <div class="ft"><span class="btn out">Cancel</span><span class="btn pri">Save</span></div>
+  </div>
+</div>
+
+</body>
+</html>

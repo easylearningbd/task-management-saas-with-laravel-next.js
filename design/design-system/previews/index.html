@@ -1,0 +1,212 @@
+<!doctype html>
+<html data-theme="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TASK — component gallery</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--background);color:var(--foreground);font-family:var(--font-sans);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  height:auto;min-height:var(--topbar-height);padding:12px 24px;background:var(--card);
+  border-bottom:1px solid var(--border)}
+.logo{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.logo b{color:var(--primary)}
+.sub{font-size:13px;color:var(--muted-foreground)}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+nav a{display:inline-flex;align-items:center;height:var(--control-height-sm);padding:0 10px;
+  border-radius:var(--radius-lg);font-size:13px;font-weight:500;color:var(--muted-foreground);
+  text-decoration:none}
+nav a:hover{background:var(--accent);color:var(--foreground)}
+.tgl{display:inline-flex;gap:2px;padding:3px;border:1px solid var(--border);border-radius:var(--radius-lg);
+  background:var(--card);box-shadow:var(--shadow-sm)}
+.tgl button{height:26px;padding:0 12px;border:0;border-radius:var(--radius-md);background:transparent;
+  color:var(--muted-foreground);font:500 13px/1 var(--font-sans);cursor:pointer}
+.tgl button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground)}
+main{padding:24px}
+h2{margin:32px 0 14px;font-size:18px;line-height:26px;font-weight:600}
+h2:first-of-type{margin-top:8px}
+.cover{border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--border);
+  box-shadow:var(--shadow-xs);background:var(--card)}
+.cover iframe{display:block;border:0;max-width:100%}
+.grid{display:grid;grid-template-columns:1fr;gap:18px}
+.card{margin:0;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-xl);
+  box-shadow:var(--shadow-xs);overflow:hidden}
+figcaption{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:14px 18px;
+  border-bottom:1px solid var(--border)}
+.nm{font-size:14px;font-weight:600}
+.sum{font-size:13px;color:var(--muted-foreground)}
+.fr{overflow:auto}
+.fr iframe{display:block;border:0}
+footer{padding:28px 24px 40px;font-size:13px;color:var(--muted-foreground)}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo"><b>T</b>ASK</span>
+  <span class="sub">Component gallery &middot; 28 components, light and dark</span>
+  <nav><a href="#foundations">Foundations</a> <a href="#actions">Actions</a> <a href="#forms">Forms</a> <a href="#status">Status</a> <a href="#data-display">Data display</a> <a href="#navigation">Navigation</a> <a href="#overlays">Overlays</a></nav>
+  <span class="tgl">
+    <button id="l" aria-pressed="true">Light</button>
+    <button id="d" aria-pressed="false">Dark</button>
+  </span>
+</header>
+<main>
+<div class="cover"><iframe data-src="Cover.html" title="Cover" scrolling="no" style="width:960px;height:288px"></iframe></div>
+<h2 id="foundations">Foundations</h2>
+<div class="grid">
+<figure class="card">
+  <figcaption><span class="nm">Card</span><span class="sum">The white panel every page is built from: a 1px border hairline, radius-xl corners and shadow-xs — the border does the separating, not the shadow.</span></figcaption>
+  <div class="fr" style="height:307px"><iframe data-src="Card.html" title="Card" scrolling="no" style="width:960px;height:307px"></iframe></div>
+</figure>
+</div>
+<h2 id="actions">Actions</h2>
+<div class="grid">
+<figure class="card">
+  <figcaption><span class="nm">ButtonGhost</span><span class="sum">A borderless button, used almost entirely as the control-height-sm square icon button in table row actions, card headers and the breadcrumb bar.</span></figcaption>
+  <div class="fr" style="height:204px"><iframe data-src="ButtonGhost.html" title="ButtonGhost" scrolling="no" style="width:960px;height:204px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">ButtonOutline</span><span class="sum">The default button for everything that is not the page's one emerald action: Cancel, Back, Filters, Refresh, and every toolbar control.</span></figcaption>
+  <div class="fr" style="height:198px"><iframe data-src="ButtonOutline.html" title="ButtonOutline" scrolling="no" style="width:960px;height:198px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">ButtonPrimary</span><span class="sum">The one emerald button on a page — the single action that page exists for: Add Company, Add Coupon, Create Plan, Save.</span></figcaption>
+  <div class="fr" style="height:206px"><iframe data-src="ButtonPrimary.html" title="ButtonPrimary" scrolling="no" style="width:960px;height:206px"></iframe></div>
+</figure>
+</div>
+<h2 id="forms">Forms</h2>
+<div class="grid">
+<figure class="card">
+  <figcaption><span class="nm">Checkbox</span><span class="sum">A 16px box on radius-sm with a 1px input border, filling primary with a white Check when on.</span></figcaption>
+  <div class="fr" style="height:190px"><iframe data-src="Checkbox.html" title="Checkbox" scrolling="no" style="width:960px;height:190px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">DateInput</span><span class="sum">A native <input type="date"> wearing the Input skin, with a Calendar glyph in muted-foreground.</span></figcaption>
+  <div class="fr" style="height:152px"><iframe data-src="DateInput.html" title="DateInput" scrolling="no" style="width:960px;height:152px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Input</span><span class="sum">The 36px text field every form is built from: card ground, 1px input border, radius-lg, 12px side padding, body text with a muted-foreground placeholder.</span></figcaption>
+  <div class="fr" style="height:252px"><iframe data-src="Input.html" title="Input" scrolling="no" style="width:960px;height:252px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Radio</span><span class="sum">An 18px circle with a 1px input border; when selected the border becomes primary and a primary dot fills the middle 10px.</span></figcaption>
+  <div class="fr" style="height:201px"><iframe data-src="Radio.html" title="Radio" scrolling="no" style="width:960px;height:201px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">SearchInput</span><span class="sum">An Input at control-height-lg with a leading Search glyph, used once per list page as the first control in the filter bar.</span></figcaption>
+  <div class="fr" style="height:130px"><iframe data-src="SearchInput.html" title="SearchInput" scrolling="no" style="width:960px;height:130px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Select</span><span class="sum">A shadcn Select shaped exactly like Input — same height, border, radius and padding — with a trailing ChevronDown in muted-foreground.</span></figcaption>
+  <div class="fr" style="height:366px"><iframe data-src="Select.html" title="Select" scrolling="no" style="width:960px;height:366px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Switch</span><span class="sum">A 44×24 track on radius-full with a 20px white knob carrying shadow-sm.</span></figcaption>
+  <div class="fr" style="height:180px"><iframe data-src="Switch.html" title="Switch" scrolling="no" style="width:960px;height:180px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Textarea</span><span class="sum">The Input skin at three rows tall with 10px vertical padding and the browser resize grip left on — vertical only.</span></figcaption>
+  <div class="fr" style="height:210px"><iframe data-src="Textarea.html" title="Textarea" scrolling="no" style="width:960px;height:210px"></iframe></div>
+</figure>
+</div>
+<h2 id="status">Status</h2>
+<div class="grid">
+<figure class="card">
+  <figcaption><span class="nm">Badge</span><span class="sum">A 24px pill on radius-md with 10px side padding and badge text — soft ground, colored text, never a solid fill and never a border.</span></figcaption>
+  <div class="fr" style="height:307px"><iframe data-src="Badge.html" title="Badge" scrolling="no" style="width:960px;height:307px"></iframe></div>
+</figure>
+</div>
+<h2 id="data-display">Data display</h2>
+<div class="grid">
+<figure class="card">
+  <figcaption><span class="nm">Avatar</span><span class="sum">A radius-full circle at avatar-size, with 28px and 48px variants for dense rows and detail headers.</span></figcaption>
+  <div class="fr" style="height:222px"><iframe data-src="Avatar.html" title="Avatar" scrolling="no" style="width:960px;height:222px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">EmptyState</span><span class="sum">What a card shows instead of a table when there is nothing to show.</span></figcaption>
+  <div class="fr" style="height:364px"><iframe data-src="EmptyState.html" title="EmptyState" scrolling="no" style="width:960px;height:364px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Pagination</span><span class="sum">A row of control-height-sm cells on radius-lg with a 1px border and shadow-sm.</span></figcaption>
+  <div class="fr" style="height:224px"><iframe data-src="Pagination.html" title="Pagination" scrolling="no" style="width:960px;height:224px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">ProgressBar</span><span class="sum">A progress-height track on radius-sm in track, filled primary from the left.</span></figcaption>
+  <div class="fr" style="height:214px"><iframe data-src="ProgressBar.html" title="ProgressBar" scrolling="no" style="width:960px;height:214px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">ProgressRing</span><span class="sum">A ring for a single figure against its own maximum — plan storage, trial days used, quota consumed.</span></figcaption>
+  <div class="fr" style="height:187px"><iframe data-src="ProgressRing.html" title="ProgressRing" scrolling="no" style="width:960px;height:187px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">RowsPerPage</span><span class="sum">The page-size control in a table footer: a body-sm muted-foreground label followed by a compact control-height-sm select carrying the current value at 13px/500.</span></figcaption>
+  <div class="fr" style="height:245px"><iframe data-src="RowsPerPage.html" title="RowsPerPage" scrolling="no" style="width:960px;height:245px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">StatCard</span><span class="sum">The metric tile that opens a dashboard.</span></figcaption>
+  <div class="fr" style="height:404px"><iframe data-src="StatCard.html" title="StatCard" scrolling="no" style="width:1000px;height:404px" data-w="1000"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Table</span><span class="sum">The workhorse of both dashboards.</span></figcaption>
+  <div class="fr" style="height:331px"><iframe data-src="Table.html" title="Table" scrolling="no" style="width:960px;height:331px"></iframe></div>
+</figure>
+</div>
+<h2 id="navigation">Navigation</h2>
+<div class="grid">
+<figure class="card">
+  <figcaption><span class="nm">HeroBanner</span><span class="sum">The greeting panel that opens the dashboard, and the only dark surface in the product: a 160px hero card on radius-xl with soft glows rising from the bottom edge and a scatter of small dots.</span></figcaption>
+  <div class="fr" style="height:230px"><iframe data-src="HeroBanner.html" title="HeroBanner" scrolling="no" style="width:960px;height:230px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">SidebarNav</span><span class="sum">The fixed sidebar-width column both dashboards navigate from: a sidebar ground with a 1px sidebar-border right edge, full height, never scrolled away.</span></figcaption>
+  <div class="fr" style="height:518px"><iframe data-src="SidebarNav.html" title="SidebarNav" scrolling="no" style="width:960px;height:518px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Tabs</span><span class="sum">An underline tab bar for switching a table between subsets of the same records — the status filters on Plan Requests, the sections of a detail page.</span></figcaption>
+  <div class="fr" style="height:148px"><iframe data-src="Tabs.html" title="Tabs" scrolling="no" style="width:960px;height:148px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">ViewToggle</span><span class="sum">Two 34×26 icon buttons in a 3px-padded card shell with a 1px border and shadow-sm, sitting at the right end of a filter bar.</span></figcaption>
+  <div class="fr" style="height:210px"><iframe data-src="ViewToggle.html" title="ViewToggle" scrolling="no" style="width:960px;height:210px"></iframe></div>
+</figure>
+</div>
+<h2 id="overlays">Overlays</h2>
+<div class="grid">
+<figure class="card">
+  <figcaption><span class="nm">DropdownMenu</span><span class="sum">A popover panel on radius-lg with a 1px border, shadow-lg and 4px padding, anchored 4px below its trigger and aligned to the trigger's edge.</span></figcaption>
+  <div class="fr" style="height:362px"><iframe data-src="DropdownMenu.html" title="DropdownMenu" scrolling="no" style="width:960px;height:362px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Modal</span><span class="sum">A card sheet on radius-xl with shadow-xl, centred over an overlay scrim.</span></figcaption>
+  <div class="fr" style="height:370px"><iframe data-src="Modal.html" title="Modal" scrolling="no" style="width:960px;height:370px"></iframe></div>
+</figure>
+<figure class="card">
+  <figcaption><span class="nm">Toast</span><span class="sum">A 396px popover card on radius-lg with shadow-lg and a 3px left edge in the status color — success or danger.</span></figcaption>
+  <div class="fr" style="height:299px"><iframe data-src="Toast.html" title="Toast" scrolling="no" style="width:960px;height:299px"></iframe></div>
+</figure>
+</div>
+</main>
+<footer>Rendered from the same preview files as the design system. Open any one directly &mdash;
+<code>previews/Button&#8203;Primary.html?theme=dark</code> &mdash; or read the rules in
+<code>design-system/</code>.</footer>
+<script>
+var theme = 'light';
+function paint() {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('l').setAttribute('aria-pressed', String(theme === 'light'));
+  document.getElementById('d').setAttribute('aria-pressed', String(theme === 'dark'));
+  document.querySelectorAll('iframe').forEach(function (f) {
+    f.src = f.getAttribute('data-src') + '?theme=' + theme;
+  });
+}
+document.getElementById('l').onclick = function () { theme = 'light'; paint(); };
+document.getElementById('d').onclick = function () { theme = 'dark'; paint(); };
+paint();
+</script>
+</body>
+</html>

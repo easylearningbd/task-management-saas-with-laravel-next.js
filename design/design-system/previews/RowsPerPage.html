@@ -1,0 +1,43 @@
+<!-- @dsCard group="Data display" height=245 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>RowsPerPage — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+.rp{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted-foreground)}
+.sel{display:inline-flex;align-items:center;gap:8px;height:var(--control-height-sm);padding:0 10px;
+  background:var(--card);border:1px solid var(--input);border-radius:var(--radius-lg);
+  color:var(--foreground);font-size:13px;font-weight:500;box-shadow:var(--shadow-sm)}
+.sel.focus{border-color:var(--ring);box-shadow:var(--shadow-focus)}
+.pop{margin-top:6px;width:84px;background:var(--popover);border:1px solid var(--border);
+  border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:4px}
+.opt{display:flex;align-items:center;justify-content:space-between;height:30px;padding:0 8px;
+  border-radius:var(--radius-md);font-size:13px}
+.opt.on{background:var(--accent)}
+.opt.cur{color:var(--primary-strong);font-weight:500}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="row" style="gap:40px">
+  <div class="col"><span class="rp">Rows per page: <span class="sel">10 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></span><span class="cap">default</span></div>
+  <div class="col"><span class="rp">Rows per page: <span class="sel focus">25 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></span><span class="cap">focus-visible</span></div>
+  <div class="col">
+    <span class="rp">Rows per page: <span class="sel">10 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></span>
+    <span class="pop"><span class="opt cur">10 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="opt on">25</span><span class="opt">50</span><span class="opt">100</span></span>
+  </div>
+</div>
+
+</body>
+</html>

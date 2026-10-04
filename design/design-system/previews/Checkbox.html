@@ -1,0 +1,48 @@
+<!-- @dsCard group="Forms" height=190 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>Checkbox — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+.cb{position:relative;display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;
+  border-radius:var(--radius-sm);border:1px solid var(--input);background:var(--card);color:var(--primary-foreground)}
+.cb.on{background:var(--primary);border-color:var(--primary)}
+.cb.mix{background:var(--primary);border-color:var(--primary)}
+.cb.hover{border-color:var(--muted-foreground)}
+.cb.focus{border-color:var(--ring);box-shadow:var(--shadow-focus)}
+.cb.dis{opacity:var(--opacity-disabled)}
+.cb svg{stroke-width:3}
+.bar{width:8px;height:2px;border-radius:1px;background:currentColor}
+.opt{display:inline-flex;align-items:center;gap:8px;font-size:14px}
+.rowsel{display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;background:var(--accent);
+  border-radius:var(--radius-lg);font-size:14px}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="row" style="gap:26px">
+  <div class="col"><span class="cb"></span><span class="cap">off</span></div>
+  <div class="col"><span class="cb on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="cap">checked</span></div>
+  <div class="col"><span class="cb mix"><span class="bar"></span></span><span class="cap">indeterminate</span></div>
+  <div class="col"><span class="cb hover"></span><span class="cap">hover</span></div>
+  <div class="col"><span class="cb on focus"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="cap">focus-visible</span></div>
+  <div class="col"><span class="cb dis"></span><span class="cap">disabled</span></div>
+</div>
+<div class="row" style="margin-top:22px;gap:28px">
+  <div class="col"><span class="opt"><span class="cb on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Send welcome email</span><span class="cap">form option</span></div>
+  <div class="col"><span class="rowsel"><span class="cb on"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>3 companies selected</span><span class="cap">bulk selection header</span></div>
+</div>
+
+</body>
+</html>

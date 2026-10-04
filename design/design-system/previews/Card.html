@@ -1,0 +1,45 @@
+<!-- @dsCard group="Foundations" height=307 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>Card — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+body{background:var(--background)}
+.card{width:420px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-xl);
+  box-shadow:var(--shadow-xs)}
+.hd{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:24px 24px 0}
+.t{font-size:16px;line-height:24px;font-weight:600}
+.s{font-size:13px;line-height:18px;color:var(--muted-foreground);margin-top:2px}
+.lnk{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-size:13px;font-weight:500;color:var(--primary-strong)}
+.bd{padding:16px 24px 24px;display:flex;flex-direction:column;gap:12px}
+.ln{height:10px;border-radius:var(--radius-sm);background:var(--muted)}
+.foot{border-top:1px solid var(--border);padding:14px 24px;font-size:13px;color:var(--muted-foreground)}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="card">
+  <div class="hd">
+    <div>
+      <div class="t">Recently Registered Companies</div>
+      <div class="s">Latest companies that joined the platform</div>
+    </div>
+    <span class="lnk">View all <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+  </div>
+  <div class="bd"><div class="ln" style="width:70%"></div><div class="ln" style="width:92%"></div><div class="ln" style="width:54%"></div></div>
+  <div class="foot">Showing 1 to 7 of 7 results</div>
+</div>
+
+</body>
+</html>

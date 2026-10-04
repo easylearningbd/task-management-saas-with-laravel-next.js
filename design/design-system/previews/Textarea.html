@@ -1,0 +1,52 @@
+<!-- @dsCard group="Forms" height=210 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>Textarea — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+.f{display:flex;flex-direction:column;gap:6px;width:230px}
+.lbl{font-size:14px;line-height:20px;font-weight:500}
+.req{color:var(--destructive);margin-left:2px}
+.ctl{display:flex;align-items:center;gap:8px;height:var(--control-height);padding:0 12px;
+  white-space:nowrap;overflow:hidden;
+  background:var(--card);border:1px solid var(--input);border-radius:var(--radius-lg);
+  font-size:14px;line-height:20px;color:var(--foreground);transition:border-color .15s,box-shadow .15s}
+.ph{color:var(--muted-foreground)}
+.ctl.hover{border-color:var(--muted-foreground)}
+.ctl.focus{border-color:var(--ring);box-shadow:var(--shadow-focus)}
+.ctl.err{border-color:var(--destructive)}
+.ctl.err.focus{box-shadow:var(--shadow-focus-danger)}
+.ctl.dis{background:var(--muted);opacity:var(--opacity-disabled);cursor:not-allowed}
+.help{font-size:12px;line-height:16px;font-weight:500;color:var(--muted-foreground)}
+.help.bad{color:var(--danger)}
+.mut{color:var(--muted-foreground);opacity:var(--opacity-muted-icon)}
+
+.ta{height:92px;align-items:flex-start;padding:10px 12px;resize:none;position:relative}
+.grip{position:absolute;right:3px;bottom:3px;color:var(--muted-foreground);opacity:.5}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="row">
+  <div class="f" style="width:300px"><span class="lbl">Description</span>
+    <span class="ctl ta"><span class="ph">Enter a brief description of the plan</span>
+    <svg class="grip" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><path d="M9 3 3 9M9 6.5 6.5 9"/></svg></span>
+    <span class="cap">default · 3 rows</span></div>
+  <div class="f" style="width:300px"><span class="lbl">Description</span>
+    <span class="ctl ta focus">Ideal for growing businesses with multiple stores and advanced needs.</span>
+    <span class="help">64 / 280</span></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!-- @dsCard group="Data display" height=364 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>EmptyState — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+body{background:var(--background)}
+.wrap{width:560px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-xl);
+  padding:48px 24px;text-align:center}
+.ic{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:var(--radius-full);
+  background:var(--muted);color:var(--muted-foreground)}
+.t{margin-top:16px;font-size:16px;line-height:24px;font-weight:600}
+.d{margin-top:6px;font-size:14px;line-height:20px;color:var(--muted-foreground);max-width:340px;
+  margin-left:auto;margin-right:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--control-height);
+  padding:0 16px;margin-top:18px;border-radius:var(--radius-lg);background:var(--primary);
+  color:var(--primary-foreground);font-size:14px;font-weight:500;box-shadow:var(--shadow-sm)}
+.alt{background:transparent;color:var(--muted-foreground);box-shadow:none;border:1px solid var(--border)}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="wrap">
+  <span class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+  <div class="t">No companies yet</div>
+  <div class="d">Companies appear here once they register or you add them. Start with the first one.</div>
+  <span class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Add Company</span>
+</div>
+
+</body>
+</html>

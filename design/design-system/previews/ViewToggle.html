@@ -1,0 +1,48 @@
+<!-- @dsCard group="Navigation" height=210 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>ViewToggle — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+.seg{display:inline-flex;align-items:center;gap:2px;padding:3px;background:var(--card);
+  border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+.sb{display:inline-flex;align-items:center;justify-content:center;width:34px;height:26px;
+  border-radius:var(--radius-md);color:var(--muted-foreground)}
+.sb.on{background:var(--primary);color:var(--primary-foreground)}
+.sb.hov{background:var(--accent);color:var(--foreground)}
+.sb.focus{box-shadow:var(--shadow-focus)}
+.big{display:inline-flex;align-items:center;gap:4px;padding:4px;background:var(--muted);
+  border-radius:var(--radius-tile)}
+.bb{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 20px;
+  border-radius:var(--radius-lg);font-size:14px;font-weight:500;color:var(--muted-foreground)}
+.bb.on{background:var(--card);color:var(--foreground);box-shadow:var(--shadow-sm)}
+.pill{display:inline-flex;align-items:center;height:22px;padding:0 8px;margin-left:8px;
+  border-radius:var(--radius-md);background:var(--success-solid);color:#fff;font-size:11px;font-weight:500}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="row" style="gap:30px;align-items:center">
+  <div class="col"><span class="seg"><span class="sb on"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span><span class="sb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span></span><span class="cap">list active</span></div>
+  <div class="col"><span class="seg"><span class="sb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span><span class="sb on"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span></span><span class="cap">grid active</span></div>
+  <div class="col"><span class="seg"><span class="sb on"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span><span class="sb hov"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span></span><span class="cap">hover</span></div>
+  <div class="col"><span class="seg"><span class="sb on focus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span><span class="sb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span></span><span class="cap">focus-visible</span></div>
+</div>
+<div class="row" style="margin-top:20px">
+  <div class="col"><span class="big"><span class="bb on">Monthly</span><span class="bb">Yearly<span class="pill">Save 20%</span></span></span>
+  <span class="cap">SegmentedControl · the same part at 44px</span></div>
+</div>
+
+</body>
+</html>

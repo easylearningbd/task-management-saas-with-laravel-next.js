@@ -1,0 +1,47 @@
+<!-- @dsCard group="Data display" height=224 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>Pagination — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+.pg{display:inline-flex;align-items:center;gap:6px}
+.pc{display:inline-flex;align-items:center;justify-content:center;min-width:var(--control-height-sm);
+  height:var(--control-height-sm);padding:0 10px;border-radius:var(--radius-lg);border:1px solid var(--border);
+  background:var(--card);font-size:13px;font-weight:500;box-shadow:var(--shadow-sm)}
+.pc.on{background:var(--primary);border-color:var(--primary);color:var(--primary-foreground)}
+.pc.hover{background:var(--accent)}
+.pc.dis{opacity:var(--opacity-disabled);cursor:not-allowed}
+.pc.focus{border-color:var(--ring);box-shadow:var(--shadow-focus)}
+.gap{color:var(--muted-foreground);padding:0 2px;font-size:13px}
+.res{font-size:13px;color:var(--muted-foreground)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:24px;width:620px;
+  border-top:1px solid var(--border);padding-top:14px}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="row" style="gap:22px">
+  <div class="col"><span class="pg">
+    <span class="pc dis">&laquo; Previous</span><span class="pc on">1</span><span class="pc hover">2</span>
+    <span class="pc">3</span><span class="gap">…</span><span class="pc">12</span><span class="pc">Next &raquo;</span>
+  </span><span class="cap">first page · page 2 hovered</span></div>
+</div>
+<div class="bar" style="margin-top:20px">
+  <span class="res">Showing 1 to 10 of 12 results</span>
+  <span class="pg"><span class="pc">&laquo; Previous</span><span class="pc on">1</span><span class="pc">2</span><span class="pc focus">Next &raquo;</span></span>
+</div>
+<p class="cap" style="margin-top:9px">the table footer, with the result count on the left</p>
+
+</body>
+</html>

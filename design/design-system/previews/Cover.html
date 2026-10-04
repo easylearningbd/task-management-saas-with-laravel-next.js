@@ -1,0 +1,55 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>TASK — cover</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+html,body{margin:0}
+.cv{position:relative;width:960px;height:288px;background:var(--background);overflow:hidden;
+  font-family:var(--font-sans);-webkit-font-smoothing:antialiased}
+.art{position:absolute;inset:0}
+.brand{fill:var(--primary)}
+.navy{fill:var(--secondary-foreground)}
+.blue{fill:var(--stat-blue-icon)}
+.amber{fill:var(--stat-amber-icon)}
+.quiet{fill:var(--muted)}
+.xl{rx:12px}
+.lg{rx:8px}
+.txt{position:absolute;left:56px;bottom:30px;width:420px}
+.nm{margin:0;font-size:120px;line-height:.9;font-weight:700;letter-spacing:-.045em;color:var(--foreground)}
+.nm b{color:var(--primary);font-weight:700}
+.tg{margin:10px 0 0;font-size:14px;line-height:18px;font-weight:500;color:var(--muted-foreground)}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+<div class="cv">
+  <!-- blocks: primary 216x152 xl, secondary-foreground 216x72 xl x2, stat-blue-icon 104x72 lg,
+       stat-amber-icon 104x72 lg, muted 104x72 lg x2 — emerald takes the largest slab because
+       the brand is one green; the ink slabs stand for the dashboard's dark hero and are bound
+       to secondary-foreground, not hero, so they stay a figure on the dark ground too.
+       arrangement: a 4-column modular grid, 104px columns on an 8px (space-2) gutter,
+       72px rows, with the brand slab merged two-wide and two-tall — the dashboard's own
+       stat row, stacked.
+       pattern: geometric / modular / dense UI -> tiles cut by the radius tokens, some merged
+       two-wide, because this system is a table-and-card product on a 4px grid whose whole
+       surface vocabulary is the rounded rectangle.
+       scales: x 504/616/728/840 (104 + space-2 gutters), y 24/104/184 (72 + space-2),
+       corners radius-xl 12px on the two big slabs, radius-lg 8px on the small tiles. -->
+  <svg class="art" width="960" height="288" viewBox="0 0 960 288" aria-hidden="true">
+    <rect class="brand xl" x="504" y="24"  width="216" height="152"/>
+    <rect class="navy  xl" x="728" y="24"  width="216" height="72"/>
+    <rect class="blue  lg" x="728" y="104" width="104" height="72"/>
+    <rect class="quiet lg" x="840" y="104" width="104" height="72"/>
+    <rect class="amber lg" x="504" y="184" width="104" height="72"/>
+    <rect class="quiet lg" x="616" y="184" width="104" height="72"/>
+    <rect class="navy  xl" x="728" y="184" width="216" height="72"/>
+  </svg>
+  <div class="txt">
+    <p class="nm"><b>T</b>ASK</p>
+    <p class="tg">One system, two dashboards.</p>
+  </div>
+</div>
+</body>
+</html>

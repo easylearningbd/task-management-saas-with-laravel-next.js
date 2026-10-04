@@ -1,0 +1,50 @@
+<!-- @dsCard group="Forms" height=201 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>Radio — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+.rd{position:relative;display:inline-block;width:18px;height:18px;border-radius:var(--radius-full);
+  border:1px solid var(--input);background:var(--card)}
+.rd.on{border-color:var(--primary);border-width:1px}
+.rd.on::after{content:"";position:absolute;inset:4px;border-radius:var(--radius-full);background:var(--primary)}
+.rd.hover{border-color:var(--muted-foreground)}
+.rd.focus{border-color:var(--ring);box-shadow:var(--shadow-focus)}
+.rd.dis{opacity:var(--opacity-disabled)}
+.opt{display:inline-flex;align-items:center;gap:8px;font-size:14px}
+.grp{display:flex;gap:24px;align-items:center}
+.lbl{font-size:14px;font-weight:500;margin-bottom:8px;display:block}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="row" style="gap:26px">
+  <div class="col"><span class="rd"></span><span class="cap">off</span></div>
+  <div class="col"><span class="rd on"></span><span class="cap">on</span></div>
+  <div class="col"><span class="rd hover"></span><span class="cap">hover</span></div>
+  <div class="col"><span class="rd on focus"></span><span class="cap">focus-visible</span></div>
+  <div class="col"><span class="rd dis"></span><span class="cap">disabled</span></div>
+  <div class="col"><span class="rd on dis"></span><span class="cap">disabled on</span></div>
+</div>
+<div style="margin-top:22px">
+  <span class="lbl">Code Generation<span style="color:var(--destructive);margin-left:2px">*</span></span>
+  <span class="grp">
+    <span class="opt"><span class="rd on"></span>Manual Entry</span>
+    <span class="opt"><span class="rd"></span>Auto Generate</span>
+  </span>
+  <span class="cap" style="display:block;margin-top:8px">inline group · two or three choices</span>
+</div>
+
+</body>
+</html>

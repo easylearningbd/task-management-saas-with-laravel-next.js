@@ -1,0 +1,73 @@
+<!-- @dsCard group="Navigation" height=230 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>HeroBanner — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+body{padding:20px;background:var(--background)}
+.hero{position:relative;height:160px;border-radius:var(--radius-xl);overflow:hidden;background:var(--hero);
+  color:var(--hero-foreground);padding:24px 28px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+.gl{position:absolute;inset:0;
+  background:
+   radial-gradient(420px 150px at 18% 118%, var(--hero-glow-teal) 0%, transparent 70%),
+   radial-gradient(360px 140px at 62% 128%, var(--hero-glow-slate) 0%, transparent 72%),
+   radial-gradient(300px 120px at 96% 110%, var(--hero-glow-teal) 0%, transparent 70%)}
+.dots{position:absolute;inset:0;opacity:.9}
+.d{position:absolute;width:5px;height:5px;border-radius:var(--radius-full);background:var(--hero-accent);opacity:.75}
+.d.w{background:var(--hero-foreground);opacity:.35}
+.l{position:relative}
+.g{font-size:14px;line-height:20px;color:var(--hero-muted)}
+.n{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.s{font-size:13px;line-height:18px;color:var(--hero-muted);margin-top:6px}
+.reg{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;font-weight:500;color:var(--hero-accent)}
+.dd{display:inline-flex;gap:4px}
+.dd i{width:5px;height:5px;border-radius:var(--radius-full);background:var(--hero-accent);display:block}
+.dd i:nth-child(2){opacity:.6}.dd i:nth-child(3){opacity:.3}
+.r{position:relative;display:flex;align-items:center;gap:10px}
+.chip{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:72px;height:56px;
+  border-radius:var(--radius-lg);background:var(--hero-chip);border:1px solid var(--hero-chip-border);gap:2px}
+.chip b{font-size:17px;line-height:22px;font-weight:700}
+.chip span{font-size:11px;line-height:14px;color:var(--hero-muted)}
+.chip.ac b{color:var(--hero-accent)}
+.sc{display:flex;flex-direction:column;align-items:center;justify-content:center;width:58px;height:56px;gap:4px;
+  color:var(--hero-muted)}
+.sc span{font-size:10px;line-height:12px}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="hero">
+  <span class="gl"></span>
+  <span class="dots">
+    <i class="d" style="left:41%;top:14%"></i><i class="d w" style="left:73%;top:9%"></i>
+    <i class="d w" style="left:36%;top:78%"></i><i class="d" style="left:88%;top:70%"></i>
+    <i class="d w" style="left:57%;top:46%;width:3px;height:3px"></i>
+  </span>
+  <span class="l">
+    <div class="g">Good morning,</div>
+    <div class="n">Super Admin</div>
+    <div class="s">Here's what's happening across your platform today.</div>
+    <div class="reg"><span class="dd"><i></i><i></i><i></i></span>7 registered companies</div>
+  </span>
+  <span class="r">
+    <span class="chip"><b>7</b><span>Companies</span></span>
+    <span class="chip ac"><b>55%</b><span>Growth</span></span>
+    <span class="sc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.41l8.7 8.71a2.43 2.43 0 0 0 3.42 0l6.58-6.59a2.43 2.43 0 0 0 0-3.41z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg><span>Coupons</span></span>
+    <span class="sc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg><span>Referral</span></span>
+    <span class="sc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg><span>Settings</span></span>
+  </span>
+</div>
+
+</body>
+</html>

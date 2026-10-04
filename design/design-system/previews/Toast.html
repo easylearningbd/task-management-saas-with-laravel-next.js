@@ -1,0 +1,45 @@
+<!-- @dsCard group="Overlays" height=299 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>Toast — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+.tw{width:396px;display:flex;align-items:flex-start;gap:12px;background:var(--popover);
+  border:1px solid var(--border);border-left:3px solid var(--success);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);padding:14px 14px 14px 13px}
+.tw.err{border-left-color:var(--danger)}
+.ic{color:var(--success);margin-top:1px}
+.err .ic{color:var(--danger)}
+.tt{font-size:14px;line-height:20px;font-weight:500}
+.td{font-size:13px;line-height:18px;color:var(--muted-foreground);margin-top:2px}
+.x{margin-left:auto;color:var(--muted-foreground);display:inline-flex}
+.act{display:inline-flex;align-items:center;height:28px;padding:0 10px;margin-top:10px;border-radius:var(--radius-lg);
+  border:1px solid var(--border);font-size:13px;font-weight:500;color:var(--foreground)}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="col" style="gap:14px">
+  <span class="tw"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+    <span><span class="tt">Company created</span><span class="td">Healthcare Systems was added and an invite was sent.</span></span>
+    <span class="x"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span></span>
+  <span class="tw err"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg></span>
+    <span><span class="tt">Couldn't update the plan</span><span class="td">The plan request was already approved by someone else.</span>
+    <span class="act">Reload</span></span>
+    <span class="x"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span></span>
+</div>
+<p class="cap" style="margin-top:12px">success · error with a recovery action</p>
+
+</body>
+</html>

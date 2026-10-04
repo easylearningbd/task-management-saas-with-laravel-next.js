@@ -1,0 +1,57 @@
+<!-- @dsCard group="Data display" height=222 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>Avatar — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+.av{position:relative;display:inline-flex;align-items:center;justify-content:center;width:var(--avatar-size);
+  height:var(--avatar-size);border-radius:var(--radius-full);overflow:hidden;flex:none;
+  font-size:13px;font-weight:600;letter-spacing:.01em}
+.av.ph{background:var(--muted);color:var(--muted-foreground)}
+.a1{background:var(--primary-soft);color:var(--primary-strong)}
+.a2{background:var(--info-soft);color:var(--info)}
+.a3{background:var(--stat-violet);color:var(--stat-violet-label)}
+.a4{background:var(--stat-amber);color:var(--stat-amber-label)}
+.sm{width:28px;height:28px;font-size:11px}
+.lg{width:48px;height:48px;font-size:16px}
+.ring{box-shadow:0 0 0 2px var(--avatar-ring)}
+.stack{display:inline-flex}
+.stack .av{margin-left:-10px}
+.stack .av:first-child{margin-left:0}
+.who{display:inline-flex;align-items:center;gap:12px}
+.nm{font-size:14px;font-weight:500;line-height:20px}
+.em{font-size:13px;line-height:18px;color:var(--muted-foreground)}
+.dot{position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:var(--radius-full);
+  background:var(--success-solid);box-shadow:0 0 0 2px var(--card)}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="row" style="gap:24px;align-items:center">
+  <div class="col"><span class="av ph"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="cap">photo fallback</span></div>
+  <div class="col"><span class="av a1">HS</span><span class="cap">initials · 36px</span></div>
+  <div class="col"><span class="av a2 sm">FS</span><span class="cap">sm · 28px</span></div>
+  <div class="col"><span class="av a3 lg">CA</span><span class="cap">lg · 48px</span></div>
+  <div class="col"><span class="av a4">TS<span class="dot"></span></span><span class="cap">with presence</span></div>
+  <div class="col"><span class="stack"><span class="av a1 ring">HS</span><span class="av a2 ring">FS</span><span class="av a4 ring">TS</span><span class="av ph ring">+4</span></span><span class="cap">stacked</span></div>
+</div>
+<div class="row" style="margin-top:22px">
+  <div class="col">
+    <span class="who"><span class="av a2">HS</span><span><span class="nm">Healthcare Systems</span><br><span class="em">admin@healthcare.com</span></span></span>
+    <span class="cap">the table row identity cell</span>
+  </div>
+</div>
+
+</body>
+</html>

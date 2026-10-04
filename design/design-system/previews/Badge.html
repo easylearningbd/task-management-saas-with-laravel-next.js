@@ -1,0 +1,57 @@
+<!-- @dsCard group="Status" height=307 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>Badge — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+.bg{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 10px;border-radius:var(--radius-md);
+  font-size:12px;line-height:16px;font-weight:500;white-space:nowrap}
+.ok{background:var(--success-soft);color:var(--success)}
+.inf{background:var(--info-soft);color:var(--info)}
+.wr{background:var(--warning-soft);color:var(--warning)}
+.dg{background:var(--danger-soft);color:var(--danger)}
+.nu{background:var(--neutral-soft);color:var(--neutral)}
+.solid{background:var(--success-solid);color:#ffffff}
+.code{background:var(--code);color:var(--code-foreground);font-family:var(--font-mono);
+  font-size:13px;letter-spacing:.01em;border-radius:var(--radius-md);height:28px;padding:0 10px}
+.mny{font-family:var(--font-mono);font-size:14px;font-weight:500}
+.ttl{font-size:11px;font-weight:600;color:var(--muted-foreground);letter-spacing:.04em;text-transform:uppercase;margin:0 0 9px}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<p class="ttl">Status</p>
+<div class="row" style="gap:10px">
+  <span class="bg ok">Active</span><span class="bg ok">Paid</span><span class="bg ok">Approved</span>
+  <span class="bg inf">Completed</span><span class="bg inf">Signed</span><span class="bg inf">Sent</span>
+  <span class="bg wr">Pending</span><span class="bg wr">Partial</span>
+  <span class="bg dg">Rejected</span><span class="bg dg">Cancelled</span><span class="bg dg">Urgent</span><span class="bg dg">Overdue</span>
+  <span class="bg nu">Draft</span><span class="bg nu">Inactive</span>
+</div>
+<p class="ttl" style="margin-top:20px">Plan &amp; special</p>
+<div class="row" style="gap:10px">
+  <span class="bg inf">Free</span><span class="bg inf">Starter</span><span class="bg inf">Pro</span>
+  <span class="bg inf">Default</span>
+  <span class="bg inf"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> 14 days free trial</span>
+  <span class="bg solid">Save 20%</span>
+  <span class="bg wr"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg> Action needed</span>
+</div>
+<p class="ttl" style="margin-top:20px">Mono</p>
+<div class="row" style="gap:10px;align-items:center">
+  <span class="bg code">WELCOME50</span><span class="bg code">BLACKFRI30</span>
+  <span class="mny">$2,961.20</span><span class="mny" style="color:var(--muted-foreground)">$0.00</span>
+</div>
+
+</body>
+</html>

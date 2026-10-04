@@ -1,0 +1,65 @@
+<!-- @dsCard group="Navigation" height=518 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="tokens.css"><title>SidebarNav — preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{padding:20px;font-family:var(--font-sans);background:var(--card);color:var(--foreground);
+  font-size:14px;line-height:20px;-webkit-font-smoothing:antialiased}
+.row{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.cap{font-size:11px;line-height:14px;color:var(--muted-foreground);font-weight:500}
+svg{display:block;flex:none}
+
+body{padding:0;background:var(--background)}
+.sb{width:var(--sidebar-width);background:var(--sidebar);border-right:1px solid var(--sidebar-border);
+  padding:0 0 16px;min-height:380px}
+.logo{display:flex;align-items:center;height:64px;padding:0 24px;font-size:26px;font-weight:700;
+  letter-spacing:-.02em;color:var(--sidebar-foreground)}
+.logo b{color:var(--sidebar-primary);font-weight:700}
+.srch{margin:0 20px 18px;display:flex;align-items:center;gap:8px;height:var(--control-height);
+  padding:0 12px;border:1px solid var(--input);border-radius:var(--radius-lg);
+  color:var(--muted-foreground);font-size:14px}
+.sec{padding:14px 24px 6px;font-size:12px;line-height:16px;font-weight:600;color:var(--sidebar-muted)}
+.it{display:flex;align-items:center;gap:12px;height:40px;margin:0 12px;padding:0 12px;
+  border-radius:var(--radius-lg);font-size:14px;font-weight:500;color:var(--sidebar-foreground)}
+.it.on{color:var(--sidebar-primary)}
+.it.hov{background:var(--sidebar-accent)}
+.it .ch{margin-left:auto;color:var(--muted-foreground)}
+.it.dis{opacity:var(--opacity-disabled)}
+.sub{margin:0 12px 0 28px;padding-left:14px;border-left:1px solid var(--sidebar-border);display:flex;
+  flex-direction:column}
+.si{position:relative;display:flex;align-items:center;height:34px;padding:0 10px;font-size:14px;
+  border-radius:var(--radius-lg);color:var(--sidebar-foreground)}
+.si.on{color:var(--sidebar-primary);font-weight:500}
+.si.on::before{content:"";position:absolute;left:-15px;top:7px;bottom:7px;width:var(--border-width-2);
+  border-radius:var(--radius-sm);background:var(--sidebar-primary)}
+.bdg{margin-left:auto;display:inline-flex;align-items:center;height:20px;padding:0 6px;border-radius:var(--radius-md);
+  background:var(--warning-soft);color:var(--warning);font-size:11px;font-weight:500}
+</style>
+<script>(function(){var t=new URLSearchParams(location.search).get("theme");document.documentElement.setAttribute("data-theme",t==="dark"?"dark":"light");})();</script>
+</head>
+<body>
+
+<div class="sb">
+  <div class="logo"><b>T</b>ASK</div>
+  <div class="srch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> Search menu...</div>
+  <div class="sec">Overview</div>
+  <div class="it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg> Dashboard</div>
+  <div class="sec">Management</div>
+  <div class="it on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg> Companies</div>
+  <div class="it hov"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.83 0L6 21"/></svg> Media Library</div>
+  <div class="it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg> Plans <span class="ch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+  <div class="sub">
+    <span class="si on">Plan</span>
+    <span class="si">Plan Request <span class="bdg">6</span></span>
+    <span class="si">Plan Orders</span>
+  </div>
+  <div class="it dis"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.41l8.7 8.71a2.43 2.43 0 0 0 3.42 0l6.58-6.59a2.43 2.43 0 0 0 0-3.41z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg> Coupons</div>
+</div>
+
+</body>
+</html>

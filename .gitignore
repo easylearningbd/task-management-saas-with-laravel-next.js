@@ -1,0 +1,7 @@
+# OS / editor files. Each app (backend/, frontend/) has its own .gitignore for its build output and secrets.
+.DS_Store
+Thumbs.db
+desktop.ini
+/.idea
+/.vscode
+*.swp
