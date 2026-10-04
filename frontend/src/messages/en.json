@@ -1,0 +1,116 @@
+{
+  "common": {
+    "appName": "TASK",
+    "toggleTheme": "Toggle dark mode",
+    "language": "Language",
+    "languages": {
+      "en": "English"
+    },
+    "loading": "Loading…",
+    "dismiss": "Dismiss notification",
+    "requiredField": "required"
+  },
+  "shell": {
+    "toggleSidebar": "Toggle sidebar",
+    "closeSidebar": "Close sidebar",
+    "mainNavigation": "Main navigation",
+    "breadcrumb": "Breadcrumb",
+    "userMenu": "Account menu",
+    "sections": {
+      "overview": "Overview"
+    },
+    "nav": {
+      "dashboard": "Dashboard"
+    }
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "description": "We couldn't load this page. If the problem continues, the server may be unavailable.",
+    "retry": "Try Again"
+  },
+  "roles": {
+    "company": "Company",
+    "super_admin": "Super Admin"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "companySubtitle": "Welcome to your workspace.",
+    "adminSubtitle": "Platform overview.",
+    "signedInAs": "Signed in as",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "placeholder": "Dashboard widgets arrive in a later milestone."
+  },
+  "metadata": {
+    "title": "TASK",
+    "description": "Task & project management for small businesses."
+  },
+  "home": {
+    "title": "Welcome to TASK",
+    "subtitle": "Task and project management for small businesses.",
+    "companyLogin": "Log In",
+    "adminLogin": "Super Admin Log In",
+    "register": "Create Account"
+  },
+  "auth": {
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "passwordConfirmation": "Confirm Password",
+      "remember": "Remember me"
+    },
+    "placeholders": {
+      "name": "enter your name",
+      "email": "enter your email",
+      "password": "enter your password",
+      "passwordConfirmation": "re-enter your password"
+    },
+    "login": {
+      "title": "Log in to your account",
+      "subtitle": "Enter your email and password to continue.",
+      "forgotPassword": "Forgot password?",
+      "submit": "Log in",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Register"
+    },
+    "adminLogin": {
+      "title": "Log in to the admin panel",
+      "subtitle": "Super Admin access to manage the platform."
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Start managing your projects and tasks.",
+      "submit": "Create Account",
+      "passwordHint": "Use at least {min} characters.",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Log in"
+    },
+    "quickAccess": {
+      "title": "Quick Access",
+      "loginAsCompany": "Login as Company",
+      "loginAsSuperAdmin": "Login as Super Admin"
+    },
+    "validation": {
+      "nameRequired": "Name is required.",
+      "nameMax": "Name may not be longer than {max} characters.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailMax": "Email may not be longer than {max} characters.",
+      "passwordRequired": "Password is required.",
+      "passwordMin": "Password must be at least {min} characters.",
+      "passwordConfirmationRequired": "Confirm your password.",
+      "passwordMismatch": "Passwords do not match."
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "network": "Can't reach the server. Check your connection and try again."
+    },
+    "logout": {
+      "action": "Log out",
+      "failed": "Couldn't log you out",
+      "failedDescription": "Please try again."
+    }
+  }
+}
