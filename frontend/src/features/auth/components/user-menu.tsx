@@ -1,20 +1,30 @@
 'use client'
 
-import { ChevronDown, LogOut } from 'lucide-react'
+import Link from 'next/link'
+import { ChevronDown, LogOut, User as UserIcon } from 'lucide-react'
 import { DropdownMenu } from 'radix-ui'
 import { useTranslations } from 'next-intl'
 import { Avatar } from '@/components/ui/avatar'
 import { Spinner } from '@/components/ui/spinner'
 import { toast } from '@/components/ui/toast'
 import { useLogout } from '@/features/auth/api'
-import type { User } from '@/features/auth/types'
+import type { User, UserRole } from '@/features/auth/types'
 import { LOGIN } from '@/lib/routes'
 
 /* The top bar's user button (avatar, name, email, chevron) opening a design-system
-   DropdownMenu. Profile Settings joins Logout when the profile module lands (PRD §2.3). */
+   DropdownMenu: Profile Settings, then Log out (PRD §4.1). */
+
+/** Each role's Profile Settings page. Company has none yet, so its menu shows Log out only. */
+const PROFILE_SETTINGS: Partial<Record<UserRole, string>> = { super_admin: '/admin/profile' }
+
+/** DropdownMenu.md item: 34px on `radius-md`, 16px glyph 10px from the label, `accent` when highlighted. */
+const ITEM_CLASS =
+  'flex h-8.5 cursor-default items-center gap-2.5 rounded-md px-2 text-body outline-none select-none focus:bg-accent data-disabled:cursor-not-allowed data-disabled:opacity-disabled'
+
 export function UserMenu({ user }: { user: User }) {
   const t = useTranslations('auth.logout')
   const tShell = useTranslations('shell')
+  const profileHref = PROFILE_SETTINGS[user.role]
   const tRoles = useTranslations('roles')
   const logout = useLogout()
   const busy = logout.isPending || logout.isSuccess
@@ -56,11 +66,16 @@ export function UserMenu({ user }: { user: User }) {
             <span className="mt-0.5 block text-caption text-muted-foreground">{tRoles(user.role)}</span>
           </DropdownMenu.Label>
           <DropdownMenu.Separator className="-mx-1 my-1 h-px bg-border" />
-          <DropdownMenu.Item
-            onSelect={onLogout}
-            disabled={busy}
-            className="flex h-8.5 cursor-default items-center gap-2.5 rounded-md px-2 text-body outline-none select-none focus:bg-accent data-disabled:cursor-not-allowed data-disabled:opacity-disabled"
-          >
+          {profileHref ? (
+            // A real link: Radix keeps arrow-key/Enter handling and closes the menu on select.
+            <DropdownMenu.Item asChild disabled={busy} className={ITEM_CLASS}>
+              <Link href={profileHref}>
+                <UserIcon className="size-icon" aria-hidden="true" />
+                {tShell('nav.profileSettings')}
+              </Link>
+            </DropdownMenu.Item>
+          ) : null}
+          <DropdownMenu.Item onSelect={onLogout} disabled={busy} className={ITEM_CLASS}>
             {busy ? <Spinner /> : <LogOut className="size-icon" aria-hidden="true" />}
             {t('action')}
           </DropdownMenu.Item>

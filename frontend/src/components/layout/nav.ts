@@ -30,6 +30,7 @@ export type NavLabelKey =
   | 'landingPage'
   | 'emailTemplates'
   | 'settings'
+  | 'profileSettings'
 
 export type NavSectionKey = 'overview' | 'management' | 'systemControl'
 
@@ -79,7 +80,18 @@ export const NAV: Record<UserRole, NavTree> = {
   },
 }
 
+/** Top-bar titles for pages that are not in the sidebar (e.g. reached from the user menu). */
+const PAGE_TITLES: Record<UserRole, Record<string, NavLabelKey>> = {
+  company: {},
+  super_admin: { '/admin/profile': 'profileSettings' },
+}
+
 const matches = (pathname: string, href: string) => pathname === href || pathname.startsWith(`${href}/`)
+
+/** The label key the top bar shows for `pathname`: its nav entry, else its page title. */
+export function pageTitleKey(role: UserRole, pathname: string): NavLabelKey | undefined {
+  return activeItem(role, pathname)?.labelKey ?? PAGE_TITLES[role][pathname]
+}
 
 /** The deepest nav entry that owns `pathname` (exact match, or the longest prefix). */
 export function activeItem(role: UserRole, pathname: string): NavLeaf | undefined {

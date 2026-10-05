@@ -36,7 +36,8 @@
       "referralProgram": "Referral Program",
       "landingPage": "Landing Page",
       "emailTemplates": "Email Templates",
-      "settings": "Settings"
+      "settings": "Settings",
+      "profileSettings": "Profile Settings"
     }
   },
   "adminDashboard": {
@@ -111,6 +112,57 @@
       "title": "Couldn't load the dashboard",
       "description": "Something went wrong while fetching the figures.",
       "retry": "Try again"
+    }
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "subtitle": "Update profile settings.",
+    "sectionsLabel": "Profile sections",
+    "nav": {
+      "profile": "Profile",
+      "password": "Password"
+    },
+    "info": {
+      "title": "Profile Information",
+      "subtitle": "Update your account's profile information and email address",
+      "changeAvatar": "Change Avatar",
+      "avatarHint": "JPG, PNG, GIF up to 2MB",
+      "uploading": "Uploading… {percent}%",
+      "avatarUpdated": "Avatar updated",
+      "avatarFailed": "Couldn't upload the avatar",
+      "name": "Name",
+      "email": "Email address",
+      "save": "Save",
+      "saved": "Profile updated"
+    },
+    "password": {
+      "title": "Update Password",
+      "subtitle": "Ensure your account is using a long, random password to stay secure",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm password",
+      "save": "Save",
+      "saved": "Password updated"
+    },
+    "loadError": {
+      "title": "Couldn't load your profile",
+      "description": "Something went wrong while fetching your account details.",
+      "retry": "Try again"
+    },
+    "validation": {
+      "nameRequired": "Name is required.",
+      "nameMax": "Name may not be longer than {max} characters.",
+      "emailRequired": "Email address is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailMax": "Email address may not be longer than {max} characters.",
+      "currentPasswordRequired": "Current password is required.",
+      "passwordRequired": "New password is required.",
+      "passwordMin": "New password must be at least {min} characters.",
+      "passwordSameAsCurrent": "New password must be different from the current one.",
+      "passwordConfirmationRequired": "Confirm your new password.",
+      "passwordMismatch": "Passwords do not match.",
+      "avatarType": "Choose a JPG, PNG or GIF image.",
+      "avatarSize": "The image must be {max} MB or smaller."
     }
   },
   "errorPage": {

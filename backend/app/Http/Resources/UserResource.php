@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
+use App\Services\ProfileService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +25,9 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'role' => $this->type->value,
-            'avatar' => $this->avatar ? Storage::url($this->avatar) : null,
+            // Absolute URL on the public disk (http://localhost:8000/storage/…) so the SPA on
+            // another origin can load it; the default disk is private and gives a relative path.
+            'avatar' => $this->avatar ? Storage::disk(ProfileService::AVATAR_DISK)->url($this->avatar) : null,
             'status' => $this->status->value,
         ];
     }

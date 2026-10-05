@@ -24,22 +24,32 @@ function toneIndex(seed: number): number {
   return Math.abs(seed) % TONES.length
 }
 
+/* default: `avatar-size` (36px) with 13px/600 initials (Avatar.md).
+   lg: 80px for a profile header (the Profile Settings screenshot), initials at `title-section`. */
+const SIZES = {
+  default: 'size-avatar text-[13px] font-semibold',
+  lg: 'size-20 text-title-section',
+} as const
+
 export function Avatar({
   name,
   seed,
   src,
+  size = 'default',
   className,
 }: {
   name: string
   /** Stable value (e.g. the user id) that picks the tone. */
   seed: number
   src?: string | null
+  size?: keyof typeof SIZES
   className?: string
 }) {
   return (
     <span
       className={cn(
-        'relative inline-flex size-avatar shrink-0 items-center justify-center overflow-hidden rounded-full text-[13px] font-semibold',
+        'relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full',
+        SIZES[size],
         TONES[toneIndex(seed)],
         className,
       )}

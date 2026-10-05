@@ -13,7 +13,8 @@ import { HOME, LOGIN } from '@/lib/routes'
 export function AppShell({ user, children }: { user: User; children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
 
-  useSessionWatch(user)
+  // Live copy of the user: profile edits written into the `me` query show in the top bar at once.
+  const current = useSessionWatch(user)
 
   React.useEffect(() => {
     if (!sidebarOpen) return
@@ -28,7 +29,7 @@ export function AppShell({ user, children }: { user: User; children: React.React
     <div className="flex min-h-svh bg-background">
       <Sidebar role={user.role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar user={user} sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen((open) => !open)} />
+        <Topbar user={current} sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen((open) => !open)} />
         <main className="flex-1 px-4 pt-4 pb-8 md:px-6 md:pb-10 xl:px-12 xl:pb-12">{children}</main>
       </div>
     </div>
@@ -40,8 +41,11 @@ export function AppShell({ user, children }: { user: User; children: React.React
  * page restored from the back/forward cache or the HTTP cache after logout never reaches the
  * server — so confirm with /api/v1/me on mount and on every bfcache restore, and leave with a
  * full navigation if the session is gone or belongs to the other role.
+ *
+ * Returns the freshest copy of the signed-in user (the `me` query, which profile updates
+ * write into), falling back to the server's copy — never a user of another role.
  */
-function useSessionWatch(user: User) {
+function useSessionWatch(user: User): User {
   const me = useMe({ initialData: user, alwaysRefetchOnMount: true })
 
   React.useEffect(() => {
@@ -57,6 +61,8 @@ function useSessionWatch(user: User) {
     window.addEventListener('pageshow', onPageShow)
     return () => window.removeEventListener('pageshow', onPageShow)
   }, [])
+
+  return me.data && me.data.role === user.role ? me.data : user
 }
 
 /** Page title + subtitle row (from the dashboard designs' PageHeader). */

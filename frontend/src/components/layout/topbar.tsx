@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
-import { activeItem } from '@/components/layout/nav'
+import { pageTitleKey } from '@/components/layout/nav'
 import { UserMenu } from '@/features/auth/components/user-menu'
 import type { User } from '@/features/auth/types'
 
@@ -16,7 +16,7 @@ import type { User } from '@/features/auth/types'
 export function Topbar({ user, sidebarOpen, onToggleSidebar }: { user: User; sidebarOpen: boolean; onToggleSidebar: () => void }) {
   const t = useTranslations('shell')
   const pathname = usePathname()
-  const current = activeItem(user.role, pathname)
+  const titleKey = pageTitleKey(user.role, pathname)
 
   return (
     <header className="sticky top-0 z-20 flex h-topbar shrink-0 items-center gap-3 border-b border-border bg-card px-4 md:px-6 xl:px-12">
@@ -32,9 +32,9 @@ export function Topbar({ user, sidebarOpen, onToggleSidebar }: { user: User; sid
       </button>
 
       <nav aria-label={t('breadcrumb')} className="flex min-w-0 items-center gap-2 text-body">
-        {current ? (
+        {titleKey ? (
           <span aria-current="page" className="truncate font-medium text-foreground">
-            {t(`nav.${current.labelKey}`)}
+            {t(`nav.${titleKey}`)}
           </span>
         ) : null}
       </nav>

@@ -7,6 +7,9 @@ use App\Http\Controllers\Api\V1\Auth\LogoutController;
 use App\Http\Controllers\Api\V1\Auth\MeController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Company\DashboardController as CompanyDashboardController;
+use App\Http\Controllers\Api\V1\Profile\AvatarController;
+use App\Http\Controllers\Api\V1\Profile\PasswordController;
+use App\Http\Controllers\Api\V1\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('v1.')->group(function () {
@@ -21,6 +24,12 @@ Route::prefix('v1')->name('v1.')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('auth/logout', LogoutController::class)->name('auth.logout');
         Route::get('me', MeController::class)->name('me');
+
+        // Own profile — both roles; every action targets the signed-in user only.
+        Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+        Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('profile/avatar', AvatarController::class)->middleware('throttle:10,1')->name('profile.avatar');
+        Route::put('profile/password', PasswordController::class)->middleware('throttle:6,1')->name('profile.password');
     });
 
     // Super Admin.
