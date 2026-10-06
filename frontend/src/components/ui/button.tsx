@@ -20,6 +20,10 @@ const buttonVariants = cva(
           'border border-border bg-card text-foreground shadow-sm hover:bg-accent focus-visible:border-ring',
         ghost:
           'text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:border focus-visible:border-ring',
+        // Modal.md: only inside a confirm-delete dialog. No hover token exists, so hover
+        // dims the same `destructive` fill to 90% rather than introducing a new color.
+        destructive:
+          'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 focus-visible:shadow-focus-danger',
       },
       size: {
         sm: 'h-control-sm gap-1.5 px-3 text-button-sm',

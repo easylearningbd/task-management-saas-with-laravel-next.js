@@ -17,7 +17,8 @@ export function TextField({
   id: idProp,
   ...inputProps
 }: React.ComponentProps<typeof Input> & {
-  label: string
+  /** Usually a string; a node allows inline parts such as a muted "(Optional)". */
+  label: React.ReactNode
   error?: string
   hint?: string
   required?: boolean

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\V1\Admin\PlanController;
 use App\Http\Controllers\Api\V1\Auth\AdminLoginController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
@@ -35,6 +36,10 @@ Route::prefix('v1')->name('v1.')->group(function () {
     // Super Admin.
     Route::middleware(['auth:sanctum', 'role:super_admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', AdminDashboardController::class)->name('dashboard');
+
+        // Subscription plans (PRD §8.3).
+        Route::apiResource('plans', PlanController::class);
+        Route::patch('plans/{plan}/toggle-active', [PlanController::class, 'toggleActive'])->name('plans.toggle-active');
     });
 
     // Company (tenant).
