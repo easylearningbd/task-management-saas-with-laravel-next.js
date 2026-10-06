@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\CouponController;
 use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Api\V1\Admin\PlanController;
 use App\Http\Controllers\Api\V1\Auth\AdminLoginController;
@@ -40,6 +41,11 @@ Route::prefix('v1')->name('v1.')->group(function () {
         // Subscription plans (PRD §8.3).
         Route::apiResource('plans', PlanController::class);
         Route::patch('plans/{plan}/toggle-active', [PlanController::class, 'toggleActive'])->name('plans.toggle-active');
+
+        // Coupons. generate-code is registered before the resource so it never binds as {coupon}.
+        Route::get('coupons/generate-code', [CouponController::class, 'generateCode'])->middleware('throttle:60,1')->name('coupons.generate-code');
+        Route::apiResource('coupons', CouponController::class);
+        Route::patch('coupons/{coupon}/toggle-status', [CouponController::class, 'toggleStatus'])->name('coupons.toggle-status');
     });
 
     // Company (tenant).

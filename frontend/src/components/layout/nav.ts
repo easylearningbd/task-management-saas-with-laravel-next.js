@@ -94,7 +94,7 @@ const PAGE_TITLES: Record<UserRole, Record<string, NavLabelKey>> = {
 export type Crumb = { labelKey: NavLabelKey; href?: string }
 
 /* Multi-step breadcrumbs for routes that need them (the Plans screenshots: "Dashboard › Plans"
-   and "Dashboard › Plans › Create Plan"). Every other route keeps its single title. */
+   and "Dashboard › Plans › Create Plan"; the Coupons screenshot: "Dashboard › Coupons"). Every other route keeps its single title. */
 const ADMIN_DASHBOARD: Crumb = { labelKey: 'dashboard', href: '/admin/dashboard' }
 const TRAILS: Record<UserRole, { match: RegExp; crumbs: Crumb[] }[]> = {
   company: [],
@@ -102,6 +102,7 @@ const TRAILS: Record<UserRole, { match: RegExp; crumbs: Crumb[] }[]> = {
     { match: /^\/admin\/plans$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'plans' }] },
     { match: /^\/admin\/plans\/create$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'plans', href: '/admin/plans' }, { labelKey: 'createPlan' }] },
     { match: /^\/admin\/plans\/\d+\/edit$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'plans', href: '/admin/plans' }, { labelKey: 'editPlan' }] },
+    { match: /^\/admin\/coupons$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'coupons' }] },
   ],
 }
 

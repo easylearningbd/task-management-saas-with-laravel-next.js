@@ -351,5 +351,173 @@
       "failed": "Couldn't log you out",
       "failedDescription": "Please try again."
     }
+  },
+  "shared": {
+    "table": {
+      "rowNumber": "#",
+      "actions": "Actions",
+      "sortBy": "Sort by {column}",
+      "loading": "Loading rows…"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "showing": "Showing {from} to {to} of {total} results",
+      "rowsPerPage": "Rows per page:",
+      "previous": "« Previous",
+      "next": "Next »",
+      "previousLabel": "Previous page",
+      "nextLabel": "Next page",
+      "page": "Page {page}"
+    },
+    "filters": {
+      "searchPlaceholder": "Search...",
+      "searchLabel": "Search",
+      "clearSearch": "Clear search",
+      "filters": "Filters",
+      "advanced": "More filters",
+      "reset": "Reset"
+    },
+    "modal": {
+      "close": "Close",
+      "cancel": "Cancel",
+      "save": "Save",
+      "discardTitle": "Discard changes?",
+      "discardDescription": "You have unsaved changes. If you close this form now, they will be lost.",
+      "keepEditing": "Keep editing",
+      "discard": "Discard"
+    },
+    "status": {
+      "on": "Active",
+      "off": "Inactive"
+    }
+  },
+  "coupons": {
+    "validation": {
+      "nameRequired": "The coupon name is required.",
+      "nameMax": "The coupon name may not be longer than {max} characters.",
+      "codeRequired": "The coupon code is required.",
+      "codeInvalid": "Use up to {max} letters, digits, hyphens or underscores.",
+      "typeRequired": "Select a discount type.",
+      "valueRequired": "The discount value is required.",
+      "valuePositive": "The discount value must be greater than 0.",
+      "percentMax": "A percentage discount cannot be more than 100%.",
+      "amountInvalid": "Enter an amount with at most 2 decimal places.",
+      "amountTooLarge": "That amount is too large.",
+      "spendRange": "The maximum spend must be greater than or equal to the minimum spend.",
+      "limitInvalid": "Leave empty for unlimited, or enter a whole number of at least 1.",
+      "dateInvalid": "Enter a valid date.",
+      "datePast": "The expiry date cannot be in the past."
+    },
+    "list": {
+      "title": "Coupons",
+      "subtitle": "Manage your coupons and discounts.",
+      "add": "Add Coupon",
+      "tableLabel": "Coupons",
+      "columns": {
+        "name": "Name",
+        "code": "Code",
+        "type": "Type",
+        "minSpend": "Min Spend",
+        "maxSpend": "Max Spend",
+        "discount": "Discount",
+        "couponLimit": "Coupon Limit",
+        "userLimit": "User Limit",
+        "expiryDate": "Expiry Date",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "filters": {
+        "typeLabel": "Discount type",
+        "allTypes": "All Types",
+        "percentage": "Percentage",
+        "flat": "Flat Amount",
+        "statusLabel": "Status",
+        "allStatus": "All Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "expiryFrom": "Expiry From",
+        "expiryTo": "Expiry To"
+      },
+      "actions": {
+        "view": "View {name}",
+        "edit": "Edit {name}",
+        "delete": "Delete {name}",
+        "viewTip": "View",
+        "editTip": "Edit",
+        "deleteTip": "Delete"
+      },
+      "status": {
+        "label": "Active: {name}",
+        "activated": "Coupon activated",
+        "deactivated": "Coupon deactivated",
+        "failed": "Couldn't update the coupon"
+      },
+      "delete": {
+        "title": "Delete Coupon",
+        "body": "Delete the “{name}” coupon ({code})? Companies will no longer be able to use it.",
+        "confirm": "Delete Coupon",
+        "cancel": "Cancel",
+        "close": "Close",
+        "deleted": "Coupon deleted"
+      },
+      "empty": {
+        "title": "No coupons yet",
+        "description": "Create your first coupon to offer discounts on plans.",
+        "noMatchTitle": "No coupons match your filters",
+        "noMatchDescription": "Try a different search or clear the filters.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn't load coupons",
+        "retry": "Try again"
+      }
+    },
+    "form": {
+      "createTitle": "Add New Coupon",
+      "editTitle": "Edit Coupon",
+      "name": "Coupon Name",
+      "namePlaceholder": "Enter coupon name",
+      "type": "Discount Type",
+      "typePlaceholder": "Select Discount Type",
+      "percentage": "Percentage",
+      "flat": "Flat Amount",
+      "value": "Discount Value",
+      "valuePlaceholder": "Enter value",
+      "percentAffix": "%",
+      "currencyAffix": "$",
+      "usageLimit": "Total Usage Limit",
+      "unlimitedPlaceholder": "Leave empty for unlimited",
+      "codeGeneration": "Code Generation",
+      "manual": "Manual Entry",
+      "auto": "Auto Generate",
+      "code": "Coupon Code",
+      "codePlaceholder": "Enter coupon code",
+      "generating": "Generating a code…",
+      "generateFailed": "Couldn't generate a code here — one will be created when you save.",
+      "minSpend": "Minimum Spend ($)",
+      "maxSpend": "Maximum Spend ($)",
+      "optional": "Optional",
+      "perUserLimit": "Usage Limit Per User",
+      "expiryDate": "Expiry Date",
+      "save": "Save",
+      "cancel": "Cancel",
+      "created": "Coupon created",
+      "updated": "Coupon updated"
+    },
+    "details": {
+      "title": "Coupon Details",
+      "name": "Name",
+      "code": "Code",
+      "type": "Type",
+      "discount": "Discount",
+      "minSpend": "Minimum Spend",
+      "maxSpend": "Maximum Spend",
+      "couponLimit": "Coupon Limit",
+      "userLimit": "User Limit",
+      "expiryDate": "Expiry Date",
+      "status": "Status",
+      "createdAt": "Created At",
+      "active": "Active",
+      "inactive": "Inactive",
+      "expired": "Expired"
+    }
   }
 }
