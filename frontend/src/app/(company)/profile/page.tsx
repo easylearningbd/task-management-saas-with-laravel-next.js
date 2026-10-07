@@ -7,8 +7,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('title') }
 }
 
-/* Super Admin Profile Settings (PRD §2.3) — the shared Profile Settings page body
-   (features/profile). The (admin) layout guard already restricts this route to super admins. */
-export default function AdminProfilePage() {
+/* Company Profile Settings (PRD §4.1) — the same shared Profile Settings page body as
+   /admin/profile (features/profile), inside the company shell. The (company) layout guard
+   restricts this route to company users; the forms edit the signed-in account only. */
+export default function CompanyProfilePage() {
   return <ProfilePage />
 }

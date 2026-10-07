@@ -4,7 +4,7 @@ import * as React from 'react'
 import { ChevronRight, PanelLeft } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { activeCompanyEntry } from '@/components/layout/company/nav'
+import { activeCompanyEntry, COMPANY_PAGE_TITLES } from '@/components/layout/company/nav'
 import { StartTimerButton } from '@/components/layout/company/start-timer-button'
 import { usePageCrumbLabel } from '@/components/layout/page-crumb'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
@@ -33,12 +33,16 @@ export function CompanyTopbar({
   const pathname = usePathname()
   const pageLabel = usePageCrumbLabel()
   const active = activeCompanyEntry(pathname)
+  const pageTitle = COMPANY_PAGE_TITLES[pathname]
 
+  // A menu page: "Parent › Page"; a page outside the menu (Profile Settings): its single title.
   const crumbs = active
     ? [...(active.parent ? [t(`nav.${active.parent.labelKey}`)] : []), pageLabel ?? t(`nav.${active.leaf.labelKey}`)]
     : pageLabel
       ? [pageLabel]
-      : []
+      : pageTitle
+        ? [tShell(`nav.${pageTitle}`)]
+        : []
 
   return (
     <header className="sticky top-0 z-20 flex h-topbar shrink-0 items-center gap-3 border-b border-border bg-card px-4 md:px-6 xl:px-12">

@@ -114,6 +114,10 @@ export const COMPANY_NAV: CompanyNavSection[] = [
   },
 ]
 
+/** Top-bar titles for company pages that are not in the sidebar (reached from the user menu).
+ *  Keys of `shell.nav` — the same strings the Super Admin top bar uses. */
+export const COMPANY_PAGE_TITLES: Readonly<Record<string, 'profileSettings'>> = { '/profile': 'profileSettings' }
+
 /** The leaf that owns `pathname` (exact or longest prefix), with its parent if it has one. */
 export function activeCompanyEntry(pathname: string): { leaf: CompanyNavLeaf; parent?: CompanyNavItem } | undefined {
   const matches = (href: string) => href.startsWith('/') && (pathname === href || pathname.startsWith(`${href}/`))

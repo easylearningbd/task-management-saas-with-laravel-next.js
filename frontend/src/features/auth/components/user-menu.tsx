@@ -14,8 +14,8 @@ import { LOGIN } from '@/lib/routes'
 /* The top bar's user button (avatar, name, email, chevron) opening a design-system
    DropdownMenu: Profile Settings, then Log out (PRD §4.1). */
 
-/** Each role's Profile Settings page. Company has none yet: its item shows, disabled, as "Coming soon". */
-const PROFILE_SETTINGS: Partial<Record<UserRole, string>> = { super_admin: '/admin/profile' }
+/** Each role's Profile Settings page — the same shared page (features/profile) on both sides. */
+const PROFILE_SETTINGS: Record<UserRole, string> = { super_admin: '/admin/profile', company: '/profile' }
 
 /** DropdownMenu.md item: 34px on `radius-md`, 16px glyph 10px from the label, `accent` when highlighted. */
 const ITEM_CLASS =
@@ -26,7 +26,6 @@ export function UserMenu({ user }: { user: User }) {
   const tShell = useTranslations('shell')
   const profileHref = PROFILE_SETTINGS[user.role]
   const tRoles = useTranslations('roles')
-  const tShared = useTranslations('shared')
   const logout = useLogout()
   const busy = logout.isPending || logout.isSuccess
 
@@ -68,21 +67,13 @@ export function UserMenu({ user }: { user: User }) {
             <span className="mt-0.5 block text-caption text-muted-foreground">{tRoles(user.role)}</span>
           </DropdownMenu.Label>
           <DropdownMenu.Separator className="-mx-1 my-1 h-px bg-border" />
-          {profileHref ? (
-            // A real link: Radix keeps arrow-key/Enter handling and closes the menu on select.
-            <DropdownMenu.Item asChild disabled={busy} className={ITEM_CLASS}>
-              <Link href={profileHref}>
-                <UserIcon className="size-icon" aria-hidden="true" />
-                {tShell('nav.profileSettings')}
-              </Link>
-            </DropdownMenu.Item>
-          ) : (
-            <DropdownMenu.Item disabled className={ITEM_CLASS}>
+          {/* A real link: Radix keeps arrow-key/Enter handling and closes the menu on select. */}
+          <DropdownMenu.Item asChild disabled={busy} className={ITEM_CLASS}>
+            <Link href={profileHref}>
               <UserIcon className="size-icon" aria-hidden="true" />
               {tShell('nav.profileSettings')}
-              <span className="ml-auto pl-3 text-caption font-normal text-muted-foreground">{tShared('comingSoon')}</span>
-            </DropdownMenu.Item>
-          )}
+            </Link>
+          </DropdownMenu.Item>
           <DropdownMenu.Item onSelect={onLogout} disabled={busy} className={ITEM_CLASS}>
             {busy ? <Spinner /> : <LogOut className="size-icon" aria-hidden="true" />}
             {t('action')}
