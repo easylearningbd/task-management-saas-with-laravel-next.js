@@ -28,24 +28,35 @@ function CardDescription({ className, ...props }: React.ComponentProps<'p'>) {
 /* The dashboard card head from design/admin-dashboard (components/ui/primitives.tsx
    CardHeader): `title-card` + a `caption` subtitle on the left, an action slot on the right
    (a "View all" link, a badge + year select), wrapping on narrow screens. */
+/* `divided`: the head with a rule under it from design/user-dashboard (panels.tsx `Head`) —
+   `px-card py-4.5` above a 1px `border`, the body starting flush under the rule; actions sit
+   12px apart. */
 function CardHeading({
   title,
   subtitle,
   action,
+  divided = false,
   className,
 }: {
   title: string
   subtitle?: string
   action?: React.ReactNode
+  divided?: boolean
   className?: string
 }) {
   return (
-    <div className={cn('flex flex-wrap items-start justify-between gap-x-4 gap-y-2 p-card pb-0', className)}>
+    <div
+      className={cn(
+        'flex flex-wrap items-start justify-between gap-x-4 gap-y-2',
+        divided ? 'border-b border-border px-card py-4.5' : 'p-card pb-0',
+        className,
+      )}
+    >
       <div className="min-w-0">
         <h2 className="text-title-card">{title}</h2>
         {subtitle ? <p className="text-caption font-normal text-muted-foreground">{subtitle}</p> : null}
       </div>
-      {action ? <div className="flex shrink-0 items-center gap-2">{action}</div> : null}
+      {action ? <div className={cn('flex shrink-0 items-center', divided ? 'gap-3' : 'gap-2')}>{action}</div> : null}
     </div>
   )
 }

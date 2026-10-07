@@ -50,7 +50,7 @@ export function AppShell({ user, children }: { user: User; children: React.React
  * Returns the freshest copy of the signed-in user (the `me` query, which profile updates
  * write into), falling back to the server's copy — never a user of another role.
  */
-function useSessionWatch(user: User): User {
+export function useSessionWatch(user: User): User {
   const me = useMe({ initialData: user, alwaysRefetchOnMount: true })
 
   React.useEffect(() => {

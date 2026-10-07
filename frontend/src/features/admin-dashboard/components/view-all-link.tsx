@@ -1,5 +1,7 @@
+import type * as React from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
+import { cn } from '@/lib/cn'
 
 /* The card-header "View all" link from design/admin-dashboard (components/dashboard/lists.tsx):
    `body-sm` 500 in `primary-strong` (green text on a light ground — brand-book.md). */
@@ -15,10 +17,11 @@ export function ViewAllLink({ href, label }: { href: string; label: string }) {
   )
 }
 
-/** The same "View all" when it opens something on the page (a modal) instead of navigating. */
-export function ViewAllButton({ onClick, label }: { onClick: () => void; label: string }) {
+/** The same "View all" when it opens something on the page (a modal) instead of navigating.
+ *  Extra button props pass through (ComingSoon adds aria-disabled and its classes). */
+export function ViewAllButton({ label, className, ...props }: React.ComponentProps<'button'> & { label: string }) {
   return (
-    <button type="button" onClick={onClick} className={CLASSES}>
+    <button type="button" className={cn(CLASSES, className)} {...props}>
       {label}
       <ChevronRight className="size-3.5" aria-hidden="true" />
     </button>

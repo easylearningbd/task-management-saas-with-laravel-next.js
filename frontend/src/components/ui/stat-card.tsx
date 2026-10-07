@@ -6,9 +6,32 @@ import { cn } from '@/lib/cn'
    dashboard/stat-cards.tsx: a 164px tinted card, a 40px icon tile, two decorative circles
    of the tile color, then label · figure (24px/700) · note. The five hues are a fixed set
    in a fixed order and carry no meaning. The design adds a hairline border in the tile
-   color and `shadow-xs` (StatCard.md says neither) — the design file wins. */
+   color and `shadow-xs` (StatCard.md says neither) — the design file wins.
+   `compact`: the 123px variant of design/user-dashboard (hero-and-stats.tsx) — 16px padding,
+   a 32px tile with a 16px glyph, smaller circles, a 20px/700 figure. */
 
 export type StatHue = 'emerald' | 'blue' | 'violet' | 'indigo' | 'amber'
+
+const SIZES = {
+  default: {
+    card: 'h-41 p-5',
+    big: '-top-6.5 -right-6.5 size-23',
+    small: 'right-6.5 -bottom-4.5 size-11',
+    tile: 'size-tile rounded-tile',
+    glyph: 'size-icon-lg',
+    label: 'mt-4',
+    value: 'mt-1 text-2xl leading-8',
+  },
+  compact: {
+    card: 'h-[123px] p-4',
+    big: '-top-5 -right-5 size-19',
+    small: 'right-5 -bottom-3.5 size-9',
+    tile: 'size-8 rounded-lg',
+    glyph: 'size-icon',
+    label: 'mt-2.5',
+    value: 'text-xl leading-7',
+  },
+} as const
 
 const HUE: Record<StatHue, { card: string; tile: string; label: string; value: string }> = {
   emerald: {
@@ -50,6 +73,7 @@ export function StatCard({
   value,
   caption,
   corner,
+  size = 'default',
   className,
 }: {
   hue: StatHue
@@ -59,21 +83,23 @@ export function StatCard({
   caption: React.ReactNode
   /** Top-right extra: an arrow glyph, or the `warning` "Action needed" chip. */
   corner?: React.ReactNode
+  size?: keyof typeof SIZES
   className?: string
 }) {
   const h = HUE[hue]
+  const z = SIZES[size]
 
   return (
-    <div className={cn('relative h-41 overflow-hidden rounded-xl border p-5 shadow-xs', h.card, className)}>
+    <div className={cn('relative overflow-hidden rounded-xl border shadow-xs', z.card, h.card, className)}>
       {/* decorative circles take the tile color through `currentColor` */}
-      <span aria-hidden="true" className="absolute -top-6.5 -right-6.5 size-23 rounded-full bg-current opacity-55" />
-      <span aria-hidden="true" className="absolute right-6.5 -bottom-4.5 size-11 rounded-full bg-current opacity-45" />
-      <span className={cn('relative inline-flex size-tile items-center justify-center rounded-tile', h.tile)}>
-        <Icon className="size-icon-lg" strokeWidth={1.75} aria-hidden="true" />
+      <span aria-hidden="true" className={cn('absolute rounded-full bg-current opacity-55', z.big)} />
+      <span aria-hidden="true" className={cn('absolute rounded-full bg-current opacity-45', z.small)} />
+      <span className={cn('relative inline-flex items-center justify-center', z.tile, h.tile)}>
+        <Icon className={z.glyph} strokeWidth={1.75} aria-hidden="true" />
       </span>
       {corner}
-      <p className={cn('relative mt-4 text-caption', h.label)}>{label}</p>
-      <p className={cn('relative mt-1 text-2xl leading-8 font-bold tracking-[-0.01em]', h.value)}>{value}</p>
+      <p className={cn('relative text-caption', z.label, h.label)}>{label}</p>
+      <p className={cn('relative font-bold tracking-[-0.01em]', z.value, h.value)}>{value}</p>
       <p className={cn('relative mt-0.5 flex items-center gap-1 text-caption opacity-85', h.label)}>{caption}</p>
     </div>
   )

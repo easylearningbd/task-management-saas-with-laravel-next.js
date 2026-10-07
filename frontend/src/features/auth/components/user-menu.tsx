@@ -14,7 +14,7 @@ import { LOGIN } from '@/lib/routes'
 /* The top bar's user button (avatar, name, email, chevron) opening a design-system
    DropdownMenu: Profile Settings, then Log out (PRD §4.1). */
 
-/** Each role's Profile Settings page. Company has none yet, so its menu shows Log out only. */
+/** Each role's Profile Settings page. Company has none yet: its item shows, disabled, as "Coming soon". */
 const PROFILE_SETTINGS: Partial<Record<UserRole, string>> = { super_admin: '/admin/profile' }
 
 /** DropdownMenu.md item: 34px on `radius-md`, 16px glyph 10px from the label, `accent` when highlighted. */
@@ -26,6 +26,7 @@ export function UserMenu({ user }: { user: User }) {
   const tShell = useTranslations('shell')
   const profileHref = PROFILE_SETTINGS[user.role]
   const tRoles = useTranslations('roles')
+  const tShared = useTranslations('shared')
   const logout = useLogout()
   const busy = logout.isPending || logout.isSuccess
 
@@ -75,7 +76,13 @@ export function UserMenu({ user }: { user: User }) {
                 {tShell('nav.profileSettings')}
               </Link>
             </DropdownMenu.Item>
-          ) : null}
+          ) : (
+            <DropdownMenu.Item disabled className={ITEM_CLASS}>
+              <UserIcon className="size-icon" aria-hidden="true" />
+              {tShell('nav.profileSettings')}
+              <span className="ml-auto pl-3 text-caption font-normal text-muted-foreground">{tShared('comingSoon')}</span>
+            </DropdownMenu.Item>
+          )}
           <DropdownMenu.Item onSelect={onLogout} disabled={busy} className={ITEM_CLASS}>
             {busy ? <Spinner /> : <LogOut className="size-icon" aria-hidden="true" />}
             {t('action')}

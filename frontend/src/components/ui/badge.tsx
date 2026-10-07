@@ -18,6 +18,11 @@ const badgeVariants = cva('inline-flex items-center gap-1 rounded-md whitespace-
       warning: 'bg-warning-soft text-warning',
       danger: 'bg-danger-soft text-danger',
       neutral: 'bg-neutral-soft text-neutral',
+      // Statuses Badge.md's five tones don't cover, from design/user-dashboard (panels.tsx):
+      // Completed (contracts / projects) · Done (task stage) · High (priority).
+      violet: 'bg-stat-violet text-stat-violet-label',
+      primary: 'bg-primary-soft text-primary',
+      amber: 'bg-stat-amber text-stat-amber-icon',
       solid: 'bg-success-solid text-primary-foreground',
     },
     size: {

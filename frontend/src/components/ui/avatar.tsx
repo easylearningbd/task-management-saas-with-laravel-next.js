@@ -28,6 +28,8 @@ function toneIndex(seed: number): number {
    lg: 80px for a profile header (the Profile Settings screenshot), initials at `title-section`. */
 // sm 28px / md 48px: Avatar.md's variants "for dense rows and detail headers".
 const SIZES = {
+  // 20px: the client chip in design/user-dashboard's Recent Contracts rows (9px/600 initials).
+  xs: 'size-5 text-[9px] font-semibold',
   sm: 'size-7 text-[11px] font-semibold',
   default: 'size-avatar text-[13px] font-semibold',
   // 40px: the identity cell in the Companies screenshot's table rows.
@@ -41,6 +43,7 @@ export function Avatar({
   seed,
   src,
   size = 'default',
+  muted = false,
   className,
 }: {
   name: string
@@ -48,6 +51,8 @@ export function Avatar({
   seed: number
   src?: string | null
   size?: keyof typeof SIZES
+  /** Neutral `muted` ground instead of a hue — a secondary party, e.g. a contract's client. */
+  muted?: boolean
   className?: string
 }) {
   return (
@@ -55,7 +60,7 @@ export function Avatar({
       className={cn(
         'relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full',
         SIZES[size],
-        TONES[toneIndex(seed)],
+        muted ? 'bg-muted text-muted-foreground' : TONES[toneIndex(seed)],
         className,
       )}
       aria-hidden="true"

@@ -395,6 +395,11 @@
     "status": {
       "on": "Active",
       "off": "Inactive"
+    },
+    "comingSoon": "Coming soon",
+    "charts": {
+      "year": "Year",
+      "month": "Month"
     }
   },
   "coupons": {
@@ -757,6 +762,170 @@
         "title": "Couldn't load the company",
         "retry": "Try again"
       }
+    }
+  },
+  "companyShell": {
+    "sections": {
+      "overview": "Overview",
+      "projectManagement": "Project Management",
+      "clientRelations": "Client Relations",
+      "financialManagement": "Financial Management",
+      "meetings": "Meetings",
+      "systemConfiguration": "System Configuration",
+      "accountBilling": "Account & Billing",
+      "systemControl": "System Control"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "calendar": "Calendar",
+      "tasks": "Tasks",
+      "projects": "Projects",
+      "timeTracker": "Time Tracker",
+      "timesheets": "Timesheets",
+      "clients": "Clients",
+      "financial": "Financial",
+      "invoices": "Invoices",
+      "expenses": "Expenses",
+      "contracts": "Contracts",
+      "items": "Items",
+      "zoomMeetings": "Zoom Meetings",
+      "configuration": "Configuration",
+      "taskStages": "Task Stages",
+      "expenseCategories": "Expense Categories",
+      "plans": "Plans",
+      "plan": "Plan",
+      "planRequest": "Plan Request",
+      "planOrders": "Plan Orders",
+      "referralProgram": "Referral Program",
+      "notificationTemplates": "Notification Templates",
+      "mediaLibrary": "Media Library",
+      "settings": "Settings"
+    },
+    "start": "Start",
+    "startLabel": "Start the time tracker",
+    "upgrade": "Upgrade",
+    "upgradeLabel": "Upgrade your plan",
+    "planCard": "Your account"
+  },
+  "companyDashboard": {
+    "title": "Dashboard",
+    "subtitle": "Welcome to your company dashboard.",
+    "viewAll": "View all",
+    "quickAccess": {
+      "button": "Quick Access",
+      "label": "Quick-create actions",
+      "addProject": "Add Project",
+      "addTask": "Add Task",
+      "createInvoice": "Create Invoice",
+      "addClient": "Add Client",
+      "addExpense": "Add Expense",
+      "startTimer": "Start Timer"
+    },
+    "hero": {
+      "morning": "Good morning,",
+      "afternoon": "Good afternoon,",
+      "evening": "Good evening,",
+      "tagline": "Here’s what’s happening across your company today.",
+      "activeProjects": "{count, plural, one {# active project} other {# active projects}}",
+      "projects": "Projects",
+      "tasksDone": "Tasks Done",
+      "shortcuts": "Shortcuts",
+      "shortcutProjects": "Projects",
+      "shortcutTasks": "Tasks",
+      "shortcutInvoices": "Invoices",
+      "shortcutClients": "Clients"
+    },
+    "stats": {
+      "totalProjects": "Total Projects",
+      "totalProjectsCaption": "{growth} this month",
+      "activeTasks": "Active Tasks",
+      "activeTasksCaption": "{count} completed",
+      "totalClients": "Total Clients",
+      "totalClientsCaption": "{count} active",
+      "totalRevenue": "Total Revenue",
+      "totalRevenueCaption": "{amount} paid"
+    },
+    "performance": {
+      "title": "Performance Overview",
+      "subtitle": "Key metrics across tasks, invoices and profitability",
+      "progress": "Progress",
+      "taskRate": "Task Completion Rate",
+      "taskRateDetail": "{done} of {total} tasks done",
+      "invoiceRate": "Invoice Payment Rate",
+      "invoiceRateDetail": "{paid} of {total} invoices paid",
+      "profitMargin": "Profit Margin",
+      "profitMarginDetail": "Net: {amount}"
+    },
+    "projectProgress": {
+      "title": "Project Progress",
+      "subtitle": "Select a project to view its completion details",
+      "selectLabel": "Project",
+      "complete": "complete",
+      "ringLabel": "{project} completion",
+      "totalBudget": "Total Budget",
+      "spent": "Spent",
+      "remaining": "Remaining",
+      "empty": "No projects yet"
+    },
+    "projectStatus": {
+      "active": "Active",
+      "completed": "Completed",
+      "on_hold": "On Hold",
+      "inactive": "Inactive"
+    },
+    "revenueChart": {
+      "title": "Monthly Revenue",
+      "subtitle": "Paid invoices revenue per month — {year}",
+      "valueHeader": "Revenue",
+      "empty": "No paid invoice revenue in {year}"
+    },
+    "hoursChart": {
+      "title": "Timesheet Hours",
+      "subtitle": "Logged hours per month — {year}",
+      "total": "{hours} h total",
+      "value": "{hours}h",
+      "tooltip": "Hours : {hours}h",
+      "valueHeader": "Hours",
+      "empty": "No hours logged in {year}"
+    },
+    "taskDeadlines": {
+      "title": "Upcoming Task Deadlines",
+      "subtitle": "Tasks due soon",
+      "empty": "No upcoming task deadlines"
+    },
+    "invoiceDeadlines": {
+      "title": "Upcoming Invoice Deadlines",
+      "subtitle": "Unpaid invoices due soon",
+      "empty": "No upcoming invoice deadlines"
+    },
+    "recentContracts": {
+      "title": "Recent Contracts",
+      "subtitle": "Latest contracts by status",
+      "empty": "No contracts yet"
+    },
+    "recentTasks": {
+      "title": "Recent Tasks",
+      "subtitle": "Latest task activity in your projects",
+      "empty": "No recent task activity"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "contractStatus": {
+      "draft": "Draft",
+      "pending": "Pending",
+      "signed": "Signed",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "loadError": {
+      "title": "Couldn’t load the dashboard",
+      "description": "Something went wrong while loading your dashboard. Please try again.",
+      "retry": "Try again"
     }
   }
 }
