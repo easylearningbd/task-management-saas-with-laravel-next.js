@@ -34,6 +34,7 @@ export type NavLabelKey =
   | 'profileSettings'
   | 'createPlan'
   | 'editPlan'
+  | 'companyDetails'
 
 export type NavSectionKey = 'overview' | 'management' | 'systemControl'
 
@@ -90,11 +91,12 @@ const PAGE_TITLES: Record<UserRole, Record<string, NavLabelKey>> = {
   super_admin: { '/admin/profile': 'profileSettings' },
 }
 
-/** One step of the top bar's breadcrumb; every step but the last links somewhere. */
-export type Crumb = { labelKey: NavLabelKey; href?: string }
+/** One step of the top bar's breadcrumb; every step but the last links somewhere. A `dynamic`
+ *  step shows the label its page provides (usePageCrumb — a record's name), else `labelKey`. */
+export type Crumb = { labelKey: NavLabelKey; href?: string; dynamic?: boolean }
 
 /* Multi-step breadcrumbs for routes that need them (the Plans screenshots: "Dashboard › Plans"
-   and "Dashboard › Plans › Create Plan"; the Coupons screenshot: "Dashboard › Coupons"). Every other route keeps its single title. */
+   and "Dashboard › Plans › Create Plan"; the Coupons screenshot: "Dashboard › Coupons"; a company: "Dashboard › Companies › {name}"). Every other route keeps its single title. */
 const ADMIN_DASHBOARD: Crumb = { labelKey: 'dashboard', href: '/admin/dashboard' }
 const TRAILS: Record<UserRole, { match: RegExp; crumbs: Crumb[] }[]> = {
   company: [],
@@ -103,6 +105,11 @@ const TRAILS: Record<UserRole, { match: RegExp; crumbs: Crumb[] }[]> = {
     { match: /^\/admin\/plans\/create$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'plans', href: '/admin/plans' }, { labelKey: 'createPlan' }] },
     { match: /^\/admin\/plans\/\d+\/edit$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'plans', href: '/admin/plans' }, { labelKey: 'editPlan' }] },
     { match: /^\/admin\/coupons$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'coupons' }] },
+    { match: /^\/admin\/companies$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'companies' }] },
+    {
+      match: /^\/admin\/companies\/\d+$/,
+      crumbs: [ADMIN_DASHBOARD, { labelKey: 'companies', href: '/admin/companies' }, { labelKey: 'companyDetails', dynamic: true }],
+    },
   ],
 }
 

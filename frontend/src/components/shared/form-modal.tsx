@@ -21,8 +21,14 @@ export type FormModalProps = {
   title: string
   onSubmit: React.FormEventHandler<HTMLFormElement>
   children: React.ReactNode
-  size?: 'sm' | 'lg'
+  size?: 'sm' | 'md' | 'lg'
   submitLabel?: string
+  /** A line under the title (e.g. "Select a new plan for this company"). */
+  description?: React.ReactNode
+  /** Save stays disabled (e.g. nothing changed yet). */
+  submitDisabled?: boolean
+  /** A full-width strip between the header and the scrolling fields (e.g. a billing switch band). */
+  toolbar?: React.ReactNode
   cancelLabel?: string
   /** Submitting: Save shows a spinner, nothing can close the modal. */
   pending?: boolean
@@ -50,6 +56,9 @@ export function FormModal({
   dirty = false,
   error,
   divided = false,
+  description,
+  submitDisabled = false,
+  toolbar,
 }: FormModalProps) {
   const t = useTranslations('shared.modal')
   const bodyRef = React.useRef<HTMLDivElement>(null)
@@ -69,6 +78,7 @@ export function FormModal({
         closeLabel={t('close')}
         closeDisabled={pending}
         divided={divided}
+        description={description}
         onOpenAutoFocus={(event) => {
           const first = bodyRef.current?.querySelector<HTMLElement>(FOCUSABLE)
           if (first) {
@@ -81,6 +91,7 @@ export function FormModal({
         }}
       >
         <form noValidate onSubmit={onSubmit} className="flex min-h-0 flex-1 flex-col">
+          {toolbar ? <div className="mb-5 shrink-0">{toolbar}</div> : null}
           <DialogBody ref={bodyRef}>
             {error ? (
               <Alert tone="danger" className="mb-4.5">
@@ -93,7 +104,7 @@ export function FormModal({
             <Button variant="outline" onClick={requestClose} disabled={pending}>
               {cancelLabel ?? t('cancel')}
             </Button>
-            <Button type="submit" loading={pending}>
+            <Button type="submit" loading={pending} disabled={submitDisabled}>
               {submitLabel ?? t('save')}
             </Button>
           </DialogFooter>

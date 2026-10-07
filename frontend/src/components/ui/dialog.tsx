@@ -29,7 +29,8 @@ const contentVariants = cva(
   'fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col ' +
     'rounded-xl bg-card text-card-foreground shadow-xl focus:outline-none',
   {
-    variants: { size: { sm: 'sm:w-[468px]', lg: 'sm:w-[872px]' } },
+    // md (672px): a single-column list of rich choices, as measured in the Upgrade Plan screenshot.
+    variants: { size: { sm: 'sm:w-[468px]', md: 'sm:w-2xl', lg: 'sm:w-[872px]' } },
     defaultVariants: { size: 'sm' },
   },
 )
@@ -38,6 +39,7 @@ function DialogContent({
   className,
   size,
   heading,
+  description,
   closeLabel,
   closeDisabled = false,
   divided = false,
@@ -49,6 +51,8 @@ function DialogContent({
   VariantProps<typeof contentVariants> & {
     /** The `title-section` heading (Radix Dialog.Title). Named `heading` because `title` is an HTML attribute. */
     heading: React.ReactNode
+    /** A `body-sm` `muted-foreground` line under the title (Radix Dialog.Description). */
+    description?: React.ReactNode
     /** aria-label for the X button. */
     closeLabel: string
     closeDisabled?: boolean
@@ -71,7 +75,12 @@ function DialogContent({
             divided ? 'mb-5 border-b border-border px-6 py-4' : 'p-6 pb-4.5',
           )}
         >
-          <DialogPrimitive.Title className="text-title-section">{heading}</DialogPrimitive.Title>
+          <div className="min-w-0">
+            <DialogPrimitive.Title className="text-title-section">{heading}</DialogPrimitive.Title>
+            {description ? (
+              <DialogPrimitive.Description className="mt-1 text-body-sm text-muted-foreground">{description}</DialogPrimitive.Description>
+            ) : null}
+          </div>
           <DialogPrimitive.Close asChild>
             <Button variant="ghost" size="icon-sm" aria-label={closeLabel} disabled={closeDisabled} className="-mt-1 -mr-2">
               <X className="size-icon" aria-hidden="true" />

@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { breadcrumbsFor } from '@/components/layout/nav'
+import { usePageCrumbLabel } from '@/components/layout/page-crumb'
 import { cn } from '@/lib/cn'
 import { UserMenu } from '@/features/auth/components/user-menu'
 import type { User } from '@/features/auth/types'
@@ -19,6 +20,7 @@ export function Topbar({ user, sidebarOpen, onToggleSidebar }: { user: User; sid
   const t = useTranslations('shell')
   const pathname = usePathname()
   const crumbs = breadcrumbsFor(user.role, pathname)
+  const pageLabel = usePageCrumbLabel()
 
   return (
     <header className="sticky top-0 z-20 flex h-topbar shrink-0 items-center gap-3 border-b border-border bg-card px-4 md:px-6 xl:px-12">
@@ -38,6 +40,7 @@ export function Topbar({ user, sidebarOpen, onToggleSidebar }: { user: User; sid
         <ol className="flex min-w-0 items-center gap-2">
           {crumbs.map((crumb, index) => {
             const last = index === crumbs.length - 1
+            const label = crumb.dynamic && pageLabel ? pageLabel : t(`nav.${crumb.labelKey}`)
             return (
               <li key={crumb.labelKey} className={cn('flex min-w-0 items-center gap-2', !last && 'max-sm:hidden')}>
                 {index > 0 ? (
@@ -49,14 +52,14 @@ export function Topbar({ user, sidebarOpen, onToggleSidebar }: { user: User; sid
                 ) : null}
                 {last || !crumb.href ? (
                   <span aria-current={last ? 'page' : undefined} className="truncate font-medium text-foreground">
-                    {t(`nav.${crumb.labelKey}`)}
+                    {label}
                   </span>
                 ) : (
                   <Link
                     href={crumb.href}
                     className="truncate rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:shadow-focus focus-visible:outline-none"
                   >
-                    {t(`nav.${crumb.labelKey}`)}
+                    {label}
                   </Link>
                 )}
               </li>

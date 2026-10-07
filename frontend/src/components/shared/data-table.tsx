@@ -21,7 +21,8 @@ import { cn } from '@/lib/cn'
 
    Density: `default` is Table.md (`table-header-height` 44px, `table-row-height` 60px — sized
    for an avatar over two lines); `compact` is for single-line tables, measured from the
-   Coupons screenshot (48px header, 52px rows).
+   Coupons screenshot (48px header, 52px rows); `relaxed` is for identity rows (avatar + two
+   lines), measured from the Companies screenshot (48px header, `table-row-height` rows).
 
    Sorting is controlled: the table only reports clicks through onSortChange (asc → desc →
    asc). Sortable headers are real buttons inside a <th aria-sort>. */
@@ -62,7 +63,7 @@ export type DataTableProps<T, K extends string = string> = {
   empty?: React.ReactNode
   /** Footer under a 1px rule (pagination); hidden while empty. */
   footer?: React.ReactNode
-  density?: 'default' | 'compact'
+  density?: 'default' | 'compact' | 'relaxed'
   className?: string
   scrollAreaClassName?: string
 }
@@ -72,6 +73,7 @@ const ALIGN = { left: 'text-left', center: 'text-center', right: 'text-right' } 
 const HEIGHTS = {
   default: { head: 'h-thead', row: 'h-row' },
   compact: { head: 'h-12', row: 'h-13' },
+  relaxed: { head: 'h-12', row: 'h-row' },
 } as const
 
 export function DataTable<T, K extends string = string>({

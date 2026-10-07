@@ -17,10 +17,17 @@ import { PER_PAGE_OPTIONS } from '@/components/shared/pagination'
      change instead keeps the first visible record in view — Pagination passes that page).
    - Rows per page also persists per table for the browser session (RowsPerPage.md); the URL
      wins when it has one.
+   - UI-only parameters (`ui`, e.g. the list/grid view) live in the URL and the session too,
+     but are never sent to the API, never cleared by Reset and don't change the page.
    - Updates use router.replace: refining a list doesn't flood the history. */
 
-export type ListParamsConfig<F extends string, S extends string> = {
-  /** Session-storage key for this table's page size, e.g. "admin.coupons". */
+export type UiParam = {
+  values: ReadonlyArray<string>
+  default: string
+}
+
+export type ListParamsConfig<F extends string, S extends string, U extends string = never> = {
+  /** Session-storage key for this table's remembered choices, e.g. "admin.coupons". */
   id: string
   /** Filter name → validator for its URL value ('' = not filtered). */
   filters: Record<F, (value: string) => boolean>
@@ -28,27 +35,33 @@ export type ListParamsConfig<F extends string, S extends string> = {
   sortKeys: ReadonlyArray<S>
   defaultPerPage?: number
   perPageOptions?: ReadonlyArray<number>
+  /** UI-only parameters (not API filters), e.g. `{ view: { values: ['list', 'grid'], default: 'list' } }`. */
+  ui?: Record<U, UiParam>
 }
 
-export type ListState<F extends string, S extends string> = {
+export type ListState<F extends string, S extends string, U extends string = never> = {
   search: string
   filters: Record<F, string>
   sort: SortState<S> | null
   page: number
   perPage: number
+  ui: Record<U, string>
 }
 
 export type ListApiParams = Record<string, string | number>
 
-export function useListParams<F extends string, S extends string>(config: ListParamsConfig<F, S>) {
+const NO_UI: Record<string, UiParam> = {}
+
+export function useListParams<F extends string, S extends string, U extends string = never>(config: ListParamsConfig<F, S, U>) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
   const defaultPerPage = config.defaultPerPage ?? PER_PAGE_OPTIONS[0]
   const options = config.perPageOptions ?? PER_PAGE_OPTIONS
-  const storedPerPage = useStoredPerPage(config.id)
+  const uiConfig = (config.ui ?? NO_UI) as Record<U, UiParam>
+  const stored = useStoredChoices(config.id)
 
-  const state = React.useMemo<ListState<F, S>>(() => {
+  const state = React.useMemo<ListState<F, S, U>>(() => {
     const read = (key: string) => searchParams.get(key)?.trim() ?? ''
     const filterNames = Object.keys(config.filters) as F[]
 
@@ -67,11 +80,22 @@ export function useListParams<F extends string, S extends string>(config: ListPa
 
     const page = Number(read('page'))
     const urlPerPage = Number(read('per_page'))
+    const storedPerPage = Number(stored.per_page)
     const perPage = options.includes(urlPerPage)
       ? urlPerPage
-      : storedPerPage !== null && options.includes(storedPerPage)
+      : options.includes(storedPerPage)
         ? storedPerPage
         : defaultPerPage
+
+    // UI-only: the URL, else this session's last choice, else the default.
+    const ui = Object.fromEntries(
+      (Object.keys(uiConfig) as U[]).map((name) => {
+        const { values, default: fallback } = uiConfig[name]
+        const fromUrl = read(name)
+        const fromStore = stored[name] ?? ''
+        return [name, values.includes(fromUrl) ? fromUrl : values.includes(fromStore) ? fromStore : fallback]
+      }),
+    ) as Record<U, string>
 
     return {
       search: read('search'),
@@ -79,13 +103,22 @@ export function useListParams<F extends string, S extends string>(config: ListPa
       sort,
       page: Number.isInteger(page) && page > 1 ? page : 1,
       perPage,
+      ui,
     }
-  }, [searchParams, config.filters, config.sortKeys, options, storedPerPage, defaultPerPage])
+  }, [searchParams, config.filters, config.sortKeys, options, stored, defaultPerPage, uiConfig])
+
+  // The query string most recently written but not yet reflected in `searchParams`: router.replace
+  // lands asynchronously, so two changes in a row (e.g. "from" then "to") must build on each
+  // other instead of both starting from the old URL. Cleared once the URL catches up.
+  const pending = React.useRef<string | null>(null)
+  React.useEffect(() => {
+    pending.current = null
+  }, [searchParams])
 
   /** Writes changes to the URL; '' / null / defaults remove the parameter. */
   const update = React.useCallback(
     (changes: Record<string, string | number | null>, resetPage: boolean) => {
-      const next = new URLSearchParams(searchParams.toString())
+      const next = new URLSearchParams(pending.current ?? searchParams.toString())
       for (const [key, value] of Object.entries(changes)) {
         const isDefault =
           value === null ||
@@ -97,6 +130,7 @@ export function useListParams<F extends string, S extends string>(config: ListPa
       }
       if (resetPage) next.delete('page')
       const query = next.toString()
+      pending.current = query
       router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
     },
     [searchParams, router, pathname, defaultPerPage],
@@ -113,17 +147,24 @@ export function useListParams<F extends string, S extends string>(config: ListPa
       /** `page` = the page that keeps the first visible record in view (from Pagination). */
       setPerPage: (perPage: number, page = 1) => {
         // Stored first, so a default-size choice (left out of the URL) still wins over an older one.
-        writeStoredPerPage(config.id, perPage)
+        writeStoredChoice(config.id, 'per_page', String(perPage))
         update({ per_page: perPage === defaultPerPage ? null : perPage, page }, false)
       },
-      /** Clears search and every filter; keeps the sort and page size. */
+      /** A UI-only parameter (e.g. the view): remembered for the session; the page stays. */
+      setUi: (name: U, value: string) => {
+        const param = uiConfig[name]
+        if (!param || !param.values.includes(value)) return
+        writeStoredChoice(config.id, name, value)
+        update({ [name]: value === param.default ? null : value }, false)
+      },
+      /** Clears search and every filter; keeps the sort, page size and UI parameters. */
       reset: () =>
         update(
           Object.fromEntries([['search', null], ...Object.keys(config.filters).map((name) => [name, null])]),
           true,
         ),
     }),
-    [update, config.id, config.filters, defaultPerPage],
+    [update, config.id, config.filters, defaultPerPage, uiConfig],
   )
 
   const isFiltered = state.search !== '' || Object.values<string>(state.filters).some((value) => value !== '')
@@ -136,40 +177,49 @@ export function useListParams<F extends string, S extends string>(config: ListPa
       params.sort = state.sort.key
       params.direction = state.sort.direction
     }
-    return params
+    return params // UI-only parameters never reach the API
   }, [state])
 
   return { state, isFiltered, apiParams, ...actions }
 }
 
-/* ── Rows-per-page memory (sessionStorage, per table) ──────────────────────────────────────
-   Read through useSyncExternalStore: the server snapshot is null, so hydration matches, and
-   every list using the same id stays in sync. */
+/* ── Per-table session memory (sessionStorage: rows per page, UI parameters) ──────────────
+   Keys look like `list:<id>:per_page` / `list:<id>:view`. Read through useSyncExternalStore
+   as one JSON string per table (a stable primitive snapshot): the server snapshot is empty, so
+   hydration matches, and every list using the same id stays in sync. */
 
-const STORAGE_EVENT = 'list-params:per-page'
-const storageKey = (id: string) => `list:${id}:per_page`
+const STORAGE_EVENT = 'list-params:stored'
+const storagePrefix = (id: string) => `list:${id}:`
+const EMPTY = '{}'
 
-function useStoredPerPage(id: string): number | null {
-  return React.useSyncExternalStore(
+function useStoredChoices(id: string): Record<string, string> {
+  const snapshot = React.useSyncExternalStore(
     (onChange) => {
       window.addEventListener(STORAGE_EVENT, onChange)
       return () => window.removeEventListener(STORAGE_EVENT, onChange)
     },
     () => {
       try {
-        const value = Number(window.sessionStorage.getItem(storageKey(id)))
-        return Number.isInteger(value) && value > 0 ? value : null
+        const prefix = storagePrefix(id)
+        const entries: Array<[string, string]> = []
+        for (let i = 0; i < window.sessionStorage.length; i++) {
+          const key = window.sessionStorage.key(i)
+          if (key?.startsWith(prefix)) entries.push([key.slice(prefix.length), window.sessionStorage.getItem(key) ?? ''])
+        }
+        entries.sort(([a], [b]) => a.localeCompare(b))
+        return entries.length ? JSON.stringify(Object.fromEntries(entries)) : EMPTY
       } catch {
-        return null // storage blocked (privacy mode)
+        return EMPTY // storage blocked (privacy mode)
       }
     },
-    () => null,
+    () => EMPTY,
   )
+  return React.useMemo(() => JSON.parse(snapshot) as Record<string, string>, [snapshot])
 }
 
-function writeStoredPerPage(id: string, perPage: number) {
+function writeStoredChoice(id: string, key: string, value: string) {
   try {
-    window.sessionStorage.setItem(storageKey(id), String(perPage))
+    window.sessionStorage.setItem(`${storagePrefix(id)}${key}`, value)
   } catch {
     // storage blocked — the URL still carries the choice
   }

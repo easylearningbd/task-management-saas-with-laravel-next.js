@@ -40,7 +40,13 @@
       "settings": "Settings",
       "profileSettings": "Profile Settings",
       "createPlan": "Create Plan",
-      "editPlan": "Edit Plan"
+      "editPlan": "Edit Plan",
+      "companyDetails": "Company Details"
+    },
+    "impersonation": {
+      "viewingAs": "You are viewing as <strong>{company}</strong>",
+      "backToAdmin": "Back to Admin",
+      "failed": "Couldn't return to the admin account. Please try again."
     }
   },
   "adminDashboard": {
@@ -518,6 +524,239 @@
       "active": "Active",
       "inactive": "Inactive",
       "expired": "Expired"
+    }
+  },
+  "companies": {
+    "validation": {
+      "nameRequired": "The company name is required.",
+      "nameMax": "The company name may not be longer than {max} characters.",
+      "emailRequired": "The email address is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailMax": "The email address may not be longer than {max} characters.",
+      "passwordRequired": "A password is required when login is enabled.",
+      "passwordNeededToEnable": "This company has no password yet. Set one to enable login.",
+      "newPasswordRequired": "The new password is required.",
+      "passwordMin": "The password must be at least {min} characters.",
+      "passwordMismatch": "The passwords do not match."
+    },
+    "list": {
+      "title": "Companies",
+      "subtitle": "Manage your companies and their settings.",
+      "add": "Add Company",
+      "history": "Activity history",
+      "tableLabel": "Companies",
+      "gridLabel": "Companies",
+      "columns": {
+        "name": "Name",
+        "plan": "Plan",
+        "status": "Status",
+        "createdAt": "Created At",
+        "actions": "Actions"
+      },
+      "filters": {
+        "statusLabel": "Status",
+        "allStatus": "All Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "createdFrom": "Created from",
+        "createdTo": "Created to",
+        "planLabel": "Plan",
+        "allPlans": "All Plans"
+      },
+      "view": {
+        "label": "View",
+        "list": "List view",
+        "grid": "Grid view"
+      },
+      "noPlan": "-",
+      "createdOn": "Created {date}",
+      "actions": {
+        "impersonate": "Login as {name}",
+        "impersonateTip": "Login as company",
+        "details": "View details of {name}",
+        "detailsTip": "View details",
+        "upgrade": "Upgrade plan for {name}",
+        "upgradeTip": "Upgrade plan",
+        "resetPassword": "Reset password for {name}",
+        "resetPasswordTip": "Reset password",
+        "disableLogin": "Disable login for {name}",
+        "disableLoginTip": "Disable login",
+        "enableLogin": "Enable login for {name}",
+        "enableLoginTip": "Enable login",
+        "edit": "Edit {name}",
+        "editTip": "Edit",
+        "delete": "Delete {name}",
+        "deleteTip": "Delete"
+      },
+      "impersonating": "Opening {name}…",
+      "impersonateFailed": "Couldn't log in as this company",
+      "login": {
+        "disableTitle": "Disable Login",
+        "disableBody": "“{name}” will not be able to sign in until login is enabled again.",
+        "disableConfirm": "Disable Login",
+        "enabled": "Login enabled",
+        "disabled": "Login disabled",
+        "failed": "Couldn't change the login setting"
+      },
+      "delete": {
+        "title": "Delete Company",
+        "body": "Delete “{name}” ({email})? The company will no longer be able to sign in.",
+        "confirm": "Delete Company",
+        "deleted": "Company deleted"
+      },
+      "dialog": {
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "empty": {
+        "title": "No companies yet",
+        "description": "Add your first company to give it a workspace.",
+        "noMatchTitle": "No companies match your filters",
+        "noMatchDescription": "Try a different search or clear the filters.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn't load companies",
+        "retry": "Try again"
+      }
+    },
+    "form": {
+      "createTitle": "Add New Company",
+      "editTitle": "Edit Company",
+      "name": "Company Name",
+      "namePlaceholder": "enter company name",
+      "email": "Email",
+      "emailPlaceholder": "enter email",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "enableLogin": "Enable Login",
+      "password": "Password",
+      "passwordPlaceholder": "enter password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "confirm password",
+      "keepPasswordHint": "Leave blank to keep the current password.",
+      "noPasswordHint": "This company has no password yet — set one to let it sign in.",
+      "save": "Save",
+      "cancel": "Cancel",
+      "created": "Company created",
+      "updated": "Company updated"
+    },
+    "upgrade": {
+      "title": "Upgrade Plan for Company",
+      "subtitle": "Select a new plan for this company",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "billingLabel": "Yearly billing",
+      "plansLabel": "Plans",
+      "current": "Current",
+      "perMonthly": "/ monthly",
+      "perYearly": "/ yearly",
+      "aiIntegration": "AI Integration",
+      "submit": "Upgrade Plan",
+      "cancel": "Cancel",
+      "updated": "Plan updated",
+      "noPlans": "No active plans to choose from."
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "subtitle": "Set a new password for {name}.",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "enter new password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "confirm new password",
+      "warning": "The company will need this new password to sign in. Anyone signed in as this company will be signed out.",
+      "strengthLabel": "Password strength",
+      "strength": {
+        "1": "Weak",
+        "2": "Fair",
+        "3": "Good",
+        "4": "Strong"
+      },
+      "strengthHint": "Strength: {level}",
+      "submit": "Reset Password",
+      "cancel": "Cancel",
+      "done": "Password reset"
+    },
+    "history": {
+      "title": "Activity History",
+      "companyTitle": "Activity History — {name}",
+      "subtitleAll": "Everything that happened to your companies, newest first.",
+      "subtitleOne": "Everything that happened to this company, newest first.",
+      "listLabel": "Activity",
+      "system": "System",
+      "by": "by {name}",
+      "deleted": "(deleted)",
+      "empty": "No activity yet.",
+      "emptyDescription": "Actions on companies will show up here.",
+      "errorTitle": "Couldn't load the activity",
+      "retry": "Try again",
+      "close": "Close"
+    },
+    "details": {
+      "title": "Company Details",
+      "subtitle": "Account, subscription, usage and activity for this company.",
+      "back": "Back",
+      "metaTitle": "{name} · Company Details",
+      "memberSince": "Member since {date}",
+      "actionsLabel": "Actions for {name}",
+      "noPlan": "No plan",
+      "subscription": {
+        "title": "Subscription",
+        "subtitle": "The current plan and its billing.",
+        "upgrade": "Upgrade Plan",
+        "plan": "Current Plan",
+        "duration": "Billing Duration",
+        "price": "Price",
+        "perMonth": "/ month",
+        "perYear": "/ year",
+        "expiry": "Plan Expiry",
+        "neverExpires": "Never expires",
+        "expiresToday": "Expires today",
+        "expiresIn": "{count, plural, one {Expires in # day} other {Expires in # days}}",
+        "expired": "Expired",
+        "trialEnd": "Trial End",
+        "trialEndsToday": "Ends today",
+        "trialEndsIn": "{count, plural, one {# day left} other {# days left}}",
+        "trialEnded": "Ended"
+      },
+      "account": {
+        "title": "Account",
+        "subtitle": "Sign-in access and account state.",
+        "login": "Login",
+        "loginEnabled": "Enabled",
+        "loginDisabled": "Disabled",
+        "loginToggleLabel": "Login enabled for {name}",
+        "noPassword": "No password yet — reset the password before enabling login.",
+        "status": "Status",
+        "emailVerified": "Email Verified",
+        "verified": "Verified",
+        "notVerified": "Not verified",
+        "lastUpdated": "Last Updated"
+      },
+      "usage": {
+        "title": "Usage",
+        "subtitle": "Current usage against the plan's limits.",
+        "projects": "Projects",
+        "storage": "Storage",
+        "of": "{used} / {limit}",
+        "unlimited": "Unlimited",
+        "projectsBar": "Projects used",
+        "storageBar": "Storage used"
+      },
+      "activity": {
+        "title": "Recent Activity",
+        "subtitle": "The latest changes to this account.",
+        "viewAll": "View all",
+        "empty": "No activity yet."
+      },
+      "notFound": {
+        "title": "Company not found",
+        "description": "It may have been deleted, or the link is wrong.",
+        "back": "Back to Companies"
+      },
+      "error": {
+        "title": "Couldn't load the company",
+        "retry": "Try again"
+      }
     }
   }
 }

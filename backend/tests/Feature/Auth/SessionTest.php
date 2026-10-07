@@ -16,6 +16,8 @@ test('me returns the authenticated user and role without secrets', function (str
             'role' => $role,
             'avatar' => null,
             'status' => 'active',
+            'is_impersonating' => false,
+            'impersonator' => null,
         ]]);
 })->with([
     'company' => ['company', 'company'],

@@ -35,7 +35,8 @@ export function UserMenu({ user }: { user: User }) {
     logout.mutate(undefined, {
       // Full navigation, not router.replace: drops every bit of client state and the
       // router cache, so Back cannot resurface a signed-in page.
-      onSuccess: () => window.location.replace(LOGIN[user.role]),
+      // While impersonating, the real person is the super admin: back to the admin login.
+      onSuccess: () => window.location.replace(user.is_impersonating ? LOGIN.super_admin : LOGIN[user.role]),
       onError: () => toast.error(t('failed'), t('failedDescription')),
     })
   }

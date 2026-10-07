@@ -26,8 +26,13 @@ function toneIndex(seed: number): number {
 
 /* default: `avatar-size` (36px) with 13px/600 initials (Avatar.md).
    lg: 80px for a profile header (the Profile Settings screenshot), initials at `title-section`. */
+// sm 28px / md 48px: Avatar.md's variants "for dense rows and detail headers".
 const SIZES = {
+  sm: 'size-7 text-[11px] font-semibold',
   default: 'size-avatar text-[13px] font-semibold',
+  // 40px: the identity cell in the Companies screenshot's table rows.
+  row: 'size-10 text-[13px] font-semibold',
+  md: 'size-12 text-[15px] font-semibold',
   lg: 'size-20 text-title-section',
 } as const
 

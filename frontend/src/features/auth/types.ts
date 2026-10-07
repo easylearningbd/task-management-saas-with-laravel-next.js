@@ -11,6 +11,10 @@ export interface User {
   role: UserRole
   avatar: string | null
   status: UserStatus
+  /** A super admin is viewing as this account ("Login as company"). */
+  is_impersonating: boolean
+  /** That admin, while `is_impersonating`. */
+  impersonator: { name: string; email: string } | null
 }
 
 /** Laravel API Resource envelope. */

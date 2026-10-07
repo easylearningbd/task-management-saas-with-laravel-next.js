@@ -35,6 +35,9 @@ export type FilterBarProps = {
   onReset?: () => void
   /** Disables Reset when nothing is filtered. */
   canReset?: boolean
+  /** Controls at the far right, after the Filters button — ViewToggle.md: the view toggle
+   *  sits "at the right end of a filter bar". */
+  actions?: React.ReactNode
   density?: 'default' | 'compact'
   className?: string
 }
@@ -50,6 +53,7 @@ export function FilterBar({
   defaultAdvancedOpen = false,
   onReset,
   canReset = true,
+  actions,
   density = 'default',
   className,
 }: FilterBarProps) {
@@ -94,18 +98,22 @@ export function FilterBar({
           className="w-full sm:w-64"
         />
         {children}
-        {advanced ? (
-          <Button
-            variant="outline"
-            size="sm"
-            className="ml-auto"
-            aria-expanded={open}
-            aria-controls={panelId}
-            onClick={() => setOpen((value) => !value)}
-          >
-            <Filter className="size-3.5" aria-hidden="true" />
-            {t('filters')}
-          </Button>
+        {advanced || actions ? (
+          <div className="ml-auto flex items-center gap-2">
+            {advanced ? (
+              <Button
+                variant="outline"
+                size="sm"
+                aria-expanded={open}
+                aria-controls={panelId}
+                onClick={() => setOpen((value) => !value)}
+              >
+                <Filter className="size-3.5" aria-hidden="true" />
+                {t('filters')}
+              </Button>
+            ) : null}
+            {actions}
+          </div>
         ) : null}
       </div>
 

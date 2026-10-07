@@ -1,13 +1,17 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\ActivityController;
+use App\Http\Controllers\Api\V1\Admin\CompanyController;
 use App\Http\Controllers\Api\V1\Admin\CouponController;
 use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\V1\Admin\ImpersonationController;
 use App\Http\Controllers\Api\V1\Admin\PlanController;
 use App\Http\Controllers\Api\V1\Auth\AdminLoginController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
 use App\Http\Controllers\Api\V1\Auth\MeController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
+use App\Http\Controllers\Api\V1\Auth\StopImpersonatingController;
 use App\Http\Controllers\Api\V1\Company\DashboardController as CompanyDashboardController;
 use App\Http\Controllers\Api\V1\Profile\AvatarController;
 use App\Http\Controllers\Api\V1\Profile\PasswordController;
@@ -26,6 +30,8 @@ Route::prefix('v1')->name('v1.')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('auth/logout', LogoutController::class)->name('auth.logout');
         Route::get('me', MeController::class)->name('me');
+        // "Back to Admin" — called by the impersonated company session (the admin comes from the session).
+        Route::post('stop-impersonating', StopImpersonatingController::class)->middleware('throttle:10,1')->name('stop-impersonating');
 
         // Own profile — both roles; every action targets the signed-in user only.
         Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -46,6 +52,15 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('coupons/generate-code', [CouponController::class, 'generateCode'])->middleware('throttle:60,1')->name('coupons.generate-code');
         Route::apiResource('coupons', CouponController::class);
         Route::patch('coupons/{coupon}/toggle-status', [CouponController::class, 'toggleStatus'])->name('coupons.toggle-status');
+
+        // Companies (users with type = company) and their activity log.
+        Route::apiResource('companies', CompanyController::class);
+        Route::patch('companies/{company}/toggle-login', [CompanyController::class, 'toggleLogin'])->name('companies.toggle-login');
+        Route::patch('companies/{company}/reset-password', [CompanyController::class, 'resetPassword'])->middleware('throttle:10,1')->name('companies.reset-password');
+        Route::patch('companies/{company}/change-plan', [CompanyController::class, 'changePlan'])->name('companies.change-plan');
+        Route::get('companies/{company}/activities', [CompanyController::class, 'activities'])->name('companies.activities');
+        Route::get('activities', ActivityController::class)->name('activities.index');
+        Route::post('companies/{company}/impersonate', ImpersonationController::class)->middleware('throttle:10,1')->name('companies.impersonate');
     });
 
     // Company (tenant).

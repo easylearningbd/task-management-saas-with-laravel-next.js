@@ -1,6 +1,8 @@
 'use client'
 
 import * as React from 'react'
+import { ImpersonationBanner } from '@/components/layout/impersonation-banner'
+import { PageCrumbProvider } from '@/components/layout/page-crumb'
 import { Sidebar } from '@/components/layout/sidebar'
 import { Topbar } from '@/components/layout/topbar'
 import { useMe } from '@/features/auth/api'
@@ -26,13 +28,16 @@ export function AppShell({ user, children }: { user: User; children: React.React
   }, [sidebarOpen])
 
   return (
-    <div className="flex min-h-svh bg-background">
-      <Sidebar role={user.role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar user={current} sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen((open) => !open)} />
-        <main className="flex-1 px-4 pt-4 pb-8 md:px-6 md:pb-10 xl:px-12 xl:pb-12">{children}</main>
+    <PageCrumbProvider>
+      <div className="flex min-h-svh bg-background">
+        <Sidebar role={user.role} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex min-w-0 flex-1 flex-col">
+          {current.is_impersonating ? <ImpersonationBanner companyName={current.name} /> : null}
+          <Topbar user={current} sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen((open) => !open)} />
+          <main className="flex-1 px-4 pt-4 pb-8 md:px-6 md:pb-10 xl:px-12 xl:pb-12">{children}</main>
+        </div>
       </div>
-    </div>
+    </PageCrumbProvider>
   )
 }
 
