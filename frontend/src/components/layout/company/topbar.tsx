@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 import { ChevronRight, PanelLeft } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -12,6 +13,8 @@ import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { UserMenu } from '@/features/auth/components/user-menu'
 import type { User } from '@/features/auth/types'
 import { cn } from '@/lib/cn'
+
+type Crumb = { label: string; href?: string }
 
 /* The company top bar — design/user-dashboard/components/shell/topbar.tsx: `topbar-height`,
    `card` ground, bottom border; the sidebar toggle (every width: drawer below `lg`, hide /
@@ -35,13 +38,20 @@ export function CompanyTopbar({
   const active = activeCompanyEntry(pathname)
   const pageTitle = COMPANY_PAGE_TITLES[pathname]
 
-  // A menu page: "Parent › Page"; a page outside the menu (Profile Settings): its single title.
-  const crumbs = active
-    ? [...(active.parent ? [t(`nav.${active.parent.labelKey}`)] : []), pageLabel ?? t(`nav.${active.leaf.labelKey}`)]
+  // A menu page other than the dashboard: "Dashboard › [Parent ›] Page" (the Clients screenshot:
+  // "Dashboard › Clients"), the first step linking home. The dashboard itself, and a page outside
+  // the menu (Profile Settings), show a single title.
+  const home: Crumb = { label: t('nav.dashboard'), href: '/dashboard' }
+  const crumbs: Crumb[] = active
+    ? [
+        ...(active.leaf.href === '/dashboard' ? [] : [home]),
+        ...(active.parent ? [{ label: t(`nav.${active.parent.labelKey}`) }] : []),
+        { label: pageLabel ?? t(`nav.${active.leaf.labelKey}`) },
+      ]
     : pageLabel
-      ? [pageLabel]
+      ? [{ label: pageLabel }]
       : pageTitle
-        ? [tShell(`nav.${pageTitle}`)]
+        ? [{ label: tShell(`nav.${pageTitle}`) }]
         : []
 
   return (
@@ -62,16 +72,25 @@ export function CompanyTopbar({
           {crumbs.map((crumb, index) => {
             const last = index === crumbs.length - 1
             return (
-              <li key={crumb} className={cn('flex min-w-0 items-center gap-2', !last && 'max-sm:hidden')}>
+              <li key={crumb.label} className={cn('flex min-w-0 items-center gap-2', !last && 'max-sm:hidden')}>
                 {index > 0 ? (
                   <ChevronRight className={cn('size-icon shrink-0 text-muted-foreground', last && 'max-sm:hidden')} aria-hidden="true" />
                 ) : null}
-                <span
-                  aria-current={last ? 'page' : undefined}
-                  className={cn('truncate', last ? 'font-medium text-foreground' : 'text-muted-foreground')}
-                >
-                  {crumb}
-                </span>
+                {crumb.href && !last ? (
+                  <Link
+                    href={crumb.href}
+                    className="truncate rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:shadow-focus focus-visible:outline-none"
+                  >
+                    {crumb.label}
+                  </Link>
+                ) : (
+                  <span
+                    aria-current={last ? 'page' : undefined}
+                    className={cn('truncate', last ? 'font-medium text-foreground' : 'text-muted-foreground')}
+                  >
+                    {crumb.label}
+                  </span>
+                )}
               </li>
             )
           })}

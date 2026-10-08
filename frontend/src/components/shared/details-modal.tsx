@@ -12,7 +12,9 @@ import { Dialog, DialogBody, DialogContent, DialogFooter } from '@/components/ui
    tiles, on `primary-soft` with a `primary-strong` glyph; the default glyph is brand-book's
    `Info` ("details"). Fields are a two-column definition list (one column on phones): a
    `body-sm` `muted-foreground` label — with an optional leading icon — over a `body` value.
-   Empty values read "-". The footer has one outline Close button (plus optional extras). */
+   Empty values read "-". The footer has one outline Close button (plus optional extras).
+   `divided` draws the 1px rule under the header (Modal.md's divided header); `footer={false}`
+   drops the Close footer when the header's × is enough. */
 
 export type { DetailItem }
 
@@ -26,7 +28,11 @@ export type DetailsModalProps = {
   loading?: boolean
   /** Extra footer actions, placed before Close. */
   actions?: React.ReactNode
-  size?: 'sm' | 'lg'
+  size?: 'sm' | 'md' | 'lg'
+  /** A 1px rule under the header (as in the details screenshots). */
+  divided?: boolean
+  /** The Close footer; off when the header's × is the only way out (as in the details screenshots). */
+  footer?: boolean
 }
 
 export function DetailsModal({
@@ -38,6 +44,8 @@ export function DetailsModal({
   loading = false,
   actions,
   size = 'lg',
+  divided = false,
+  footer = true,
 }: DetailsModalProps) {
   const t = useTranslations('shared.modal')
 
@@ -45,6 +53,7 @@ export function DetailsModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         size={size}
+        divided={divided}
         closeLabel={t('close')}
         heading={
           <span className="flex items-center gap-3">
@@ -58,12 +67,14 @@ export function DetailsModal({
         <DialogBody>
           <DetailList items={items} loading={loading} />
         </DialogBody>
-        <DialogFooter>
-          {actions}
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            {t('close')}
-          </Button>
-        </DialogFooter>
+        {footer ? (
+          <DialogFooter>
+            {actions}
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              {t('close')}
+            </Button>
+          </DialogFooter>
+        ) : null}
       </DialogContent>
     </Dialog>
   )

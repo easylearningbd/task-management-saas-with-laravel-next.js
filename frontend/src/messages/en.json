@@ -927,5 +927,128 @@
       "description": "Something went wrong while loading your dashboard. Please try again.",
       "retry": "Try again"
     }
+  },
+  "clients": {
+    "validation": {
+      "nameRequired": "The client name is required.",
+      "nameMax": "The client name may not be longer than {max} characters.",
+      "emailRequired": "The email address is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "emailMax": "The email address may not be longer than {max} characters.",
+      "emailTaken": "A client with this email address already exists.",
+      "phoneRequired": "The phone number is required.",
+      "phoneMax": "The phone number may not be longer than {max} characters.",
+      "companyRequired": "The company is required.",
+      "companyMax": "The company may not be longer than {max} characters.",
+      "addressRequired": "The address is required.",
+      "addressMax": "The address may not be longer than {max} characters.",
+      "websiteInvalid": "Enter a valid URL starting with http:// or https://.",
+      "websiteMax": "The website may not be longer than {max} characters.",
+      "notesMax": "The notes may not be longer than {max} characters."
+    },
+    "list": {
+      "title": "Clients",
+      "subtitle": "Manage your clients and their contact information.",
+      "add": "Add Client",
+      "tableLabel": "Clients",
+      "gridLabel": "Clients",
+      "columns": {
+        "name": "Name",
+        "phone": "Phone",
+        "company": "Company",
+        "website": "Website",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "filters": {
+        "statusLabel": "Status",
+        "allStatus": "All Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "createdLabel": "Created At",
+        "createdFrom": "Created from",
+        "createdTo": "Created to"
+      },
+      "view": {
+        "label": "View",
+        "list": "List view",
+        "grid": "Grid view"
+      },
+      "websiteLink": "{host} (opens in a new tab)",
+      "noValue": "-",
+      "actions": {
+        "view": "View details of {name}",
+        "viewTip": "View details",
+        "edit": "Edit {name}",
+        "editTip": "Edit",
+        "deactivate": "Deactivate {name}",
+        "deactivateTip": "Deactivate",
+        "activate": "Activate {name}",
+        "activateTip": "Activate",
+        "delete": "Delete {name}",
+        "deleteTip": "Delete"
+      },
+      "status": {
+        "activated": "Client activated",
+        "deactivated": "Client deactivated",
+        "failed": "Couldn’t change the client’s status"
+      },
+      "delete": {
+        "title": "Delete Client",
+        "body": "Delete “{name}” ({email})? The client will be removed from your list.",
+        "confirm": "Delete Client",
+        "deleted": "Client deleted"
+      },
+      "dialog": {
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "empty": {
+        "title": "No clients yet",
+        "description": "Add your first client to keep their contact details in one place.",
+        "noMatchTitle": "No clients match your filters",
+        "noMatchDescription": "Try a different search or clear the filters.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn’t load clients",
+        "retry": "Try again"
+      }
+    },
+    "form": {
+      "createTitle": "Add New Client",
+      "editTitle": "Edit Client",
+      "name": "Client Name",
+      "namePlaceholder": "enter client name",
+      "email": "Email",
+      "emailPlaceholder": "enter email",
+      "phone": "Phone",
+      "phonePlaceholder": "enter phone",
+      "company": "Company",
+      "companyPlaceholder": "enter company",
+      "address": "Address",
+      "addressPlaceholder": "enter address",
+      "website": "Website",
+      "websitePlaceholder": "https://example.com",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "notes": "Notes",
+      "notesPlaceholder": "enter notes",
+      "cancel": "Cancel",
+      "save": "Save",
+      "created": "Client created",
+      "updated": "Client updated"
+    },
+    "details": {
+      "title": "Client Details",
+      "name": "Client Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company",
+      "website": "Website",
+      "status": "Status",
+      "address": "Address",
+      "notes": "Notes",
+      "createdAt": "Created At"
+    }
   }
 }

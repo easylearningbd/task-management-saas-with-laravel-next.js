@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\Auth\LogoutController;
 use App\Http\Controllers\Api\V1\Auth\MeController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\StopImpersonatingController;
+use App\Http\Controllers\Api\V1\Company\ClientController;
 use App\Http\Controllers\Api\V1\Company\DashboardController as CompanyDashboardController;
 use App\Http\Controllers\Api\V1\Profile\AvatarController;
 use App\Http\Controllers\Api\V1\Profile\PasswordController;
@@ -66,5 +67,9 @@ Route::prefix('v1')->name('v1.')->group(function () {
     // Company (tenant).
     Route::middleware(['auth:sanctum', 'role:company'])->group(function () {
         Route::get('dashboard', CompanyDashboardController::class)->name('dashboard');
+
+        // Clients — tenant-scoped by BelongsToCompany (another company's id → 404).
+        Route::apiResource('clients', ClientController::class);
+        Route::patch('clients/{client}/toggle-status', [ClientController::class, 'toggleStatus'])->name('clients.toggle-status');
     });
 });

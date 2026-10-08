@@ -231,11 +231,11 @@ Every CRUD list page follows the same pattern:
 - Duration computed server-side.
 
 ### 6.7 Clients
-- Columns: #, Name (avatar initials + name + email), Phone, Company (badge), Website (link badge, opens in new tab), Status (Active/Inactive), Actions (view, edit, lock, delete).
-- Filters: search, All Status; list/grid toggle.
-- Add/Edit modal: Name*, Email*, Phone, Company, Website (URL), Address, Status.
-- **Client Details modal:** Client Name, Email, Phone, Company, Website, Status, Address, Created At.
-- A client with projects/invoices cannot be deleted (show reason) — deactivate instead.
+- Columns: #, Name (avatar initials + name + email; sortable), Phone, Company (badge), Website (link badge, opens in new tab), Status (Active/Inactive), Actions (view, edit, lock, delete).
+- Filters: search (name, email, company, phone), All Status, Filters panel (Created At date range); list/grid toggle.
+- Add/Edit modal (single column): Client Name*, Email* (unique within the company), Phone*, Company*, Address* (textarea), Website (http/https URL), Status (default Active), Notes (textarea).
+- **Client Details modal:** Client Name, Email, Phone, Company, Website, Status, Address, Notes (only when present), Created At.
+- A client with projects/invoices cannot be deleted (show reason) — deactivate instead. *(Guard to be wired when Projects and Invoices exist; until then delete is a plain soft delete.)*
 
 ### 6.8 Financial ▸ Invoices
 
