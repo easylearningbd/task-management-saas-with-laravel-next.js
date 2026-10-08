@@ -4,17 +4,21 @@ namespace App\Services;
 
 use App\Enums\UserType;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\SessionGuard;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthService
 {
+    public function __construct(private readonly CompanySetupService $setup) {}
+
     /**
      * Log in through the endpoint of the given role. Credentials are checked
      * without logging in, so a wrong-role or disabled account never gets a session.
@@ -64,13 +68,21 @@ class AuthService
      */
     public function registerCompany(array $data, Request $request): User
     {
-        $user = new User([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-        ]);
-        $user->type = UserType::Company;
-        $user->save();
+        // The account and its starting setup (default plan, default expense categories) are
+        // created together, exactly as when a super admin adds a company.
+        $user = DB::transaction(function () use ($data): User {
+            $user = new User([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+            ]);
+            $user->type = UserType::Company;
+            $user->save();
+
+            $this->setup->setUp(Company::query()->findOrFail($user->getKey()));
+
+            return $user->refresh();
+        });
 
         event(new Registered($user));
 

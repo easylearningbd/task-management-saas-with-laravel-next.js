@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\StopImpersonatingController;
 use App\Http\Controllers\Api\V1\Company\ClientController;
 use App\Http\Controllers\Api\V1\Company\DashboardController as CompanyDashboardController;
+use App\Http\Controllers\Api\V1\Company\ExpenseCategoryController;
 use App\Http\Controllers\Api\V1\Profile\AvatarController;
 use App\Http\Controllers\Api\V1\Profile\PasswordController;
 use App\Http\Controllers\Api\V1\Profile\ProfileController;
@@ -71,5 +72,9 @@ Route::prefix('v1')->name('v1.')->group(function () {
         // Clients — tenant-scoped by BelongsToCompany (another company's id → 404).
         Route::apiResource('clients', ClientController::class);
         Route::patch('clients/{client}/toggle-status', [ClientController::class, 'toggleStatus'])->name('clients.toggle-status');
+
+        // Expense categories — tenant-scoped the same way.
+        Route::apiResource('expense-categories', ExpenseCategoryController::class)->parameters(['expense-categories' => 'category']);
+        Route::patch('expense-categories/{category}/toggle-status', [ExpenseCategoryController::class, 'toggleStatus'])->name('expense-categories.toggle-status');
     });
 });

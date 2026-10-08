@@ -1050,5 +1050,90 @@
       "notes": "Notes",
       "createdAt": "Created At"
     }
+  },
+  "expenseCategories": {
+    "page": {
+      "title": "Expense Categories",
+      "subtitle": "Manage your expense categories for organizing and classifying expenses."
+    },
+    "validation": {
+      "nameRequired": "The category name is required.",
+      "nameMax": "The category name may not be longer than {max} characters.",
+      "nameTaken": "An expense category with this name already exists.",
+      "descriptionMax": "The description may not be longer than {max} characters.",
+      "colorRequired": "The color is required.",
+      "colorInvalid": "Enter a color as a hex code, like #3B82F6.",
+      "statusInvalid": "The selected status is invalid."
+    },
+    "form": {
+      "createTitle": "Add New Expense Category",
+      "createSubtitle": "Fill in the details to create a new expense category",
+      "editTitle": "Edit Expense Category",
+      "editSubtitle": "Update the details of this expense category",
+      "name": "Category Name",
+      "namePlaceholder": "Enter category name",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter description",
+      "color": "Color",
+      "colorPicker": "Choose a color",
+      "add": "Add Category",
+      "update": "Update Category",
+      "cancel": "Cancel",
+      "created": "Expense category created",
+      "updated": "Expense category updated"
+    },
+    "list": {
+      "searchPlaceholder": "Search categories...",
+      "searchLabel": "Search categories",
+      "searchButton": "Search",
+      "statusLabel": "Status",
+      "allStatuses": "All Statuses",
+      "active": "Active",
+      "inactive": "Inactive",
+      "tableLabel": "Expense categories",
+      "columns": {
+        "name": "Name",
+        "color": "Color",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit {name}",
+        "editTip": "Edit",
+        "deactivate": "Deactivate {name}",
+        "deactivateTip": "Deactivate",
+        "activate": "Activate {name}",
+        "activateTip": "Activate",
+        "delete": "Delete {name}",
+        "deleteTip": "Delete"
+      },
+      "status": {
+        "activated": "Expense category activated",
+        "deactivated": "Expense category deactivated",
+        "failed": "Couldn’t change the category’s status"
+      },
+      "delete": {
+        "title": "Delete Expense Category",
+        "body": "Delete “{name}”? It will be removed from your list.",
+        "confirm": "Delete Category",
+        "deleted": "Expense category deleted"
+      },
+      "dialog": {
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "empty": {
+        "title": "No expense categories yet",
+        "description": "Use the Add New Expense Category form to create your first one.",
+        "noMatchTitle": "No categories match your search",
+        "noMatchDescription": "Try a different search or status, or clear them.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn’t load expense categories",
+        "retry": "Try again"
+      }
+    }
   }
 }

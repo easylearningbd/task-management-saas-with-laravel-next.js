@@ -64,6 +64,8 @@ export type DataTableProps<T, K extends string = string> = {
   /** Footer under a 1px rule (pagination); hidden while empty. */
   footer?: React.ReactNode
   density?: 'default' | 'compact' | 'relaxed'
+  /** Marks a row as selected (e.g. the one open in an editor) — Table.md's `data-selected` row on `primary-soft`. */
+  isRowSelected?: (row: T) => boolean
   className?: string
   scrollAreaClassName?: string
 }
@@ -92,6 +94,7 @@ export function DataTable<T, K extends string = string>({
   density = 'default',
   className,
   scrollAreaClassName,
+  isRowSelected,
 }: DataTableProps<T, K>) {
   const heights = HEIGHTS[density]
   const t = useTranslations('shared.table')
@@ -144,7 +147,11 @@ export function DataTable<T, K extends string = string>({
                 : rows?.map((row, index) => (
                     <tr
                       key={getRowId(row)}
-                      className={cn(heights.row, 'border-t border-border transition-colors first:border-t-0 hover:bg-accent')}
+                      data-selected={isRowSelected?.(row) || undefined}
+                      className={cn(
+                        heights.row,
+                        'border-t border-border transition-colors first:border-t-0 hover:bg-accent data-[selected=true]:bg-primary-soft',
+                      )}
                     >
                       {showNumbers ? (
                         <td className="px-4 whitespace-nowrap text-muted-foreground">{rowNumberOffset + index + 1}</td>
