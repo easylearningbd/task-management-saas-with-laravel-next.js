@@ -308,12 +308,14 @@ Every CRUD list page follows the same pattern:
 - Meetings appear on the Calendar.
 
 ### 6.13 Configuration ▸ Task Stages
-- Columns: drag handle ⋮⋮, Name, Description, Order, Status (Active), Done Stage (Regular Stage / **Done Stage**), Actions (view, edit, lock, delete).
-- **Drag-to-reorder** rows updates `order`.
-- Add/Edit modal: Stage Name*, Description, Color (color picker + hex input, default `#3B82F6`), Order, Status (Active/Inactive), ☐ Mark as Done Stage.
+- Stat cards: Total Stages, Active Stages, **Done Stage** (the done stage's name), Inactive Stages.
+- Filters: search, All Status, Filters panel (Created At range). No view toggle and no pagination — the whole workflow is always listed.
+- **Workflow Stages** list of stage cards (not a table): drag handle ⋮⋮, `Order: n`, color dot, name, **Done Stage** badge (done stage only), status badge, task count, actions (view, edit, lock, delete).
+- **Drag-to-reorder** by the handle (mouse, touch or keyboard) rewrites `order` (contiguous 1..n) in one request; disabled while a search or filter is active ("Clear filters to reorder").
+- Add/Edit modal: Stage Name*, Description, Color (color picker + hex input, default `#3B82F6`), Order (empty = at the end; a position inserts there), Status (Active/Inactive), ☐ Mark as Done Stage (warns that the done flag moves; locked on the current done stage).
 - **Task Stage Details modal:** Stage Name, status badge, done/regular badge, Color (swatch + hex), Order, Description, Created At.
-- Rules: at least one done stage must exist; a stage with tasks cannot be deleted (move tasks first); Kanban columns follow this order; stage colors drive Kanban column dots.
-- Defaults per new company: To Do (#6B7280, 1), In Progress (#3B82F6, 2), Cancelled (3), Done (#10B981, 4, done stage).
+- Rules: **exactly one** done stage per company (marking another moves the flag); the done stage is always active and can't be unset, deactivated or deleted; at least one stage stays active; deleting renumbers the rest; a stage with tasks cannot be deleted (move tasks first) *(guard wired when Tasks exist; task counts read 0 until then)*; Kanban columns follow this order; stage colors drive Kanban column dots.
+- Defaults per new company: To Do (#6B7280, 1), In Progress (#3B82F6, 2), Cancelled (#6B7280, 3), Done (#10B981, 4, done stage).
 
 ### 6.14 Configuration ▸ Expense Categories
 - Split layout: left **Add New Expense Category** form (Category Name*, Status, Description, Color picker + hex, **Add Category** button); right: search + Search button, All Statuses filter, table (Name + description, Color swatch + hex, Status, Actions: lock, edit, delete).

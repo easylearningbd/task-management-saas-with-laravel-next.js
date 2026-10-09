@@ -400,6 +400,13 @@
     "charts": {
       "year": "Year",
       "month": "Month"
+    },
+    "sortable": {
+      "instructions": "To pick up an item, press Space or Enter. Use the up and down arrow keys to move it, Space or Enter to drop it in its new place, or Escape to cancel.",
+      "pickedUp": "Picked up {item}, at position {position} of {total}.",
+      "movedOver": "{item} moved to position {position} of {total}.",
+      "dropped": "{item} dropped at position {position} of {total}.",
+      "cancelled": "Reordering cancelled. {item} is back in its place."
     }
   },
   "coupons": {
@@ -1134,6 +1141,127 @@
         "errorTitle": "Couldn’t load expense categories",
         "retry": "Try again"
       }
+    }
+  },
+  "taskStages": {
+    "page": {
+      "title": "Task Stages",
+      "subtitle": "Manage your task stages and their order.",
+      "add": "Add Task Stage"
+    },
+    "validation": {
+      "nameRequired": "The stage name is required.",
+      "nameMax": "The stage name may not be longer than {max} characters.",
+      "nameTaken": "A task stage with this name already exists.",
+      "descriptionMax": "The description may not be longer than {max} characters.",
+      "colorRequired": "The color is required.",
+      "colorInvalid": "Enter a color as a hex code, like #3B82F6.",
+      "orderInteger": "The order must be a whole number.",
+      "orderMin": "The order must be at least {min}.",
+      "orderMax": "The order may not be greater than {max}.",
+      "statusInvalid": "The selected status is invalid."
+    },
+    "stats": {
+      "total": "Total Stages",
+      "active": "Active Stages",
+      "doneStage": "Done Stage",
+      "inactive": "Inactive Stages",
+      "none": "-"
+    },
+    "list": {
+      "heading": "Workflow Stages",
+      "dragHint": "Drag to reorder",
+      "dragDisabled": "Clear filters to reorder",
+      "listLabel": "Workflow stages",
+      "loading": "Loading stages…",
+      "order": "Order: {order}",
+      "doneStage": "Done Stage",
+      "tasks": "{count, plural, one {task} other {tasks}}",
+      "reorder": {
+        "saved": "Stage order saved",
+        "failed": "Couldn’t save the new order"
+      },
+      "filters": {
+        "statusLabel": "Status",
+        "allStatus": "All Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "createdFrom": "Created from",
+        "createdTo": "Created to"
+      },
+      "actions": {
+        "view": "View details of {name}",
+        "viewTip": "View details",
+        "edit": "Edit {name}",
+        "editTip": "Edit",
+        "deactivate": "Deactivate {name}",
+        "deactivateTip": "Deactivate",
+        "activate": "Activate {name}",
+        "activateTip": "Activate",
+        "delete": "Delete {name}",
+        "deleteTip": "Delete"
+      },
+      "status": {
+        "activated": "Stage activated",
+        "deactivated": "Stage deactivated",
+        "failed": "Couldn’t change the stage’s status"
+      },
+      "delete": {
+        "title": "Delete Task Stage",
+        "body": "Delete “{name}”? The stages after it will move up.",
+        "confirm": "Delete Stage",
+        "deleted": "Stage deleted"
+      },
+      "dialog": {
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "empty": {
+        "title": "No task stages yet",
+        "description": "Add the stages your tasks move through, in order.",
+        "noMatchTitle": "No stages match your filters",
+        "noMatchDescription": "Try a different search or status, or clear the filters.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn’t load task stages",
+        "retry": "Try again"
+      },
+      "reorderHandle": "Reorder {name}"
+    },
+    "form": {
+      "createTitle": "Add New Task Stage",
+      "editTitle": "Edit Task Stage",
+      "name": "Stage Name",
+      "namePlaceholder": "enter stage name",
+      "description": "Description",
+      "descriptionPlaceholder": "enter description",
+      "color": "Color",
+      "colorPicker": "Choose a color",
+      "order": "Order",
+      "orderPlaceholder": "enter order",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "statusLocked": "The done stage is always active.",
+      "isDone": "Mark as Done Stage",
+      "doneWarning": "Marking this stage as done will remove the done flag from “{name}”.",
+      "doneWarningNone": "This stage will become the done stage.",
+      "doneLocked": "This is the done stage. Mark another stage as the done stage to change it.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "created": "Task stage created",
+      "updated": "Task stage updated"
+    },
+    "details": {
+      "title": "Task Stage Details",
+      "name": "Stage Name",
+      "badges": "Status and type",
+      "doneStage": "Done Stage",
+      "regularStage": "Regular Stage",
+      "color": "Color",
+      "order": "Order",
+      "description": "Description",
+      "noDescription": "No description",
+      "createdAt": "Created At"
     }
   }
 }

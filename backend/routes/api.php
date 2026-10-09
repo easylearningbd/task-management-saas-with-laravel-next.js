@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\Auth\StopImpersonatingController;
 use App\Http\Controllers\Api\V1\Company\ClientController;
 use App\Http\Controllers\Api\V1\Company\DashboardController as CompanyDashboardController;
 use App\Http\Controllers\Api\V1\Company\ExpenseCategoryController;
+use App\Http\Controllers\Api\V1\Company\TaskStageController;
 use App\Http\Controllers\Api\V1\Profile\AvatarController;
 use App\Http\Controllers\Api\V1\Profile\PasswordController;
 use App\Http\Controllers\Api\V1\Profile\ProfileController;
@@ -76,5 +77,12 @@ Route::prefix('v1')->name('v1.')->group(function () {
         // Expense categories — tenant-scoped the same way.
         Route::apiResource('expense-categories', ExpenseCategoryController::class)->parameters(['expense-categories' => 'category']);
         Route::patch('expense-categories/{category}/toggle-status', [ExpenseCategoryController::class, 'toggleStatus'])->name('expense-categories.toggle-status');
+
+        // Task stages — tenant-scoped the same way. `stats` and `reorder` come before the
+        // {stage} routes so they are never read as a stage id.
+        Route::get('task-stages/stats', [TaskStageController::class, 'stats'])->name('task-stages.stats');
+        Route::patch('task-stages/reorder', [TaskStageController::class, 'reorder'])->name('task-stages.reorder');
+        Route::apiResource('task-stages', TaskStageController::class)->parameters(['task-stages' => 'stage']);
+        Route::patch('task-stages/{stage}/toggle-status', [TaskStageController::class, 'toggleStatus'])->name('task-stages.toggle-status');
     });
 });

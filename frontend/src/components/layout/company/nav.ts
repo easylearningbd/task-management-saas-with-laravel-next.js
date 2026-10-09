@@ -35,7 +35,7 @@ export type CompanyNavItem = CompanyNavLeaf & { icon: LucideIcon; children?: Com
 export type CompanyNavSection = { headingKey: CompanySectionKey; items: CompanyNavItem[] }
 
 /** Company routes that exist today. Add a route here when its page ships. */
-export const BUILT: ReadonlySet<string> = new Set(['/dashboard', '/clients', '/configuration/expense-categories'])
+export const BUILT: ReadonlySet<string> = new Set(['/dashboard', '/clients', '/configuration/task-stages', '/configuration/expense-categories'])
 
 export const isBuilt = (href: string) => BUILT.has(href)
 

@@ -14,7 +14,8 @@ import { Dialog, DialogBody, DialogContent, DialogFooter } from '@/components/ui
    `body-sm` `muted-foreground` label — with an optional leading icon — over a `body` value.
    Empty values read "-". The footer has one outline Close button (plus optional extras).
    `divided` draws the 1px rule under the header (Modal.md's divided header); `footer={false}`
-   drops the Close footer when the header's × is enough. */
+   drops the Close footer when the header's × is enough. `children` replaces the field list
+   when a record needs its own body layout (badge rows, inset text) — built from DetailList. */
 
 export type { DetailItem }
 
@@ -23,7 +24,10 @@ export type DetailsModalProps = {
   onOpenChange: (open: boolean) => void
   title: string
   icon?: LucideIcon
-  items: ReadonlyArray<DetailItem>
+  /** The labelled fields (ignored when `children` is given). */
+  items?: ReadonlyArray<DetailItem>
+  /** A custom body instead of the field list. */
+  children?: React.ReactNode
   /** Shows skeleton values (e.g. while the record loads). */
   loading?: boolean
   /** Extra footer actions, placed before Close. */
@@ -40,7 +44,8 @@ export function DetailsModal({
   onOpenChange,
   title,
   icon: Icon = Info,
-  items,
+  items = [],
+  children,
   loading = false,
   actions,
   size = 'lg',
@@ -65,7 +70,7 @@ export function DetailsModal({
         }
       >
         <DialogBody>
-          <DetailList items={items} loading={loading} />
+          {children ?? <DetailList items={items} loading={loading} />}
         </DialogBody>
         {footer ? (
           <DialogFooter>

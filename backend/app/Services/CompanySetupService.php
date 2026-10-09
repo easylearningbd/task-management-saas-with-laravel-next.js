@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Enums\ExpenseCategoryStatus;
 use App\Enums\PlanDuration;
+use App\Enums\TaskStageStatus;
 use App\Models\Company;
 use App\Models\ExpenseCategory;
 use App\Models\Plan;
+use App\Models\TaskStage;
 use App\Support\Tenancy\Tenancy;
 use Illuminate\Support\Carbon;
 
@@ -14,9 +16,7 @@ use Illuminate\Support\Carbon;
  * Everything a brand-new company gets (CLAUDE.md §7: "On company creation, CompanySetupService
  * seeds default task stages, expense categories and settings, and assigns the default plan").
  *
- * Today: the default plan and the five default expense categories.
- * TODO(task-stages): seed To Do / In Progress / Cancelled / Done (CLAUDE.md §13) once the
- *   task_stages table exists.
+ * Today: the default plan, the four default task stages and the five default expense categories.
  * TODO(settings): seed per-company settings once the settings module exists.
  *
  * Must run inside the caller's transaction (CompanyService::create and
@@ -37,10 +37,60 @@ class CompanySetupService
         ['name' => 'Meals', 'color' => '#EF4444', 'description' => 'Business meals and entertainment'],
     ];
 
+    /**
+     * CLAUDE.md §13 / PRD §6.13 — every company's workflow starts with these, in this order;
+     * "Done" is the done stage. Cancelled has no colour in §13 or the design: #6B7280, the grey
+     * of To Do (Phase 0).
+     *
+     * @var list<array{name: string, color: string, description: string, is_done_stage: bool}>
+     */
+    public const DEFAULT_TASK_STAGES = [
+        ['name' => 'To Do', 'color' => '#6B7280', 'description' => 'Tasks that are planned but not yet started', 'is_done_stage' => false],
+        ['name' => 'In Progress', 'color' => '#3B82F6', 'description' => 'Tasks that are currently being worked on', 'is_done_stage' => false],
+        ['name' => 'Cancelled', 'color' => '#6B7280', 'description' => 'Tasks that have been cancelled', 'is_done_stage' => false],
+        ['name' => 'Done', 'color' => '#10B981', 'description' => 'Tasks that are completed', 'is_done_stage' => true],
+    ];
+
     public function setUp(Company $company): void
     {
         $this->assignDefaultPlan($company);
+        $this->seedTaskStages($company);
         $this->seedExpenseCategories($company);
+    }
+
+    /**
+     * The four default task stages, written inside the company's tenancy context (see
+     * seedExpenseCategories()). Idempotent: a default is created only when the company has no
+     * stage of that name, deleted ones included; a new one goes after the company's last stage,
+     * so the order stays contiguous. Afterwards the company has exactly one done stage: if it
+     * has none, "Done" becomes it (when it exists). Returns how many stages were created.
+     */
+    public function seedTaskStages(Company $company): int
+    {
+        return Tenancy::instance()->runAs($company, function (): int {
+            $created = 0;
+            foreach (self::DEFAULT_TASK_STAGES as $default) {
+                if (TaskStage::withTrashed()->named($default['name'])->exists()) {
+                    continue;
+                }
+
+                TaskStage::create([
+                    ...$default,
+                    'is_done_stage' => false,
+                    'status' => TaskStageStatus::Active,
+                    'order' => (int) TaskStage::query()->max('order') + 1,
+                ]);
+                $created++;
+            }
+
+            if (! TaskStage::query()->where('is_done_stage', true)->exists()) {
+                $done = collect(self::DEFAULT_TASK_STAGES)->firstWhere('is_done_stage', true);
+                TaskStage::query()->named($done['name'])->first()
+                    ?->forceFill(['is_done_stage' => true, 'status' => TaskStageStatus::Active])->save();
+            }
+
+            return $created;
+        });
     }
 
     /**

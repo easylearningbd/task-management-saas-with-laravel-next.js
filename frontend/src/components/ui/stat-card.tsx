@@ -8,7 +8,21 @@ import { cn } from '@/lib/cn'
    in a fixed order and carry no meaning. The design adds a hairline border in the tile
    color and `shadow-xs` (StatCard.md says neither) — the design file wins.
    `compact`: the 123px variant of design/user-dashboard (hero-and-stats.tsx) — 16px padding,
-   a 32px tile with a 16px glyph, smaller circles, a 20px/700 figure. */
+   a 32px tile with a 16px glyph, smaller circles, a 20px/700 figure.
+   `variant="corner"`: the white summary card of the Task Stages screenshot — `card` ground,
+   1px `border`, `radius-xl`, `shadow-xs`, 20px padding; a `body` muted label over the 24px/700
+   figure in `foreground`; the 20px icon in the hue's `icon` colour, inside a quarter-circle of
+   the hue's `icon-bg` (a 160px circle centred on the card's top-right corner), as measured.
+   The figure may be a word (a stage name): it truncates before the corner. */
+
+/** The corner variant's quarter-circle and glyph, per hue. */
+const CORNER: Record<StatHue, { circle: string; icon: string }> = {
+  emerald: { circle: 'bg-stat-emerald-icon-bg', icon: 'text-stat-emerald-icon' },
+  blue: { circle: 'bg-stat-blue-icon-bg', icon: 'text-stat-blue-icon' },
+  violet: { circle: 'bg-stat-violet-icon-bg', icon: 'text-stat-violet-icon' },
+  indigo: { circle: 'bg-stat-indigo-icon-bg', icon: 'text-stat-indigo-icon' },
+  amber: { circle: 'bg-stat-amber-icon-bg', icon: 'text-stat-amber-icon' },
+}
 
 export type StatHue = 'emerald' | 'blue' | 'violet' | 'indigo' | 'amber'
 
@@ -74,20 +88,41 @@ export function StatCard({
   caption,
   corner,
   size = 'default',
+  variant = 'tinted',
   className,
 }: {
   hue: StatHue
   icon: LucideIcon
   label: string
   value: string
-  caption: React.ReactNode
+  /** The note under the figure (tinted cards; optional on `corner`). */
+  caption?: React.ReactNode
   /** Top-right extra: an arrow glyph, or the `warning` "Action needed" chip. */
   corner?: React.ReactNode
   size?: keyof typeof SIZES
+  /** `tinted` (the dashboards) or `corner` (a white card, the icon in a quarter-circle). */
+  variant?: 'tinted' | 'corner'
   className?: string
 }) {
   const h = HUE[hue]
   const z = SIZES[size]
+
+  if (variant === 'corner') {
+    const c = CORNER[hue]
+    return (
+      <div className={cn('relative overflow-hidden rounded-xl border border-border bg-card p-5 shadow-xs', className)}>
+        <span aria-hidden="true" className={cn('absolute -top-20 -right-20 size-40 rounded-full', c.circle)} />
+        <Icon className={cn('absolute top-7.5 right-7.5 size-icon-lg', c.icon)} strokeWidth={1.75} aria-hidden="true" />
+        <div className="relative min-w-0 pr-20">
+          <p className="text-body text-muted-foreground">{label}</p>
+          <p className="mt-1 truncate text-2xl leading-8 font-bold tracking-[-0.01em] text-foreground" title={value}>
+            {value}
+          </p>
+          {caption ? <p className="mt-0.5 text-caption text-muted-foreground">{caption}</p> : null}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={cn('relative overflow-hidden rounded-xl border shadow-xs', z.card, h.card, className)}>
