@@ -407,6 +407,24 @@
       "movedOver": "{item} moved to position {position} of {total}.",
       "dropped": "{item} dropped at position {position} of {total}.",
       "cancelled": "Reordering cancelled. {item} is back in its place."
+    },
+    "tabs": {
+      "withCount": "{label} ({count})"
+    },
+    "files": {
+      "type": "{type} file"
+    },
+    "upload": {
+      "label": "Uploads",
+      "percent": "{value}%",
+      "done": "Uploaded",
+      "failed": "Upload failed",
+      "dismiss": "Dismiss {name}",
+      "progressLabel": "Uploading {name}"
+    },
+    "usage": {
+      "of": "{used} of {limit}",
+      "ofUnlimited": "{used} of Unlimited"
     }
   },
   "coupons": {
@@ -812,7 +830,8 @@
     "startLabel": "Start the time tracker",
     "upgrade": "Upgrade",
     "upgradeLabel": "Upgrade your plan",
-    "planCard": "Your account"
+    "planCard": "Your account",
+    "recordCrumb": "Details"
   },
   "companyDashboard": {
     "title": "Dashboard",
@@ -1262,6 +1281,452 @@
       "description": "Description",
       "noDescription": "No description",
       "createdAt": "Created At"
+    }
+  },
+  "media": {
+    "picker": {
+      "title": "Media Library",
+      "countLabel": "{count, plural, one {# file} other {# files}} in the library",
+      "searchPlaceholder": "Search media files...",
+      "searchLabel": "Search media files",
+      "upload": "Upload",
+      "storage": "Storage",
+      "summary": "{count, plural, one {# file} other {# files}} • Page {page} of {pages}",
+      "gridLabel": "Media files",
+      "attached": "Attached",
+      "empty": "No files yet",
+      "emptyHint": "Upload images, PDFs or documents to use them in your projects.",
+      "noResults": "No files match your search",
+      "noResultsHint": "Try a different name, or clear the search.",
+      "loadFailed": "Couldn't load the media library",
+      "tooLarge": "The file may not be larger than {max}.",
+      "network": "Can't reach the server. Check your connection and try again.",
+      "failed": "Couldn't upload the file. Try again."
+    }
+  },
+  "projects": {
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "status": {
+      "active": "Active",
+      "completed": "Completed",
+      "on_hold": "On Hold",
+      "inactive": "Inactive"
+    },
+    "stats": {
+      "total": "Total Projects",
+      "active": "Active Projects",
+      "completed": "Completed",
+      "onHold": "On Hold"
+    },
+    "list": {
+      "title": "Projects",
+      "subtitle": "Manage your projects.",
+      "add": "Add Project",
+      "tableLabel": "Projects",
+      "gridLabel": "Projects",
+      "columns": {
+        "name": "Name",
+        "client": "Client",
+        "priority": "Priority",
+        "status": "Status",
+        "budget": "Budget",
+        "progress": "Progress",
+        "actions": "Actions"
+      },
+      "tabs": {
+        "label": "Project status",
+        "all": "All",
+        "active": "Active",
+        "completed": "Completed",
+        "on_hold": "On Hold",
+        "inactive": "Inactive"
+      },
+      "filters": {
+        "priorityLabel": "Priority",
+        "allPriority": "All Priority",
+        "clientLabel": "Client",
+        "allClients": "All Clients",
+        "unknownClient": "Selected client",
+        "createdFrom": "Created from",
+        "createdTo": "Created to"
+      },
+      "view": {
+        "label": "View",
+        "list": "List view",
+        "grid": "Grid view"
+      },
+      "noValue": "-",
+      "percent": "{value}%",
+      "progressLabel": "{name} progress",
+      "actions": {
+        "view": "View details of {name}",
+        "viewTip": "View details",
+        "edit": "Edit {name}",
+        "editTip": "Edit",
+        "deactivate": "Deactivate {name}",
+        "deactivateTip": "Deactivate",
+        "activate": "Activate {name}",
+        "activateTip": "Activate",
+        "switchStatus": "Switch the status of {name}",
+        "toggleRefused": "Only active and inactive projects can be switched here. Edit the project to change it from {status}.",
+        "delete": "Delete {name}",
+        "deleteTip": "Delete"
+      },
+      "status": {
+        "activated": "Project activated",
+        "deactivated": "Project deactivated",
+        "failed": "Couldn’t change the project’s status"
+      },
+      "delete": {
+        "title": "Delete Project",
+        "body": "Delete “{name}”? Its milestones, items, notes and expenses are deleted with it. Its files stay in your media library.",
+        "confirm": "Delete Project",
+        "deleted": "Project deleted"
+      },
+      "dialog": {
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "empty": {
+        "title": "No projects yet",
+        "description": "Add your first project to plan its milestones, budget and files in one place.",
+        "noMatchTitle": "No projects match your filters",
+        "noMatchDescription": "Try a different search or clear the filters.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn’t load projects",
+        "retry": "Try again"
+      }
+    },
+    "form": {
+      "createTitle": "Add New Project",
+      "editTitle": "Edit Project",
+      "name": "Project Name",
+      "namePlaceholder": "enter project name",
+      "description": "Description",
+      "descriptionPlaceholder": "enter description",
+      "client": "Client",
+      "clientPlaceholder": "Select a client",
+      "clientsLoading": "Loading clients…",
+      "noClients": "No active clients yet",
+      "noClientsHint": "Add a client on the <link>Clients page</link> first.",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "budget": "Budget",
+      "budgetPlaceholder": "enter budget",
+      "priority": "Priority",
+      "status": "Status",
+      "save": "Save",
+      "cancel": "Cancel",
+      "upgrade": "Upgrade",
+      "created": "Project created",
+      "updated": "Project updated"
+    },
+    "details": {
+      "metaTitle": "Project",
+      "subtitle": "View and manage a project's details, milestones, expenses, contracts, and files.",
+      "edit": "Edit Project",
+      "back": "Back",
+      "loading": "Loading project…",
+      "error": {
+        "title": "Couldn’t load the project",
+        "retry": "Try again"
+      },
+      "notFound": {
+        "heading": "Project not found",
+        "title": "This project doesn’t exist",
+        "description": "It may have been deleted, or the link is wrong.",
+        "back": "Back to Projects"
+      },
+      "summary": {
+        "tasks": "Total Tasks",
+        "tasksCompleted": "{count} completed",
+        "expenses": "Expenses",
+        "budgetUtilization": "Budget utilization",
+        "milestones": "Milestones",
+        "percentComplete": "{percent}% complete",
+        "contracts": "Contracts",
+        "activeContracts": "Active contracts",
+        "ratio": "{done}/{total}"
+      },
+      "tabs": {
+        "label": "Project sections",
+        "overview": "Overview",
+        "milestones": "Milestones",
+        "items": "Items",
+        "notes": "Notes",
+        "expenses": "Expenses",
+        "contracts": "Contracts",
+        "files": "Files"
+      },
+      "overview": {
+        "description": "Project Description",
+        "noDescription": "No description yet.",
+        "timeline": "Timeline",
+        "created": "Created",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "information": "Project Information",
+        "priority": "Priority",
+        "budget": "Budget",
+        "client": "Client",
+        "budgetAnalysis": "Budget Analysis",
+        "budgetSummary": "Budget: {spent} spent, {remaining} remaining",
+        "spent": "Spent",
+        "remaining": "Remaining",
+        "amountPercent": "{amount} ({percent}%)",
+        "milestoneProgress": "Milestone Progress",
+        "noMilestones": "No milestones yet.",
+        "health": "Project Health",
+        "healthLabel": "Project health: {percent}% complete, {level}",
+        "tasksComplete": "Tasks Complete",
+        "overdue": "Overdue",
+        "milestones": "Milestones",
+        "ratio": "{done}/{total}"
+      },
+      "tabError": "Couldn’t load this tab"
+    },
+    "milestones": {
+      "title": "Milestones",
+      "add": "Add Milestone",
+      "overdue": "Overdue",
+      "starts": "Starts {date}",
+      "due": "Due {date}",
+      "percent": "{value}%",
+      "progressLabel": "{title} progress",
+      "status": {
+        "pending": "Pending",
+        "in_progress": "In Progress",
+        "completed": "Completed"
+      },
+      "empty": {
+        "title": "No milestones yet",
+        "description": "Break the project into milestones to track its progress."
+      },
+      "actions": {
+        "edit": "Edit {title}",
+        "editTip": "Edit",
+        "delete": "Delete {title}",
+        "deleteTip": "Delete"
+      },
+      "delete": {
+        "title": "Delete Milestone",
+        "body": "Delete the milestone “{title}”?",
+        "confirm": "Delete Milestone",
+        "deleted": "Milestone deleted",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "form": {
+        "createTitle": "Add Milestone",
+        "editTitle": "Edit Milestone",
+        "title": "Title",
+        "titlePlaceholder": "enter title",
+        "description": "Description",
+        "descriptionPlaceholder": "enter description",
+        "dueDate": "Due Date",
+        "progress": "Progress",
+        "progressPlaceholder": "0",
+        "progressHint": "From 0 to 100%.",
+        "status": "Status",
+        "save": "Save",
+        "cancel": "Cancel",
+        "created": "Milestone added",
+        "updated": "Milestone updated"
+      }
+    },
+    "items": {
+      "title": "Project Items",
+      "add": "Add Item",
+      "unit": "Unit: {unit}",
+      "units": {
+        "hours": "hours",
+        "package": "package",
+        "piece": "piece",
+        "day": "day",
+        "month": "month",
+        "fixed": "fixed"
+      },
+      "empty": {
+        "title": "No items yet",
+        "description": "Add the products and services this project bills for."
+      },
+      "actions": {
+        "edit": "Edit {name}",
+        "editTip": "Edit",
+        "delete": "Delete {name}",
+        "deleteTip": "Delete"
+      },
+      "delete": {
+        "title": "Delete Item",
+        "body": "Delete the item “{name}”?",
+        "confirm": "Delete Item",
+        "deleted": "Item deleted",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "form": {
+        "createTitle": "Add Item",
+        "editTitle": "Edit Item",
+        "name": "Item Name",
+        "namePlaceholder": "enter item name",
+        "description": "Description",
+        "descriptionPlaceholder": "enter description",
+        "price": "Default Price",
+        "pricePlaceholder": "enter default price",
+        "unit": "Unit",
+        "unitPlaceholder": "select unit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "created": "Item added",
+        "updated": "Item updated"
+      }
+    },
+    "notes": {
+      "title": "Notes",
+      "add": "Add Note",
+      "unknownAuthor": "Former user",
+      "empty": {
+        "title": "No notes yet",
+        "description": "Keep decisions and updates about this project in one place."
+      },
+      "actions": {
+        "view": "View {title}",
+        "viewTip": "View",
+        "edit": "Edit {title}",
+        "editTip": "Edit",
+        "delete": "Delete {title}",
+        "deleteTip": "Delete"
+      },
+      "delete": {
+        "title": "Delete Note",
+        "body": "Delete the note “{title}”?",
+        "confirm": "Delete Note",
+        "deleted": "Note deleted",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "form": {
+        "createTitle": "Add Note",
+        "editTitle": "Edit Note",
+        "title": "Title",
+        "titlePlaceholder": "enter title",
+        "content": "Content",
+        "contentPlaceholder": "enter content",
+        "save": "Save",
+        "cancel": "Cancel",
+        "created": "Note added",
+        "updated": "Note updated"
+      }
+    },
+    "expenses": {
+      "title": "Expenses",
+      "add": "Add Expense",
+      "stats": {
+        "count": "Total Expenses",
+        "countCaption": "expense records",
+        "total": "Total Amount",
+        "totalCaption": "total spent"
+      },
+      "empty": {
+        "title": "No expenses yet",
+        "description": "Record what this project costs to track it against the budget."
+      },
+      "actions": {
+        "edit": "Edit {title}",
+        "editTip": "Edit",
+        "delete": "Delete {title}",
+        "deleteTip": "Delete"
+      },
+      "delete": {
+        "title": "Delete Expense",
+        "body": "Delete the expense “{title}” ({amount})?",
+        "confirm": "Delete Expense",
+        "deleted": "Expense deleted",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "form": {
+        "createTitle": "Add Expense",
+        "editTitle": "Edit Expense",
+        "title": "Title",
+        "titlePlaceholder": "enter title",
+        "description": "Description",
+        "descriptionPlaceholder": "enter description",
+        "amount": "Amount",
+        "amountPlaceholder": "enter amount",
+        "date": "Date",
+        "category": "Category",
+        "categoryPlaceholder": "select category",
+        "categoriesLoading": "Loading categories…",
+        "noCategories": "No active categories yet",
+        "noCategoriesHint": "Add one on the <link>Expense Categories page</link> first.",
+        "save": "Save",
+        "cancel": "Cancel",
+        "created": "Expense added",
+        "updated": "Expense updated"
+      }
+    },
+    "files": {
+      "title": "Project Files",
+      "add": "Add files",
+      "empty": {
+        "title": "No files yet",
+        "description": "Attach images and documents from your media library."
+      },
+      "download": "Download",
+      "downloadLabel": "Download {name}",
+      "detach": "Detach",
+      "detachLabel": "Detach {name} from this project",
+      "attached": "{name} attached",
+      "alreadyAttached": "{name} is already attached",
+      "attachFailed": "Couldn’t attach the file",
+      "detached": "{name} detached",
+      "detachFailed": "Couldn’t detach the file"
+    },
+    "validation": {
+      "nameRequired": "The project name is required.",
+      "nameMax": "The project name may not be longer than {max} characters.",
+      "descriptionMax": "The description may not be longer than {max} characters.",
+      "clientRequired": "Select a client.",
+      "startRequired": "The start date is required.",
+      "startInvalid": "Enter a valid start date.",
+      "endRequired": "The end date is required.",
+      "endInvalid": "Enter a valid end date.",
+      "endBeforeStart": "The end date can't be before the start date.",
+      "budgetRequired": "The budget is required.",
+      "budgetInvalid": "Enter the budget as a number.",
+      "budgetDecimals": "The budget can have at most 2 decimal places.",
+      "budgetNegative": "The budget can't be negative.",
+      "budgetTooLarge": "The budget is too large.",
+      "titleRequired": "The title is required.",
+      "titleMax": "The title may not be longer than {max} characters.",
+      "dueRequired": "The due date is required.",
+      "dueInvalid": "Enter a valid due date.",
+      "progressInteger": "The progress must be a whole number.",
+      "progressRange": "The progress must be between 0 and 100.",
+      "itemNameRequired": "The item name is required.",
+      "itemNameMax": "The item name may not be longer than {max} characters.",
+      "priceRequired": "The default price is required.",
+      "priceInvalid": "Enter the price as a number.",
+      "priceDecimals": "The price can have at most 2 decimal places.",
+      "priceNegative": "The price can't be negative.",
+      "priceTooLarge": "The price is too large.",
+      "unitRequired": "Select a unit.",
+      "contentRequired": "The content is required.",
+      "contentMax": "The content may not be longer than {max} characters.",
+      "amountRequired": "The amount is required.",
+      "amountInvalid": "Enter the amount as a number.",
+      "amountDecimals": "The amount can have at most 2 decimal places.",
+      "amountNegative": "The amount can't be negative.",
+      "amountTooLarge": "The amount is too large.",
+      "expenseDateRequired": "The date is required.",
+      "expenseDateInvalid": "Enter a valid date.",
+      "categoryRequired": "Select a category."
     }
   }
 }

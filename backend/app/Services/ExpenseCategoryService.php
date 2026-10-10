@@ -6,6 +6,7 @@ use App\Enums\ExpenseCategoryStatus;
 use App\Models\ExpenseCategory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Expense category business logic (PRD §6.14). Every method works on the current company's
@@ -86,21 +87,15 @@ class ExpenseCategoryService
     }
 
     /**
-     * EXTENSION POINT — PRD §6.14: "a category in use cannot be deleted — deactivate instead".
-     * The Expenses module doesn't exist yet, so nothing can use a category and every category
-     * is deletable. When it lands (see ExpenseCategory::expenses()), throw a validation error
-     * here, e.g.:
-     *
-     *     if ($category->expenses()->exists()) {
-     *         throw ValidationException::withMessages([
-     *             'category' => __('This category is used by expenses. Deactivate it instead.'),
-     *         ]);
-     *     }
-     *
-     * and add the matching tests. Deliberately not faked before then.
+     * PRD §6.14: "a category in use cannot be deleted — deactivate instead". In use = filed under
+     * by at least one live expense (a deleted expense no longer holds it).
      */
     private function ensureDeletable(ExpenseCategory $category): void
     {
-        // Intentionally empty until the Expenses module exists.
+        if ($category->expenses()->exists()) {
+            throw ValidationException::withMessages([
+                'category' => __('This category is used by expenses. Deactivate it instead.'),
+            ]);
+        }
     }
 }

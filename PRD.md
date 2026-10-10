@@ -183,7 +183,7 @@ Every CRUD list page follows the same pattern:
 - Tabs: **Overview · Milestones (n) · Items (n) · Notes (n) · Expenses (n) · Contracts (n) · Files (n)**.
 - **Overview tab:** Project Description; Timeline (Created, Start Date, End Date); Project Information (Priority, Budget, Client); Budget Analysis donut (Spent vs Remaining with amounts and %); Milestone Progress (bar per milestone with %); Project Health ring (overall %, label Low/Medium/High) with Tasks Complete x/y, Overdue count, Milestones x/y.
 - **Milestones tab:** CRUD — title*, description, start date, due date, progress %, status. Tasks can link to a milestone.
-- **Items tab:** products/services attached to the project (from the Items catalog) with qty and price — used for invoicing.
+- **Items tab:** the project's own items (table `project_items`, see §6.11): a two-column grid of item cards — name, description, Active badge, "Unit: x", default price — with Add / Edit (Item Name*, Description, Default Price* ≥ 0, Unit*) and Delete. No catalog picker and no quantity.
 - **Notes tab:** CRUD rich-text notes (title, content, created by, date).
 - **Expenses tab:** project expenses list (same as Expenses module, filtered).
 - **Contracts tab:** project contracts list (same as Contracts module, filtered).
@@ -295,10 +295,11 @@ Every CRUD list page follows the same pattern:
 - Contract view page/modal with printable layout.
 
 ### 6.11 Financial ▸ Items
-*(No screenshot — proposed design.)*
-- Catalog of products/services used in invoices and project Items tab.
-- Fields: Name*, Type (Product / Service), Unit (hour, piece, …), Price*, Tax (optional default), Description, Status.
-- Also manage **Tax rates** here or in Settings: Name, Rate %.
+**Project items (built — Projects milestone).** Items are owned by a project, as the project Items tab screenshots show: they are created inline on the project with Name, Description, Default Price and Unit — no catalog picker and no quantity. They live in `project_items` (§10), scoped to the company and the project, soft-deleted with the project.
+- Fields: Name* (max 255), Description (optional, max 5000), Default Price* (decimal ≥ 0, 2 decimals), Unit* (hours / package / piece / day / month / fixed), Status (Active default / Inactive).
+- API: `GET|POST /api/v1/projects/{project}/items`, `PUT|DELETE /api/v1/project-items/{item}`.
+
+**Company-wide catalog (not built — proposed).** *(No screenshot — proposed design.)* The name `items` is kept free for a future company catalog of products/services for invoices: Name*, Type (Product / Service), Unit, Price*, Tax (optional default), Description, Status; plus **Tax rates** (Name, Rate %) here or in Settings. When it ships, decide whether invoices pick from the catalog, from a project's items, or both — the two tables stay separate.
 
 ### 6.12 Zoom Meetings
 *(No screenshot — proposed design.)*
@@ -499,7 +500,7 @@ Buttons: Cancel, **Create Plan**; Back link.
 
 ## 10. Data Model (MySQL)
 
-All tables have `id`, `created_at`, `updated_at`. Tenant tables have `company_id` (indexed, FK → users). Money uses `DECIMAL(15,2)`. Soft deletes on users, clients, projects, tasks, invoices, contracts.
+All tables have `id`, `created_at`, `updated_at`. Tenant tables have `company_id` (indexed, FK → users). Money uses `DECIMAL(15,2)`. Soft deletes on users, clients, projects, milestones, project_items, project_notes, expenses, media, tasks, invoices, contracts (a project's children are soft-deleted with it by the service — a soft delete fires no FK cascade).
 
 | Table | Key columns |
 |---|---|
@@ -514,25 +515,25 @@ All tables have `id`, `created_at`, `updated_at`. Tenant tables have `company_id
 | `landing_page_sections` | key, content (JSON), is_enabled, sort_order |
 | `email_templates` | key, lang, subject, body, is_active |
 | `settings` | company_id (nullable = global), key, value — unique(company_id, key) |
-| `media` | company_id, disk, path, original_name, mime, size_bytes, uploaded_by |
+| `media` | company_id, disk (private `local`), path (`media/{company_id}/{uuid}.{ext}`, server-made), original_name (display only, ends in the detected extension), mime_type (detected from the bytes), extension, size_bytes, uploaded_by (nullable), deleted_at — index (company_id, created_at); served only through the authenticated `GET /api/v1/media/{id}/file` |
 | `clients` | company_id, name, email, phone, company_name, website, address, status |
-| `projects` | company_id, client_id, name, description, start_date, end_date, budget, priority, status |
-| `milestones` | company_id, project_id, title, description, start_date, due_date, progress, status |
-| `project_notes` | company_id, project_id, title, content, created_by |
-| `project_files` | company_id, project_id, media_id |
-| `project_items` | company_id, project_id, item_id, quantity, price |
+| `projects` | company_id, client_id (FK restrict), name, description, start_date, end_date, budget, priority (low/medium/high/urgent), status (active/completed/on_hold/inactive), deleted_at — indexes (company_id, status), (company_id, client_id) |
+| `milestones` | company_id, project_id, title, description, start_date (nullable, not in the modal), due_date, progress (0–100), status (pending/in_progress/completed), deleted_at |
+| `project_notes` | company_id, project_id, title, content (plain text), created_by (from the session, nullable), deleted_at |
+| `project_files` | company_id, project_id, media_id, attached_by — unique (project_id, media_id); a link only: detaching keeps the media |
+| `project_items` | company_id, project_id, name, description, default_price, unit (hours/package/piece/day/month/fixed), status (active/inactive), deleted_at — the project's own items, not a catalog link (§6.11) |
 | `task_stages` | company_id, name, description, color, order, is_done_stage, status |
 | `tasks` | company_id, project_id, milestone_id, task_stage_id, title, description, start_date, due_date, priority, progress, completed_at, created_by |
 | `time_sessions` | company_id, user_id, project_id, task_id, description, started_at, stopped_at (null = running) |
 | `timesheets` | company_id, user_id, project_id, task_id, date, start_time, end_time, duration_minutes, description, is_billable |
-| `items` | company_id, name, type, unit, price, tax_id, description, status |
+| `items` | *(future company catalog — not built, §6.11)* company_id, name, type, unit, price, tax_id, description, status |
 | `taxes` | company_id, name, rate |
 | `invoices` | company_id, client_id, project_id, invoice_number (unique per company), invoice_date, due_date, subtotal, discount_amount, tax_amount, total, paid_amount, balance_due, status (draft/sent/partial/paid), notes, public_token, sent_at |
 | `invoice_items` | invoice_id, type (item/task), item_id, task_id, description, quantity, price, total |
 | `invoice_taxes` | invoice_id, tax_id, name, rate, amount |
 | `invoice_payments` | company_id, invoice_id, payment_date, amount, payment_type, reference, status, receipt_path, description |
 | `expense_categories` | company_id, name, description, color, status |
-| `expenses` | company_id, project_id, expense_category_id, title, description, amount, expense_date, receipt_path |
+| `expenses` | company_id, project_id, expense_category_id (FK restrict), title, description, amount, expense_date, deleted_at — indexes (company_id, project_id), (company_id, expense_date); receipt_path not built yet |
 | `contracts` | company_id, project_id, client_id, title, description, amount, start_date, end_date, type, status, terms |
 | `zoom_meetings` | company_id, project_id, title, start_at, duration_minutes, password, join_url, start_url, zoom_meeting_id, status |
 | `notification_templates` | company_id, key, lang, subject, body, is_active |

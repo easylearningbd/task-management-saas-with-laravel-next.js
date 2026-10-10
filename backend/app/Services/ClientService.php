@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Client;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Client business logic (PRD §6.7). Every method works on the current company's clients only:
@@ -63,18 +64,16 @@ class ClientService
     }
 
     /**
-     * EXTENSION POINT — PRD §6.7: "a client with projects or invoices cannot be deleted".
-     * Projects and Invoices don't exist yet, so there is nothing to check and every client is
-     * deletable. When those modules land, throw a validation error here, e.g.:
-     *
-     *     if ($client->projects()->exists() || $client->invoices()->exists()) {
-     *         throw ValidationException::withMessages(['client' => __('…')]);
-     *     }
-     *
-     * and add the matching tests. Deliberately not faked before then.
+     * PRD §6.7: "a client with projects or invoices cannot be deleted". Projects: any live
+     * project of this client blocks it. TODO(invoices): add the invoices check when that module
+     * exists.
      */
     private function ensureDeletable(Client $client): void
     {
-        // Intentionally empty until the Projects and Invoices modules exist.
+        if ($client->projects()->exists()) {
+            throw ValidationException::withMessages([
+                'client' => __('This client has projects. Delete or move them to another client first.'),
+            ]);
+        }
     }
 }

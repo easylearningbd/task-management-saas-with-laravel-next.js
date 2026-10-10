@@ -15,6 +15,14 @@ use App\Http\Controllers\Api\V1\Auth\StopImpersonatingController;
 use App\Http\Controllers\Api\V1\Company\ClientController;
 use App\Http\Controllers\Api\V1\Company\DashboardController as CompanyDashboardController;
 use App\Http\Controllers\Api\V1\Company\ExpenseCategoryController;
+use App\Http\Controllers\Api\V1\Company\ExpenseController;
+use App\Http\Controllers\Api\V1\Company\MediaController;
+use App\Http\Controllers\Api\V1\Company\MilestoneController;
+use App\Http\Controllers\Api\V1\Company\PlanUsageController;
+use App\Http\Controllers\Api\V1\Company\ProjectController;
+use App\Http\Controllers\Api\V1\Company\ProjectFileController;
+use App\Http\Controllers\Api\V1\Company\ProjectItemController;
+use App\Http\Controllers\Api\V1\Company\ProjectNoteController;
 use App\Http\Controllers\Api\V1\Company\TaskStageController;
 use App\Http\Controllers\Api\V1\Profile\AvatarController;
 use App\Http\Controllers\Api\V1\Profile\PasswordController;
@@ -70,6 +78,9 @@ Route::prefix('v1')->name('v1.')->group(function () {
     Route::middleware(['auth:sanctum', 'role:company'])->group(function () {
         Route::get('dashboard', CompanyDashboardController::class)->name('dashboard');
 
+        // The company's plan and its usage against the allowance (PlanLimitService).
+        Route::get('plan-usage', PlanUsageController::class)->name('plan-usage');
+
         // Clients — tenant-scoped by BelongsToCompany (another company's id → 404).
         Route::apiResource('clients', ClientController::class);
         Route::patch('clients/{client}/toggle-status', [ClientController::class, 'toggleStatus'])->name('clients.toggle-status');
@@ -84,5 +95,42 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::patch('task-stages/reorder', [TaskStageController::class, 'reorder'])->name('task-stages.reorder');
         Route::apiResource('task-stages', TaskStageController::class)->parameters(['task-stages' => 'stage']);
         Route::patch('task-stages/{stage}/toggle-status', [TaskStageController::class, 'toggleStatus'])->name('task-stages.toggle-status');
+
+        // Projects — tenant-scoped the same way; `stats` comes before {project}.
+        Route::get('projects/stats', [ProjectController::class, 'stats'])->name('projects.stats');
+        Route::apiResource('projects', ProjectController::class);
+        Route::patch('projects/{project}/toggle-status', [ProjectController::class, 'toggleStatus'])->name('projects.toggle-status');
+        Route::get('projects/{project}/milestones', [MilestoneController::class, 'index'])->name('projects.milestones.index');
+        Route::post('projects/{project}/milestones', [MilestoneController::class, 'store'])->name('projects.milestones.store');
+        Route::put('milestones/{milestone}', [MilestoneController::class, 'update'])->name('milestones.update');
+        Route::delete('milestones/{milestone}', [MilestoneController::class, 'destroy'])->name('milestones.destroy');
+
+        // The project tabs — listed/created under the project, edited/deleted by their own id.
+        Route::get('projects/{project}/items', [ProjectItemController::class, 'index'])->name('projects.items.index');
+        Route::post('projects/{project}/items', [ProjectItemController::class, 'store'])->name('projects.items.store');
+        Route::put('project-items/{item}', [ProjectItemController::class, 'update'])->name('project-items.update');
+        Route::delete('project-items/{item}', [ProjectItemController::class, 'destroy'])->name('project-items.destroy');
+
+        Route::get('projects/{project}/notes', [ProjectNoteController::class, 'index'])->name('projects.notes.index');
+        Route::post('projects/{project}/notes', [ProjectNoteController::class, 'store'])->name('projects.notes.store');
+        Route::get('project-notes/{note}', [ProjectNoteController::class, 'show'])->name('project-notes.show');
+        Route::put('project-notes/{note}', [ProjectNoteController::class, 'update'])->name('project-notes.update');
+        Route::delete('project-notes/{note}', [ProjectNoteController::class, 'destroy'])->name('project-notes.destroy');
+
+        Route::get('projects/{project}/expenses/stats', [ExpenseController::class, 'stats'])->name('projects.expenses.stats');
+        Route::get('projects/{project}/expenses', [ExpenseController::class, 'index'])->name('projects.expenses.index');
+        Route::post('projects/{project}/expenses', [ExpenseController::class, 'store'])->name('projects.expenses.store');
+        Route::put('expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
+        Route::delete('expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
+
+        Route::get('projects/{project}/files', [ProjectFileController::class, 'index'])->name('projects.files.index');
+        Route::post('projects/{project}/files', [ProjectFileController::class, 'store'])->name('projects.files.store');
+        Route::delete('project-files/{file}', [ProjectFileController::class, 'destroy'])->name('project-files.destroy');
+
+        // The media library (private disk; files are read only through media/{media}/file).
+        Route::get('media', [MediaController::class, 'index'])->name('media.index');
+        Route::post('media', [MediaController::class, 'store'])->middleware('throttle:30,1')->name('media.store');
+        Route::get('media/{media}/file', [MediaController::class, 'file'])->name('media.file');
+        Route::delete('media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
     });
 });

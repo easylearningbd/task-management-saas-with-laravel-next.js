@@ -41,12 +41,18 @@ export function CompanyTopbar({
   // A menu page other than the dashboard: "Dashboard › [Parent ›] Page" (the Clients screenshot:
   // "Dashboard › Clients"), the first step linking home. The dashboard itself, and a page outside
   // the menu (Profile Settings), show a single title.
+  // A record page below a menu page ("/projects/6"): the menu page links back and the record's
+  // name (usePageCrumb) is the last step — "Dashboard › Projects › Enterprise Digital
+  // Transformation"; "Details" until the page provides the name.
   const home: Crumb = { label: t('nav.dashboard'), href: '/dashboard' }
+  const below = active !== undefined && pathname !== active.leaf.href
   const crumbs: Crumb[] = active
     ? [
         ...(active.leaf.href === '/dashboard' ? [] : [home]),
         ...(active.parent ? [{ label: t(`nav.${active.parent.labelKey}`) }] : []),
-        { label: pageLabel ?? t(`nav.${active.leaf.labelKey}`) },
+        ...(below
+          ? [{ label: t(`nav.${active.leaf.labelKey}`), href: active.leaf.href }, { label: pageLabel ?? t('recordCrumb') }]
+          : [{ label: pageLabel ?? t(`nav.${active.leaf.labelKey}`) }]),
       ]
     : pageLabel
       ? [{ label: pageLabel }]

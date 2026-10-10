@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use LogicException;
 
 /**
  * A company's expense category (PRD §6.14). BelongsToCompany limits every query (route binding
@@ -82,15 +82,9 @@ class ExpenseCategory extends Model
         $query->whereRaw('LOWER(expense_categories.name) = ?', [Str::lower(trim($name))]);
     }
 
-    /**
-     * STUB — the expenses filed under this category (PRD §6.14). The `expenses` table does not
-     * exist yet, so there is no relation to return. When the Expenses module lands, replace the
-     * body with `return $this->hasMany(Expense::class);` (and a HasMany return type) and wire
-     * the in-use guard in ExpenseCategoryService::ensureDeletable(). Deliberately throws rather
-     * than pretending there are none.
-     */
-    public function expenses(): never
+    /** The expenses filed under this category (a category in use can't be deleted). */
+    public function expenses(): HasMany
     {
-        throw new LogicException('Expense categories have no expenses relation yet: the expenses table does not exist.');
+        return $this->hasMany(Expense::class);
     }
 }

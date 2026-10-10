@@ -10,7 +10,10 @@ import { cn } from '@/lib/cn'
      Project Progress donut in design/user-dashboard (panels.tsx)
    Tone: `auto` follows the spec — `primary` under 75%, `warning` from 75%, `danger` from 90%
    — for consumption against a limit. A completion figure (more is better) passes
-   `primary` so a nearly finished project never turns red. Never animates. */
+   `primary` so a nearly finished project never turns red.
+   `health` (more is better, the Project Health ring): `danger` under 40%, `warning` from
+   40%, `success` from 75% — healthLevel() names the band (Low / Medium / High) and the unit
+   line under the figure takes the ring's colour, so the band reads as a label. Never animates. */
 
 const SIZES = {
   sm: { box: 72, r: 32, stroke: 'var(--progress-ring)', svg: 'size-18', figure: 'text-base leading-5 font-bold', unit: 'text-[10px] leading-3' },
@@ -22,6 +25,22 @@ function autoColor(pct: number) {
   if (pct >= 90) return 'var(--danger)'
   if (pct >= 75) return 'var(--warning)'
   return 'var(--primary)'
+}
+
+export type HealthLevel = 'low' | 'medium' | 'high'
+
+/** The health band for a 0–100 completion figure: Low < 40 ≤ Medium < 75 ≤ High
+ *  (mirrors App\Enums\ProjectHealth::fromProgress). */
+export function healthLevel(pct: number): HealthLevel {
+  if (pct >= 75) return 'high'
+  if (pct >= 40) return 'medium'
+  return 'low'
+}
+
+const HEALTH: Record<HealthLevel, { stroke: string; text: string }> = {
+  low: { stroke: 'var(--danger)', text: 'text-danger' },
+  medium: { stroke: 'var(--warning)', text: 'text-warning' },
+  high: { stroke: 'var(--success)', text: 'text-success' },
 }
 
 export function ProgressRing({
@@ -42,13 +61,14 @@ export function ProgressRing({
   /** Optional line under the figure ("complete", "GB"). */
   unit?: string
   size?: keyof typeof SIZES
-  tone?: 'auto' | 'primary'
+  tone?: 'auto' | 'primary' | 'health'
   className?: string
 }) {
   const pct = Math.max(0, Math.min(100, value))
   const s = SIZES[size]
   const c = s.box / 2
   const circumference = 2 * Math.PI * s.r
+  const stroke = tone === 'health' ? HEALTH[healthLevel(pct)].stroke : tone === 'auto' ? autoColor(pct) : 'var(--primary)'
 
   return (
     <div
@@ -68,7 +88,7 @@ export function ProgressRing({
             cy={c}
             r={s.r}
             fill="none"
-            stroke={tone === 'auto' ? autoColor(pct) : 'var(--primary)'}
+            stroke={stroke}
             strokeWidth={s.stroke}
             strokeLinecap="round"
             strokeDasharray={circumference}
@@ -78,7 +98,11 @@ export function ProgressRing({
       </svg>
       <span aria-hidden="true" className="absolute inset-0 flex flex-col items-center justify-center">
         <span className={s.figure}>{figure ?? `${Math.round(pct)}%`}</span>
-        {unit ? <span className={cn(s.unit, 'text-muted-foreground')}>{unit}</span> : null}
+        {unit ? (
+          <span className={cn(s.unit, tone === 'health' ? cn('font-medium', HEALTH[healthLevel(pct)].text) : 'text-muted-foreground')}>
+            {unit}
+          </span>
+        ) : null}
       </span>
     </div>
   )

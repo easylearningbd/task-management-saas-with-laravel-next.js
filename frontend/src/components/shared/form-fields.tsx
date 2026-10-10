@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useTranslations } from 'next-intl'
+import { DateInput } from '@/components/ui/date-input'
 import { Field, FieldMessage } from '@/components/ui/field'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -58,7 +59,40 @@ export function TextareaField({
   )
 }
 
-/** Label + the design-system Select (a fixed list of options) + message. */
+/** Label + DateInput (DateInput.md: the browser's mm/dd/yyyy mask, value YYYY-MM-DD, the
+ *  trailing Calendar glyph) + message. Spread a react-hook-form `register()` result onto it. */
+export function DateField({
+  label,
+  required = false,
+  error,
+  hint,
+  id: idProp,
+  ...inputProps
+}: React.ComponentProps<typeof DateInput> & { label: string; required?: boolean } & MessageProps) {
+  const tCommon = useTranslations('common')
+  const generatedId = React.useId()
+  const id = idProp ?? generatedId
+  const message = useMessage(id, { error, hint })
+
+  return (
+    <Field>
+      <Label htmlFor={id} required={required} requiredLabel={tCommon('requiredField')}>
+        {label}
+      </Label>
+      <DateInput
+        id={id}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={message.describedBy}
+        aria-required={required || undefined}
+        {...inputProps}
+      />
+      {message.node}
+    </Field>
+  )
+}
+
+/** Label + the design-system Select (a fixed list of options) + message.
+ *  `placeholder` shows while the value is '' ("Select a client"). */
 export function SelectField<V extends string>({
   label,
   value,
@@ -70,15 +104,17 @@ export function SelectField<V extends string>({
   error,
   hint,
   size,
+  placeholder,
 }: {
   label: string
-  value: V
+  value: V | ''
   onValueChange: (value: V) => void
   options: ReadonlyArray<{ value: V; label: string }>
   triggerRef?: React.Ref<HTMLButtonElement>
   required?: boolean
   disabled?: boolean
   size?: 'default' | 'lg'
+  placeholder?: string
 } & MessageProps) {
   const tCommon = useTranslations('common')
   const id = React.useId()
@@ -90,8 +126,15 @@ export function SelectField<V extends string>({
         {label}
       </Label>
       <Select value={value} onValueChange={(next) => onValueChange(next as V)} disabled={disabled}>
-        <SelectTrigger id={id} ref={triggerRef} size={size} aria-invalid={error ? true : undefined} aria-describedby={message.describedBy}>
-          <SelectValue />
+        <SelectTrigger
+          id={id}
+          ref={triggerRef}
+          size={size}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={message.describedBy}
+          aria-required={required || undefined}
+        >
+          <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (

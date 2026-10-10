@@ -35,19 +35,8 @@ export function deadline(iso: string | null, now: number): { past: true } | { pa
   return { past: false, days: Math.round((startOfDay(at) - startOfDay(new Date(now))) / DAY_MS) }
 }
 
-const BYTE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB'] as const
-
-/** 0 → "0 B", 1536 → "1.5 KB", 5368709120 → "5 GB" (1024-based, like the plan's GB limit). */
-export function formatBytes(bytes: number): string {
-  let value = Math.max(0, bytes)
-  let unit = 0
-  while (value >= 1024 && unit < BYTE_UNITS.length - 1) {
-    value /= 1024
-    unit += 1
-  }
-  const rounded = unit === 0 ? value : Math.round(value * 10) / 10
-  return `${rounded} ${BYTE_UNITS[unit]}`
-}
+/** Moved to lib/format-bytes (shared with the media library); re-exported for this module. */
+export { formatBytes } from '@/lib/format-bytes'
 
 /** GB (the plan's 2-decimal string) → bytes, 1024-based. */
 export function gigabytesToBytes(gb: string): number {
