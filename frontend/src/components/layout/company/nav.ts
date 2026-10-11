@@ -30,12 +30,22 @@ import type { Messages } from 'next-intl'
 export type CompanyNavKey = keyof Messages['companyShell']['nav']
 export type CompanySectionKey = keyof Messages['companyShell']['sections']
 
-export type CompanyNavLeaf = { labelKey: CompanyNavKey; href: string }
+/**
+ * `crumb` (optional) adjusts the top bar's breadcrumb for this leaf without changing the sidebar:
+ *  - `labelKey`: the breadcrumb's name for it (the sidebar's "Plan" reads "Plans" there);
+ *  - `hideParent`: leave the parent group out ("Dashboard › Plans", not "… › Plans › Plan");
+ *  - `parentHref`: make the parent step a link ("Dashboard › Plans › Plan Requests", Plans → /plans).
+ */
+export type CompanyNavLeaf = {
+  labelKey: CompanyNavKey
+  href: string
+  crumb?: { labelKey?: CompanyNavKey; hideParent?: boolean; parentHref?: string }
+}
 export type CompanyNavItem = CompanyNavLeaf & { icon: LucideIcon; children?: CompanyNavLeaf[] }
 export type CompanyNavSection = { headingKey: CompanySectionKey; items: CompanyNavItem[] }
 
 /** Company routes that exist today. Add a route here when its page ships. */
-export const BUILT: ReadonlySet<string> = new Set(['/dashboard', '/tasks', '/projects', '/clients', '/configuration/task-stages', '/configuration/expense-categories'])
+export const BUILT: ReadonlySet<string> = new Set(['/dashboard', '/plans', '/plans/requests', '/tasks', '/projects', '/clients', '/configuration/task-stages', '/configuration/expense-categories'])
 
 export const isBuilt = (href: string) => BUILT.has(href)
 
@@ -96,8 +106,9 @@ export const COMPANY_NAV: CompanyNavSection[] = [
         href: '#plans',
         icon: CreditCard,
         children: [
-          { labelKey: 'plan', href: '/plans' },
-          { labelKey: 'planRequest', href: '/plans/requests' },
+          // Breadcrumbs as the Plans screenshots: "Dashboard › Plans" and "Dashboard › Plans › Plan Requests".
+          { labelKey: 'plan', href: '/plans', crumb: { labelKey: 'plans', hideParent: true } },
+          { labelKey: 'planRequest', href: '/plans/requests', crumb: { labelKey: 'planRequests', parentHref: '/plans' } },
           { labelKey: 'planOrders', href: '/plans/orders' },
         ],
       },

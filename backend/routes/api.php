@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Admin\CouponController;
 use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Api\V1\Admin\ImpersonationController;
 use App\Http\Controllers\Api\V1\Admin\PlanController;
+use App\Http\Controllers\Api\V1\Admin\PlanOrderController as AdminPlanOrderController;
 use App\Http\Controllers\Api\V1\Auth\AdminLoginController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\LogoutController;
@@ -18,6 +19,8 @@ use App\Http\Controllers\Api\V1\Company\ExpenseCategoryController;
 use App\Http\Controllers\Api\V1\Company\ExpenseController;
 use App\Http\Controllers\Api\V1\Company\MediaController;
 use App\Http\Controllers\Api\V1\Company\MilestoneController;
+use App\Http\Controllers\Api\V1\Company\PlanCatalogController;
+use App\Http\Controllers\Api\V1\Company\PlanOrderController;
 use App\Http\Controllers\Api\V1\Company\PlanUsageController;
 use App\Http\Controllers\Api\V1\Company\ProjectController;
 use App\Http\Controllers\Api\V1\Company\ProjectFileController;
@@ -75,6 +78,14 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('companies/{company}/activities', [CompanyController::class, 'activities'])->name('companies.activities');
         Route::get('activities', ActivityController::class)->name('activities.index');
         Route::post('companies/{company}/impersonate', ImpersonationController::class)->middleware('throttle:10,1')->name('companies.impersonate');
+
+        // Plan orders of every company — review API (the admin UI is a later task). Resolved by id
+        // through CrossTenant in PlanOrderService, so {order} is a plain number here.
+        Route::get('plan-orders', [AdminPlanOrderController::class, 'index'])->name('plan-orders.index');
+        Route::get('plan-orders/{order}', [AdminPlanOrderController::class, 'show'])->whereNumber('order')->name('plan-orders.show');
+        Route::patch('plan-orders/{order}/approve', [AdminPlanOrderController::class, 'approve'])->whereNumber('order')->name('plan-orders.approve');
+        Route::patch('plan-orders/{order}/reject', [AdminPlanOrderController::class, 'reject'])->whereNumber('order')->name('plan-orders.reject');
+        Route::get('plan-orders/{order}/receipt', [AdminPlanOrderController::class, 'receipt'])->whereNumber('order')->name('plan-orders.receipt');
     });
 
     // Company (tenant).
@@ -83,6 +94,17 @@ Route::prefix('v1')->name('v1.')->group(function () {
 
         // The company's plan and its usage against the allowance (PlanLimitService).
         Route::get('plan-usage', PlanUsageController::class)->name('plan-usage');
+
+        // Billing — the Plans page, checkout and Plan Requests (BillingService). The fixed paths
+        // come before {order}; orders are tenant-scoped (another company's id → 404).
+        Route::get('plans', PlanCatalogController::class)->name('plans.index');
+        Route::get('plan-orders', [PlanOrderController::class, 'index'])->name('plan-orders.index');
+        Route::post('plan-orders', [PlanOrderController::class, 'store'])->middleware('throttle:10,1')->name('plan-orders.store');
+        Route::post('plan-orders/request', [PlanOrderController::class, 'request'])->middleware('throttle:10,1')->name('plan-orders.request');
+        Route::post('plan-orders/trial', [PlanOrderController::class, 'trial'])->middleware('throttle:10,1')->name('plan-orders.trial');
+        Route::post('plan-orders/free', [PlanOrderController::class, 'free'])->middleware('throttle:10,1')->name('plan-orders.free');
+        Route::get('plan-orders/{order}', [PlanOrderController::class, 'show'])->name('plan-orders.show');
+        Route::get('plan-orders/{order}/receipt', [PlanOrderController::class, 'receipt'])->name('plan-orders.receipt');
 
         // Clients — tenant-scoped by BelongsToCompany (another company's id → 404).
         Route::apiResource('clients', ClientController::class);

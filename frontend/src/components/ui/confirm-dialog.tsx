@@ -12,7 +12,10 @@ import { useReturnFocus } from '@/lib/use-return-focus'
    `title-section` title and a ghost X; body repeats the record's name; footer above a 1px
    rule with Cancel (outline) then the action (`destructive` fill). Escape, the X and Cancel
    all dismiss — except while the action is in flight. Built on Radix AlertDialog
-   (role="alertdialog", focus trapped); focus returns to whatever opened it (useReturnFocus). */
+   (role="alertdialog", focus trapped); focus returns to whatever opened it (useReturnFocus).
+   `tone="primary"`: the same sheet confirming a non-destructive action (start a trial, send a
+   request) — the action is the primary (emerald) button, as Modal.md's general footer; the
+   `destructive` fill stays reserved for deletions. */
 export function ConfirmDialog({
   open,
   onOpenChange,
@@ -24,6 +27,7 @@ export function ConfirmDialog({
   onConfirm,
   pending = false,
   error,
+  tone = 'destructive',
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -38,6 +42,8 @@ export function ConfirmDialog({
   pending?: boolean
   /** A reason the action failed (e.g. the server's 422 message), shown in `danger`. */
   error?: string | null
+  /** The confirm button: `destructive` (default — deletions) or `primary`. */
+  tone?: 'destructive' | 'primary'
 }) {
   const focus = useReturnFocus()
   const guard = (next: boolean) => {
@@ -81,7 +87,7 @@ export function ConfirmDialog({
               </Button>
             </AlertDialog.Cancel>
             {/* Not AlertDialog.Action: that would close immediately; we close after success. */}
-            <Button variant="destructive" loading={pending} onClick={onConfirm}>
+            <Button variant={tone} loading={pending} onClick={onConfirm}>
               {confirmLabel}
             </Button>
           </div>

@@ -1,17 +1,15 @@
 'use client'
 
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { Avatar } from '@/components/ui/avatar'
-import { ComingSoon } from '@/components/ui/coming-soon'
 import type { User } from '@/features/auth/types'
 
 /* The sidebar footer card (PRD §4; design/user-dashboard shell-config.tsx `CompanyPlanCard`):
-   an `accent` card with the company's avatar and name, its plan under the name, and an
-   outline "Upgrade" button (28px, 12px/500) that will open the Plans page.
-   Name and avatar are the signed-in company from /me — never sample data.
-   TODO(plan): /me does not return the plan yet (Phase 0, decision 3), so the plan line is
-   left out rather than faked; render `plan.name` here once the resource carries it.
-   Upgrade stays "Coming soon" until the company Plans page exists. */
+   an `accent` card with the company's avatar and name, its plan under the name (a muted
+   `caption` line, as drawn), and an outline "Upgrade" button (28px, 12px/500) that opens the
+   Plans page. Name, avatar and plan are the signed-in company from /me — never sample data —
+   the same live user the header dropdown reads, so both change together. */
 export function CompanyPlanCard({ user }: { user: User }) {
   const t = useTranslations('companyShell')
 
@@ -20,16 +18,20 @@ export function CompanyPlanCard({ user }: { user: User }) {
       <Avatar name={user.name} seed={user.id} src={user.avatar} />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-title-row">{user.name}</span>
+        {user.plan ? (
+          <span className="block truncate text-caption font-normal text-muted-foreground">
+            <span className="sr-only">{t('currentPlan')}: </span>
+            {user.plan.name}
+          </span>
+        ) : null}
       </span>
-      <ComingSoon side="top">
-        <button
-          type="button"
-          aria-label={t('upgradeLabel')}
-          className="inline-flex h-7 shrink-0 items-center rounded-lg border border-border bg-card px-2.5 text-[12px] font-medium shadow-sm transition-colors focus-visible:border-ring focus-visible:shadow-focus focus-visible:outline-none"
-        >
-          {t('upgrade')}
-        </button>
-      </ComingSoon>
+      <Link
+        href="/plans"
+        aria-label={t('upgradeLabel')}
+        className="inline-flex h-7 shrink-0 items-center rounded-lg border border-border bg-card px-2.5 text-[12px] font-medium shadow-sm transition-colors hover:bg-accent focus-visible:border-ring focus-visible:shadow-focus focus-visible:outline-none"
+      >
+        {t('upgrade')}
+      </Link>
     </section>
   )
 }

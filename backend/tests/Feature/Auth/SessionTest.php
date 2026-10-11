@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,11 +19,25 @@ test('me returns the authenticated user and role without secrets', function (str
             'status' => 'active',
             'is_impersonating' => false,
             'impersonator' => null,
+            'plan' => null, // no plan assigned to this factory user (see the next test)
         ]]);
 })->with([
     'company' => ['company', 'company'],
     'super admin' => ['superAdmin', 'super_admin'],
 ]);
+
+test('me carries a company\'s current plan (Billing decision 1) — never a super admin\'s', function () {
+    $plan = Plan::factory()->create(['name' => 'Growth']);
+    $company = User::factory()->company()->create();
+    $company->forceFill(['plan_id' => $plan->id, 'plan_duration' => 'yearly'])->save();
+    $admin = User::factory()->superAdmin()->create();
+    $admin->forceFill(['plan_id' => $plan->id])->save();
+
+    $this->actingAs($company, 'web')->getJson(route('v1.me'))
+        ->assertJsonPath('data.plan', ['id' => $plan->id, 'name' => 'Growth', 'duration' => 'yearly']);
+    Auth::forgetGuards();
+    $this->actingAs($admin, 'web')->getJson(route('v1.me'))->assertJsonPath('data.plan', null);
+});
 
 test('logout ends the session for both roles', function (string $state, string $loginRoute) {
     $user = User::factory()->{$state}()->create();

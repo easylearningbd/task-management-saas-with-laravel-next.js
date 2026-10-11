@@ -8,7 +8,6 @@ import { useTranslations } from 'next-intl'
 import { DateField, SelectField, TextareaField } from '@/components/shared/form-fields'
 import { FormModal } from '@/components/shared/form-modal'
 import { Button } from '@/components/ui/button'
-import { ComingSoon } from '@/components/ui/coming-soon'
 import { toast } from '@/components/ui/toast'
 import { TextField } from '@/features/auth/components/text-field'
 import { useAuthFormError } from '@/features/auth/components/use-auth-form-error'
@@ -34,8 +33,7 @@ import { isPlanLimitError, toApiError } from '@/lib/api-error'
    - End Date can't be before Start Date (its picker starts there too).
    - zod mirrors the server; a 422 lands under its field, anything else in the alert above the
      fields. The plan's project limit (422 `plan_limit_reached`, create only — editing is never
-     blocked) shows the server's message with an Upgrade button. Upgrade stays "Coming soon"
-     until the company Plans page exists, like the sidebar's.
+     blocked) shows the server's message with an Upgrade link to the Plans page, like the sidebar's.
    FormModal owns focus (first field on open, back to the trigger on close) and the
    unsaved-changes confirm. */
 
@@ -116,11 +114,9 @@ export function ProjectFormModal({
   const alert = limitMessage ? (
     <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
       <span className="min-w-0 flex-1 basis-48">{limitMessage}</span>
-      <ComingSoon>
-        <Button type="button" variant="outline" size="sm">
-          {t('upgrade')}
-        </Button>
-      </ComingSoon>
+      <Button asChild variant="outline" size="sm">
+        <Link href="/plans">{t('upgrade')}</Link>
+      </Button>
     </span>
   ) : (
     formError

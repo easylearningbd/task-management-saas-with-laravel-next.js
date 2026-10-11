@@ -24,6 +24,12 @@ import { cn } from '@/lib/cn'
    Coupons screenshot (48px header, 52px rows); `relaxed` is for identity rows (avatar + two
    lines), measured from the Companies screenshot (48px header, `table-row-height` rows).
 
+   Clickable rows (`onRowClick`): Table.md — "a row is clickable only if the whole row opens a
+   detail view". The row is then a pointer target and a Tab stop (Enter / Space open it too);
+   `rowLabel` names what it opens for screen readers (read in the # cell). Its focus ring is the
+   focus token drawn inside the row (`border-width-focus` in primary at 25%, as `shadow-focus`),
+   so the scroll area can't clip it. A click on a link or button inside the row is left to it.
+
    Sorting is controlled: the table only reports clicks through onSortChange (asc → desc →
    asc). Sortable headers are real buttons inside a <th aria-sort>. */
 
@@ -64,6 +70,10 @@ export type DataTableProps<T, K extends string = string> = {
   /** Footer under a 1px rule (pagination); hidden while empty. */
   footer?: React.ReactNode
   density?: 'default' | 'compact' | 'relaxed'
+  /** Makes each row open its detail view (click, or Enter / Space on the focused row). */
+  onRowClick?: (row: T) => void
+  /** What a clickable row opens, for screen readers — e.g. "View request ORD-2026-0001". */
+  rowLabel?: (row: T) => string
   /** Marks a row as selected (e.g. the one open in an editor) — Table.md's `data-selected` row on `primary-soft`. */
   isRowSelected?: (row: T) => boolean
   className?: string
@@ -95,6 +105,8 @@ export function DataTable<T, K extends string = string>({
   className,
   scrollAreaClassName,
   isRowSelected,
+  onRowClick,
+  rowLabel,
 }: DataTableProps<T, K>) {
   const heights = HEIGHTS[density]
   const t = useTranslations('shared.table')
@@ -148,13 +160,29 @@ export function DataTable<T, K extends string = string>({
                     <tr
                       key={getRowId(row)}
                       data-selected={isRowSelected?.(row) || undefined}
+                      tabIndex={onRowClick ? 0 : undefined}
+                      onClick={onRowClick ? (event) => !fromControl(event) && onRowClick(row) : undefined}
+                      onKeyDown={
+                        onRowClick
+                          ? (event) => {
+                              if (event.target !== event.currentTarget || (event.key !== 'Enter' && event.key !== ' ')) return
+                              event.preventDefault()
+                              onRowClick(row)
+                            }
+                          : undefined
+                      }
                       className={cn(
                         heights.row,
                         'border-t border-border transition-colors first:border-t-0 hover:bg-accent data-[selected=true]:bg-primary-soft',
+                        onRowClick &&
+                          'cursor-pointer focus-visible:bg-accent focus-visible:outline-(length:--border-width-focus) focus-visible:-outline-offset-(--border-width-focus) focus-visible:outline-primary/25',
                       )}
                     >
                       {showNumbers ? (
-                        <td className="px-4 whitespace-nowrap text-muted-foreground">{rowNumberOffset + index + 1}</td>
+                        <td className="px-4 whitespace-nowrap text-muted-foreground">
+                          {rowNumberOffset + index + 1}
+                          {onRowClick && rowLabel ? <span className="sr-only">{rowLabel(row)}</span> : null}
+                        </td>
                       ) : null}
                       {columns.map((column) => (
                         <td
@@ -174,6 +202,12 @@ export function DataTable<T, K extends string = string>({
       {footer && !isEmpty ? <div className="border-t border-border px-4 py-3.5">{footer}</div> : null}
     </div>
   )
+}
+
+/** A click on a control inside a clickable row belongs to that control, not the row. */
+function fromControl(event: React.MouseEvent<HTMLElement>): boolean {
+  const control = event.target instanceof Element ? event.target.closest('a, button, input, select, textarea, [role="menuitem"]') : null
+  return control !== null && event.currentTarget.contains(control)
 }
 
 const headClass =

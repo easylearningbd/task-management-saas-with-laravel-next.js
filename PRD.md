@@ -338,13 +338,24 @@ Every CRUD list page follows the same pattern:
 | Pro (recommended) | $49.99 | $479.90 | Unlimited | 50 GB | ✓ | 14 days |
 
 ### 6.16 Plan Request (company side)
-- "View the status of your submitted plan upgrade requests."
-- Columns: #, Company (avatar, name, email), Plan (badge), Plan Duration (Monthly/Yearly), Status (Approved / Pending / Rejected), Requested At.
-- Filters: search, All Status. Only one pending request at a time.
+*Built — `/plans/requests`. One list over the single `plan_orders` table (§10): every request, purchase and trial the company has submitted.*
+- "Plan Requests" — "View the status of your submitted plan upgrade requests." No Add button. Breadcrumb Dashboard › Plans › Plan Requests.
+- Filter bar: search "Search..." (order code, payment reference, plan name), **All Status** (Pending / Approved / Rejected), outline **Filters** → **Type** (Plan Request / Purchase / Trial) + Reset. No view toggle. All list state in the URL.
+- Columns: # (continues across pages), Company ↕ (avatar, name, email), Plan ↕ (soft `info` badge), Plan Duration (Monthly / Yearly), Status (`success` Approved / `warning` Pending / `danger` Rejected), Requested At ↕ (calendar icon, YYYY-MM-DD). Newest first by default. Shared pagination footer.
+- A row (click, or Enter / Space) opens a read-only **details modal**: order code, type, plan, duration, amount, payment method, transaction / reference no., payment receipt (opens the authorised receipt route in a new tab), status, requested at, reviewed at ("Not reviewed yet" while pending), notes, and the rejection reason when rejected.
+- States: skeleton rows, an empty state pointing at Plans ("View Plans"), no results ("Clear filters"), load error with retry.
+- **One pending order at a time** (any type): while one is pending, the Plans page shows a banner linking here, every card but the current one shows "Request pending", the checkout refuses, and the API answers 422 (`pending_order`).
+- While a row is pending the list re-asks every 30 s; when a decision lands, the header dropdown and sidebar plan (both `/me`) refresh without a reload.
 
 ### 6.17 Plan Orders (company side)
-*(No screenshot — proposed design.)*
-- Order history: Order ID, Plan, Duration, Amount, Coupon, Discount, Final Amount, Payment Method, Status (Pending / Approved / Rejected / Failed), Date, receipt/invoice download.
+*Page not built (sidebar item stays "Coming soon"). Its data already exists: the `purchase` rows of `plan_orders` (§10), which Plan Requests (§6.16) lists today — a separate page is a `type` filter away.*
+- **How a purchase is made — the checkout** (`/plans/checkout?plan={id}&duration={monthly|yearly}`, built): Subscribe Now on a paid plan opens it. Breadcrumb Dashboard › Plans › Checkout; "Complete Your Purchase" + Back.
+  - Entry is guarded: an unknown / inactive plan or bad duration, the current plan + duration, a pending order, or a $0 plan each show why, with a way back — never the form.
+  - Left: **Payment Method** — Bank Transfer (selected) and **Stripe, disabled with "Coming soon"** (the API rejects `payment_method=stripe` with 422 even if crafted); **Bank Details** from the global settings (bank name, account name, account number, branch, SWIFT / BIC, instructions), each with a copy button; **Payment Proof** — Transaction / Reference No. (optional, ≤ 100), **Payment Receipt\*** (JPG / PNG / PDF ≤ 5 MB, checked before upload, image preview or PDF chip, remove), Notes (optional, ≤ 2000).
+  - Right, sticky: **Order Summary** — plan, billing period, price, Discount "—" (coupons not applied yet), **Total**; **Submit for Approval** with upload progress and the note that the plan activates once an administrator approves.
+  - Submit creates a **Pending** `purchase` order (price snapshotted) and lands on Plan Requests with the new row on top. The plan does not change until approval. Leaving with unsaved input asks first.
+- **Receipts** are billing documents, not media: a private disk under `billing/receipts/{company_id}/`, streamed only by `GET /api/v1/plan-orders/{id}/receipt` (the owning company) and `GET /api/v1/admin/plan-orders/{id}/receipt` (super admin), `Cache-Control: private, no-store`. They never appear in the Media Library and never count toward the storage limit.
+- Still to come on this page: coupon code at checkout (`coupon_id` + `discount` are reserved columns), invoice download, Stripe.
 
 ### 6.18 Referral Program (company side)
 *(No screenshot — proposed design.)*
@@ -429,15 +440,19 @@ Top bar: sidebar toggle, breadcrumbs, dark mode, language, user menu (no timer b
 Buttons: Cancel, **Create Plan**; Back link.
 
 ### 8.4 Plan Requests (admin)
+*API built; page not built yet. Reads the same `plan_orders` table as the company side (§10) — there is no separate `plan_requests` table.*
 - "View and manage all plan requests from companies."
 - Columns: #, Company, Plan, Plan Duration, Status, Requested At, Actions (✓ approve, ✗ reject — only on **Pending** rows).
-- Approve → assign plan to company, set `plan_expires_at` = now + 1 month/year, create an approved plan order (amount per plan price, marked "manual"), notify company by email.
-- Reject → status Rejected, notify company.
+- Endpoints (`auth:sanctum`, `role:super_admin`): `GET /api/v1/admin/plan-orders` (paginated; `search` over order code, reference, plan, company name / email; `status`; `type`; sort `company` / `plan` / `requested_at`), `GET …/{id}` (with the reviewer), `PATCH …/{id}/approve`, `PATCH …/{id}/reject` (`reason` required), `GET …/{id}/receipt`.
+- **Approve** (pending orders only; refused if the plan is inactive or deleted) — one transaction, through `CompanyService::applyPlan()`: the company's `plan_id` and `plan_duration` become the order's, `plan_expires_at` = now + 1 month / 1 year (null for a $0 plan, which never expires), `trial_ends_at` cleared; the order gets `status=approved`, `reviewed_by`, `reviewed_at`; a `PlanChanged` activity entry is logged. Limits follow automatically — `PlanLimitService` reads the live plan, nothing is copied onto the company.
+- **Reject** (pending only): `status=rejected`, `rejection_reason`, `reviewed_by`, `reviewed_at`. Nothing about the company changes.
+- The company sees the decision on its Plan Requests page (§6.16). Email notifications are not sent yet (Email Templates, §8.10).
 
 ### 8.5 Plan Orders (admin)
-*(No screenshot — proposed design.)*
-- All orders: Order ID, Company, Plan, Duration, Price, Coupon, Discount, Final Amount, Payment Method (Stripe / Bank Transfer / Manual), Payment Status, Date, Actions (view, approve/reject for bank transfers, view receipt).
-- **Revenue** figures on the admin dashboard use approved orders only.
+*API built (the §8.4 endpoints, filtered by `type=purchase`); page not built yet.*
+- All orders: Order code, Company, Plan, Duration, Price, Discount, Final Amount, Payment Method (Bank Transfer / Stripe / Manual / Free), Status (Pending / Approved / Rejected), Date, Actions (view, approve / reject a pending bank transfer, view receipt).
+- `request` orders (Request Plan) are amount 0 / method Manual; `trial` and $0 orders are created already Approved (method Free) and applied at once.
+- **Revenue** figures on the admin dashboard should use approved orders' `final_amount` only (the dashboard still shows sample data).
 
 ### 8.6 Coupons
 - Filters: search, All Types, All Status.
@@ -500,14 +515,13 @@ Buttons: Cancel, **Create Plan**; Back link.
 
 ## 10. Data Model (MySQL)
 
-All tables have `id`, `created_at`, `updated_at`. Tenant tables have `company_id` (indexed, FK → users). Money uses `DECIMAL(15,2)`. Soft deletes on users, clients, projects, milestones, project_items, project_notes, expenses, media, tasks, invoices, contracts (a project's children are soft-deleted with it by the service — a soft delete fires no FK cascade).
+All tables have `id`, `created_at`, `updated_at`. Tenant tables have `company_id` (indexed, FK → users). Money uses `DECIMAL(15,2)`. Soft deletes on users, clients, projects, milestones, project_items, project_notes, expenses, media, tasks, plan_orders, invoices, contracts (a project's children are soft-deleted with it by the service — a soft delete fires no FK cascade).
 
 | Table | Key columns |
 |---|---|
 | `users` | name, email (unique), password, type (`super_admin`/`company`), avatar, is_login_enabled, status, plan_id, plan_duration, plan_expires_at, trial_ends_at, referral_code, referred_by, lang, remember_token, email_verified_at, deleted_at |
 | `plans` | name, description, monthly_price, yearly_price, max_projects (-1 = unlimited), storage_limit_gb, trial_enabled, trial_days, ai_integration, is_active, is_default, is_recommended, sort_order |
-| `plan_requests` | company_id, plan_id, duration, status (pending/approved/rejected), actioned_by, actioned_at |
-| `plan_orders` | order_code, company_id, plan_id, duration, price, coupon_id, discount, final_amount, payment_method, payment_status, transaction_id, receipt_path |
+| `plan_orders` | **one table for everything awaiting or past approval** (no `plan_requests` table) — order_code (unique, `ORD-{YYYY}-{NNNN}`, generated in a transaction under a lock), company_id (FK users, cascade; never from input), plan_id (FK plans, restrict), type (`request`/`purchase`/`trial`, indexed), duration (`monthly`/`yearly`), price (snapshot at submission), coupon_id (nullable FK coupons, null on delete — reserved), discount (default 0 — reserved), final_amount (`price - discount`), payment_method (`bank_transfer`/`stripe`/`manual`/`free`, nullable), payment_reference, receipt_path (private disk), receipt_name (display only), notes, status (`pending`/`approved`/`rejected`, default pending), reviewed_by (FK users, nullable), reviewed_at, rejection_reason, deleted_at — indexes (company_id, status), (company_id, created_at). A company has used a plan's trial when a `trial` row exists for that plan; at most one `pending` row per company (enforced by the service) |
 | `coupons` | name, code (unique), type (percentage/flat), value, min_spend, max_spend, usage_limit, per_user_limit, expiry_date, is_active |
 | `coupon_usages` | coupon_id, company_id, plan_order_id |
 | `currencies` | name, code, symbol, exchange_rate, is_default, is_active |

@@ -200,21 +200,49 @@ class CompanyService
             throw ValidationException::withMessages(['plan_id' => __('This plan is not available.')]);
         }
 
-        return DB::transaction(function () use ($company, $plan, $duration, $actor, $now): Company {
-            $now ??= Carbon::now();
+        $now ??= Carbon::now();
+
+        return $this->applyPlan($company, $plan, $duration, self::expiryFor($duration, $now), null, $actor, __('Plan changed to :plan (:duration)', [
+            'plan' => $plan->name,
+            'duration' => $duration->value,
+        ]));
+    }
+
+    /**
+     * Puts the company on `$plan` — the one place a company's plan fields are written: the admin's
+     * manual change, an approved plan order, a trial, a $0 subscription, and plan expiry all come
+     * through here. Sets plan, duration, `plan_expires_at` and `trial_ends_at` as given, in one
+     * transaction with the company's "Plan changed" activity entry (`meta.from` / `meta.to`, plus
+     * any `$meta` — e.g. the order code or `source: expiry`). Never touches the company's data:
+     * a smaller plan only limits new projects and uploads (PlanLimitService reads the live plan).
+     *
+     * @param  array<string, mixed>  $meta
+     */
+    public function applyPlan(
+        Company $company,
+        Plan $plan,
+        PlanDuration $duration,
+        ?Carbon $expiresAt,
+        ?Carbon $trialEndsAt,
+        ?User $actor,
+        string $description,
+        array $meta = [],
+    ): Company {
+        return DB::transaction(function () use ($company, $plan, $duration, $expiresAt, $trialEndsAt, $actor, $description, $meta): Company {
             $from = ['plan' => $company->plan?->name, 'duration' => $company->plan_duration?->value];
 
             $company->forceFill([
                 'plan_id' => $plan->id,
                 'plan_duration' => $duration,
-                'plan_expires_at' => self::expiryFor($duration, $now),
-                'trial_ends_at' => null,
+                'plan_expires_at' => $expiresAt,
+                'trial_ends_at' => $trialEndsAt,
             ])->save();
 
-            $this->log($company, CompanyActivityAction::PlanChanged, $actor, __('Plan changed to :plan (:duration)', [
-                'plan' => $plan->name,
-                'duration' => $duration->value,
-            ]), ['from' => $from, 'to' => ['plan' => $plan->name, 'duration' => $duration->value]]);
+            $this->log($company, CompanyActivityAction::PlanChanged, $actor, $description, [
+                'from' => $from,
+                'to' => ['plan' => $plan->name, 'duration' => $duration->value],
+                ...$meta,
+            ]);
 
             return $company->load('plan');
         });
@@ -226,6 +254,21 @@ class CompanyService
         return $duration === PlanDuration::Yearly
             ? $from->copy()->addYearNoOverflow()
             : $from->copy()->addMonthNoOverflow();
+    }
+
+    /**
+     * Like expiryFor(), except a plan that costs nothing for that duration never expires (null) —
+     * as CompanySetupService::assignDefaultPlan() does for the Free plan (Billing decision 7).
+     */
+    public static function expiryForPlan(Plan $plan, PlanDuration $duration, Carbon $from): ?Carbon
+    {
+        return bccomp(self::priceFor($plan, $duration), '0', 2) === 0 ? null : self::expiryFor($duration, $from);
+    }
+
+    /** The plan's stored price for that duration ("19.99") — a decimal string, never a float. */
+    public static function priceFor(Plan $plan, PlanDuration $duration): string
+    {
+        return (string) ($duration === PlanDuration::Yearly ? $plan->yearly_price : $plan->monthly_price);
     }
 
     /**

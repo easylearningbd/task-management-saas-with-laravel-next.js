@@ -5,6 +5,7 @@ import { ChevronDown, LogOut, User as UserIcon } from 'lucide-react'
 import { DropdownMenu } from 'radix-ui'
 import { useTranslations } from 'next-intl'
 import { Avatar } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
 import { toast } from '@/components/ui/toast'
 import { useLogout } from '@/features/auth/api'
@@ -12,7 +13,10 @@ import type { User, UserRole } from '@/features/auth/types'
 import { LOGIN } from '@/lib/routes'
 
 /* The top bar's user button (avatar, name, email, chevron) opening a design-system
-   DropdownMenu: Profile Settings, then Log out (PRD §4.1). */
+   DropdownMenu: Profile Settings, then Log out (PRD §4.1). Under the email the menu names who
+   this is: a company's current plan as an `info` badge (brand-book.md: plan names are `info`),
+   from /me's `plan` — the same live user the sidebar's plan card reads, so both change together
+   after a trial, a $0 plan or an approval; a super admin keeps the role line. */
 
 /** Each role's Profile Settings page — the same shared page (features/profile) on both sides. */
 const PROFILE_SETTINGS: Record<UserRole, string> = { super_admin: '/admin/profile', company: '/profile' }
@@ -64,7 +68,14 @@ export function UserMenu({ user }: { user: User }) {
           <DropdownMenu.Label className="px-2 pt-2 pb-1">
             <span className="block truncate text-title-row">{user.name}</span>
             <span className="block truncate text-body-sm text-muted-foreground">{user.email}</span>
-            <span className="mt-0.5 block text-caption text-muted-foreground">{tRoles(user.role)}</span>
+            {user.plan ? (
+              <span className="mt-1.5 flex">
+                <span className="sr-only">{tShell('currentPlan')}: </span>
+                <Badge tone="info">{user.plan.name}</Badge>
+              </span>
+            ) : (
+              <span className="mt-0.5 block text-caption text-muted-foreground">{tRoles(user.role)}</span>
+            )}
           </DropdownMenu.Label>
           <DropdownMenu.Separator className="-mx-1 my-1 h-px bg-border" />
           {/* A real link: Radix keeps arrow-key/Enter handling and closes the menu on select. */}

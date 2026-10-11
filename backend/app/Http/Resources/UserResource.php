@@ -33,6 +33,11 @@ class UserResource extends JsonResource
             // Set while a super admin is viewing as this account ("Login as company").
             'is_impersonating' => $this->impersonator($request) !== null,
             'impersonator' => $this->impersonator($request),
+            // A company's current plan — the header dropdown and the sidebar card show its name
+            // (Billing decision 1). Null for a super admin, or a company without a plan.
+            'plan' => $this->isCompany() && $this->plan
+                ? ['id' => $this->plan->id, 'name' => $this->plan->name, 'duration' => $this->plan_duration?->value]
+                : null,
         ];
     }
 

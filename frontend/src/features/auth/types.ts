@@ -15,6 +15,14 @@ export interface User {
   is_impersonating: boolean
   /** That admin, while `is_impersonating`. */
   impersonator: { name: string; email: string } | null
+  /** A company's current plan (the header dropdown and the sidebar card); null for a super admin. */
+  plan: UserPlan | null
+}
+
+export interface UserPlan {
+  id: number
+  name: string
+  duration: 'monthly' | 'yearly' | null
 }
 
 /** Laravel API Resource envelope. */

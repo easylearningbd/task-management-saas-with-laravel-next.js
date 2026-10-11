@@ -44,15 +44,19 @@ export function CompanyTopbar({
   // A record page below a menu page ("/projects/6"): the menu page links back and the record's
   // name (usePageCrumb) is the last step — "Dashboard › Projects › Enterprise Digital
   // Transformation"; "Details" until the page provides the name.
+  // A leaf's `crumb` setting (nav.ts) can rename it, drop its parent group, or link the parent.
   const home: Crumb = { label: t('nav.dashboard'), href: '/dashboard' }
   const below = active !== undefined && pathname !== active.leaf.href
+  const leafLabel = active ? t(`nav.${active.leaf.crumb?.labelKey ?? active.leaf.labelKey}`) : ''
   const crumbs: Crumb[] = active
     ? [
         ...(active.leaf.href === '/dashboard' ? [] : [home]),
-        ...(active.parent ? [{ label: t(`nav.${active.parent.labelKey}`) }] : []),
+        ...(active.parent && !active.leaf.crumb?.hideParent
+          ? [{ label: t(`nav.${active.parent.labelKey}`), href: active.leaf.crumb?.parentHref }]
+          : []),
         ...(below
-          ? [{ label: t(`nav.${active.leaf.labelKey}`), href: active.leaf.href }, { label: pageLabel ?? t('recordCrumb') }]
-          : [{ label: pageLabel ?? t(`nav.${active.leaf.labelKey}`) }]),
+          ? [{ label: leafLabel, href: active.leaf.href }, { label: pageLabel ?? t('recordCrumb') }]
+          : [{ label: pageLabel ?? leafLabel }]),
       ]
     : pageLabel
       ? [{ label: pageLabel }]

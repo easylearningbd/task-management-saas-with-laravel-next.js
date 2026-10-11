@@ -47,7 +47,8 @@
       "viewingAs": "You are viewing as <strong>{company}</strong>",
       "backToAdmin": "Back to Admin",
       "failed": "Couldn't return to the admin account. Please try again."
-    }
+    },
+    "currentPlan": "Current plan"
   },
   "adminDashboard": {
     "title": "Dashboard",
@@ -457,6 +458,19 @@
       "attachFailed": "Couldn’t attach the file",
       "detached": "{name} detached",
       "detachFailed": "Couldn’t detach the file"
+    },
+    "copy": {
+      "copy": "Copy {label}",
+      "copyTip": "Copy",
+      "copied": "Copied",
+      "copiedLabel": "{label} copied",
+      "failed": "Couldn’t copy"
+    },
+    "dropzone": {
+      "prompt": "Drag a file here or <browse>browse</browse>",
+      "remove": "Remove {name}",
+      "badType": "This file type isn’t allowed.",
+      "tooLarge": "This file is larger than {max}."
     }
   },
   "coupons": {
@@ -852,6 +866,7 @@
       "plans": "Plans",
       "plan": "Plan",
       "planRequest": "Plan Request",
+      "planRequests": "Plan Requests",
       "planOrders": "Plan Orders",
       "referralProgram": "Referral Program",
       "notificationTemplates": "Notification Templates",
@@ -863,7 +878,8 @@
     "upgrade": "Upgrade",
     "upgradeLabel": "Upgrade your plan",
     "planCard": "Your account",
-    "recordCrumb": "Details"
+    "recordCrumb": "Details",
+    "currentPlan": "Current plan"
   },
   "companyDashboard": {
     "title": "Dashboard",
@@ -1982,6 +1998,219 @@
       "progressRange": "The progress must be between 0 and 100.",
       "checklistTitleRequired": "The item is required.",
       "checklistTitleMax": "The item may not be longer than {max} characters."
+    }
+  },
+  "billing": {
+    "plans": {
+      "title": "Plans",
+      "subtitle": "Manage and choose your subscription plan",
+      "heading": "Choose Your Plan",
+      "intro": "Select the perfect plan for your business needs and start growing today.",
+      "billingPeriod": "Billing period",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "save": "Save 20%",
+      "gridLabel": "Plans",
+      "recommended": "Recommended",
+      "current": "Current",
+      "currentPlan": "Current Plan",
+      "requestPlan": "Request Plan",
+      "startTrial": "Start {days} Day Trial",
+      "subscribe": "Subscribe Now",
+      "requestPending": "Request pending",
+      "trialUsed": "You've already used this plan's free trial.",
+      "trialOnPlan": "You're already on this plan.",
+      "pending": {
+        "title": "Your {plan} ({duration}) request is waiting for review",
+        "description": "You can choose another plan once an administrator has reviewed it.",
+        "link": "View Plan Requests"
+      },
+      "empty": {
+        "title": "No plans available",
+        "description": "There are no plans to choose from right now. Please check back later."
+      },
+      "error": {
+        "title": "Couldn't load plans",
+        "retry": "Try again"
+      },
+      "duration": {
+        "monthly": "monthly",
+        "yearly": "yearly"
+      },
+      "request": {
+        "title": "Request the {plan} plan?",
+        "body": "You're asking for {plan}, billed {duration}. An administrator will review the request — nothing is charged, and your current plan stays until then.",
+        "confirm": "Send Request",
+        "done": "Plan request sent"
+      },
+      "trial": {
+        "title": "Start your {days}-day {plan} trial?",
+        "body": "Your plan switches to {plan} now, with its limits. When the {days} days are over you move to the {fallback} plan unless you subscribe. Each plan's trial can be used once.",
+        "confirm": "Start Trial",
+        "done": "Your {plan} trial has started"
+      },
+      "free": {
+        "title": "Switch to {plan}?",
+        "body": "You'll move from {current} to {plan} now, and your limits change to {projects} projects and {storage} of storage. Nothing is deleted, but you won't be able to add projects or files beyond the new limits.",
+        "confirm": "Switch to {plan}",
+        "done": "You're now on the {plan} plan"
+      },
+      "failed": "Couldn't complete that",
+      "dialog": {
+        "cancel": "Cancel",
+        "close": "Close"
+      }
+    },
+    "checkout": {
+      "metaTitle": "Checkout",
+      "crumb": "Checkout",
+      "title": "Complete Your Purchase",
+      "subtitle": "Pay by bank transfer and upload your receipt. Your plan changes once an administrator approves the payment.",
+      "back": "Back",
+      "loading": "Loading the checkout…",
+      "paymentMethod": {
+        "title": "Payment Method",
+        "label": "Payment method",
+        "bank": {
+          "title": "Bank Transfer",
+          "description": "Transfer the total to the account below, then upload the receipt. Your plan activates once an administrator approves it."
+        },
+        "stripe": {
+          "title": "Stripe",
+          "description": "Pay by card.",
+          "soon": "Coming soon"
+        }
+      },
+      "bankDetails": {
+        "title": "Bank Details",
+        "notSet": "Not set",
+        "fields": {
+          "bank_name": "Bank name",
+          "bank_account_name": "Account name",
+          "bank_account_number": "Account number",
+          "bank_branch": "Branch",
+          "bank_swift": "SWIFT / BIC",
+          "bank_instructions": "Instructions"
+        }
+      },
+      "proof": {
+        "title": "Payment Proof",
+        "reference": "Transaction / Reference No.",
+        "referencePlaceholder": "enter reference",
+        "receipt": "Payment Receipt",
+        "receiptHint": "JPG, PNG or PDF, up to 5 MB",
+        "notes": "Notes",
+        "notesPlaceholder": "enter notes"
+      },
+      "summary": {
+        "title": "Order Summary",
+        "plan": "Plan",
+        "period": "Billing period",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "price": "Price",
+        "discount": "Discount",
+        "none": "—",
+        "total": "Total",
+        "submit": "Submit for Approval",
+        "note": "Your plan activates once an administrator approves the payment.",
+        "uploading": "Uploading receipt… {percent}%",
+        "uploadLabel": "Receipt upload"
+      },
+      "submitted": "Your payment was submitted for approval",
+      "guard": {
+        "unavailable": {
+          "title": "This plan isn't available",
+          "description": "It may have been removed, or the link is incomplete. Choose a plan on the Plans page."
+        },
+        "current": {
+          "title": "This is already your plan",
+          "description": "You're on {plan} ({duration}) — there's nothing to buy."
+        },
+        "pending": {
+          "title": "You have a request waiting for review",
+          "description": "You can buy another plan once it has been reviewed."
+        },
+        "free": {
+          "title": "This plan is free",
+          "description": "Subscribe to {plan} from the Plans page — no payment needed."
+        },
+        "backToPlans": "Back to Plans",
+        "viewRequests": "View Plan Requests"
+      },
+      "leave": {
+        "title": "Leave the checkout?",
+        "body": "Your payment proof hasn't been submitted. If you leave now, what you entered is lost.",
+        "confirm": "Leave",
+        "cancel": "Keep editing",
+        "close": "Close"
+      },
+      "error": {
+        "title": "Couldn't load the checkout",
+        "retry": "Try again"
+      }
+    },
+    "validation": {
+      "receiptRequired": "Attach the payment receipt.",
+      "receiptType": "The receipt must be a JPG, PNG or PDF file.",
+      "receiptSize": "The receipt may not be larger than 5 MB.",
+      "referenceMax": "The reference may not be longer than {max} characters.",
+      "notesMax": "The notes may not be longer than {max} characters."
+    },
+    "requests": {
+      "metaTitle": "Plan Requests",
+      "title": "Plan Requests",
+      "subtitle": "View the status of your submitted plan upgrade requests.",
+      "tableLabel": "Plan requests",
+      "columns": {
+        "company": "Company",
+        "plan": "Plan",
+        "duration": "Plan Duration",
+        "status": "Status",
+        "requestedAt": "Requested At"
+      },
+      "openDetails": "View request {code}",
+      "filters": {
+        "statusLabel": "Status",
+        "allStatus": "All Status",
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "typeLabel": "Type",
+        "allTypes": "All Types",
+        "request": "Plan Request",
+        "purchase": "Purchase",
+        "trial": "Trial"
+      },
+      "empty": {
+        "title": "No plan requests yet",
+        "description": "Requests, purchases and trials you start from the Plans page appear here with their status.",
+        "action": "View Plans",
+        "noMatchTitle": "No requests match your filters",
+        "noMatchDescription": "Try a different search or clear the filters.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn’t load plan requests",
+        "retry": "Try again"
+      },
+      "details": {
+        "title": "Plan Request Details",
+        "orderCode": "Order Code",
+        "type": "Type",
+        "plan": "Plan",
+        "duration": "Plan Duration",
+        "amount": "Amount",
+        "paymentMethod": "Payment Method",
+        "reference": "Transaction / Reference No.",
+        "receipt": "Payment Receipt",
+        "viewReceipt": "View receipt",
+        "viewReceiptLabel": "View receipt {name} (opens in a new tab)",
+        "notes": "Notes",
+        "status": "Status",
+        "requestedAt": "Requested At",
+        "reviewedAt": "Reviewed At",
+        "notReviewed": "Not reviewed yet",
+        "rejectionReason": "Rejection Reason"
+      }
     }
   }
 }
