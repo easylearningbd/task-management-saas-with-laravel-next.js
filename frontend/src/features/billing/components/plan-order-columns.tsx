@@ -4,6 +4,7 @@ import * as React from 'react'
 import { useTranslations } from 'next-intl'
 import type { DataTableColumn } from '@/components/shared/data-table'
 import { IdentityCell } from '@/components/shared/identity-cell'
+import { RowActions, type RowActionItem } from '@/components/shared/row-actions'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CreatedDate } from '@/features/companies/components/company-columns'
@@ -15,7 +16,26 @@ import type { PlanOrder, PlanOrderSortKey, PlanOrderStatus } from '@/features/bi
    Status: outlined `success` Approved / `warning` Pending / `danger` Rejected (Badge.md's status
    tones; the screenshot shows the hairline). Requested At: the shared Calendar date (YYYY-MM-DD).
    Widths are measured from the 1440px screenshot; there are no row actions — the row opens the
-   details modal. */
+   details modal.
+   Shared with the admin Plan Requests page (one table, never forked): it passes its own sort keys
+   (the admin list sorts Requested At as `created_at`), the admin screenshot's widths, and an
+   Actions column — right-aligned RowActions, empty for a row that returns none (only pending rows
+   get ✓ / ✗). The company page calls it with no options and is unchanged. */
+
+type ColumnWidths = { company: string; plan: string; duration: string; status: string; requestedAt: string }
+
+export type PlanOrderColumnOptions<T extends PlanOrder, K extends string> = {
+  sortKeys: { company: K; plan: K; requestedAt: K }
+  widths?: ColumnWidths
+  /** An Actions column; `items` returns null (or nothing) for a row without actions. */
+  actions?: { header: string; items: (order: T) => ReadonlyArray<RowActionItem> | null }
+}
+
+const COMPANY_OPTIONS: PlanOrderColumnOptions<PlanOrder, PlanOrderSortKey> = {
+  sortKeys: { company: 'company', plan: 'plan', requestedAt: 'requested_at' },
+}
+
+const DEFAULT_WIDTHS: ColumnWidths = { company: 'w-[32%]', plan: 'w-[14%]', duration: 'w-[17%]', status: 'w-[15%]', requestedAt: '' }
 
 const STATUS_TONE: Record<PlanOrderStatus, 'success' | 'warning' | 'danger'> = {
   approved: 'success',
@@ -23,16 +43,19 @@ const STATUS_TONE: Record<PlanOrderStatus, 'success' | 'warning' | 'danger'> = {
   rejected: 'danger',
 }
 
-export function usePlanOrderColumns(): DataTableColumn<PlanOrder, PlanOrderSortKey>[] {
+export function usePlanOrderColumns(): DataTableColumn<PlanOrder, PlanOrderSortKey>[]
+export function usePlanOrderColumns<T extends PlanOrder, K extends string>(options: PlanOrderColumnOptions<T, K>): DataTableColumn<T, K>[]
+export function usePlanOrderColumns<T extends PlanOrder, K extends string>(options?: PlanOrderColumnOptions<T, K>): DataTableColumn<T, K>[] {
   const t = useTranslations('billing.requests.columns')
+  const { sortKeys, widths = DEFAULT_WIDTHS, actions } = (options ?? COMPANY_OPTIONS) as PlanOrderColumnOptions<T, K>
 
-  return React.useMemo<DataTableColumn<PlanOrder, PlanOrderSortKey>[]>(
+  return React.useMemo<DataTableColumn<T, K>[]>(
     () => [
       {
         id: 'company',
         header: t('company'),
-        sortKey: 'company',
-        className: 'w-[32%]',
+        sortKey: sortKeys.company,
+        className: widths.company,
         cell: (order) =>
           order.company ? (
             <IdentityCell
@@ -59,34 +82,54 @@ export function usePlanOrderColumns(): DataTableColumn<PlanOrder, PlanOrderSortK
       {
         id: 'plan',
         header: t('plan'),
-        sortKey: 'plan',
-        className: 'w-[14%]',
+        sortKey: sortKeys.plan,
+        className: widths.plan,
         cell: (order) => (order.plan ? <PlanNameBadge name={order.plan.name} /> : '-'),
         skeleton: <Skeleton className="h-6 w-14" />,
       },
       {
         id: 'duration',
         header: t('duration'),
-        className: 'w-[17%]',
+        className: widths.duration,
         cell: (order) => order.duration_label,
         skeleton: <Skeleton className="h-4 w-16" />,
       },
       {
         id: 'status',
         header: t('status'),
-        className: 'w-[15%]',
+        className: widths.status,
         cell: (order) => <PlanOrderStatusBadge order={order} />,
         skeleton: <Skeleton className="h-6 w-16" />,
       },
       {
         id: 'requested_at',
         header: t('requestedAt'),
-        sortKey: 'requested_at',
+        sortKey: sortKeys.requestedAt,
+        className: widths.requestedAt || undefined,
         cell: (order) => <CreatedDate iso={order.created_at} />,
         skeleton: <Skeleton className="h-4 w-24" />,
       },
+      ...(actions
+        ? [
+            {
+              id: 'actions',
+              header: actions.header,
+              align: 'right' as const,
+              cell: (order: T) => {
+                const items = actions.items(order)
+                return items && items.length > 0 ? <RowActions actions={items} /> : null
+              },
+              skeleton: (
+                <span className="inline-flex gap-1.5">
+                  <Skeleton className="size-control-sm rounded-lg" />
+                  <Skeleton className="size-control-sm rounded-lg" />
+                </span>
+              ),
+            },
+          ]
+        : []),
     ],
-    [t],
+    [t, sortKeys.company, sortKeys.plan, sortKeys.requestedAt, widths, actions],
   )
 }
 

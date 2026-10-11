@@ -6,7 +6,8 @@ import { ChevronRight, Search } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Logo } from '@/components/ui/logo'
-import { activeItem, NAV, type NavItem, type NavLeaf } from '@/components/layout/nav'
+import { ComingSoon } from '@/components/ui/coming-soon'
+import { activeItem, isComingSoon, NAV, type NavItem, type NavLeaf } from '@/components/layout/nav'
 import { cn } from '@/lib/cn'
 import type { UserRole } from '@/features/auth/types'
 
@@ -14,13 +15,22 @@ import type { UserRole } from '@/features/auth/types'
    fixed `sidebar-width` column, wordmark, "Search menu..." filter, sectioned items. A parent
    with children carries a trailing chevron and expands in place; sub-items sit behind a 1px
    `sidebar-border` rail and the active one gets a 2px `sidebar-primary` bar. Below `lg` the
-   sidebar is an off-canvas drawer over an `overlay` scrim. */
+   sidebar is an off-canvas drawer over an `overlay` scrim. A sub-item whose page isn't built yet
+   (isComingSoon — Plan Orders) is a "Coming soon" button (ComingSoon), never a link to a 404. */
 
 const itemClass = (active: boolean) =>
   cn(
     'mx-3 flex h-10 items-center gap-1.5 rounded-lg px-2 text-body font-medium transition-colors',
     'focus-visible:border focus-visible:border-sidebar-ring focus-visible:outline-none',
     active ? 'text-sidebar-primary' : 'text-sidebar-foreground hover:bg-sidebar-accent',
+  )
+
+const subItemClass = (active: boolean) =>
+  cn(
+    // pl-3.5: label lines up with the parent's (46px − 30px rail − 2px bar)
+    '-ml-px flex h-8.5 items-center rounded-r-lg border-l-2 pl-3.5 text-body transition-colors',
+    'focus-visible:shadow-focus focus-visible:outline-none',
+    active ? 'border-sidebar-primary font-medium text-sidebar-primary' : 'border-transparent text-sidebar-foreground hover:bg-sidebar-accent',
   )
 
 export function Sidebar({ role, open, onClose }: { role: UserRole; open: boolean; onClose: () => void }) {
@@ -146,21 +156,17 @@ export function Sidebar({ role, open, onClose }: { role: UserRole; open: boolean
                               const isActive = child === active
                               return (
                                 <li key={child.href}>
-                                  <Link
-                                    href={child.href}
-                                    onClick={onClose}
-                                    aria-current={isActive ? 'page' : undefined}
-                                    className={cn(
-                                      // pl-3.5: label lines up with the parent's (46px − 30px rail − 2px bar)
-                                      '-ml-px flex h-8.5 items-center rounded-r-lg border-l-2 pl-3.5 text-body transition-colors',
-                                      'focus-visible:shadow-focus focus-visible:outline-none',
-                                      isActive
-                                        ? 'border-sidebar-primary font-medium text-sidebar-primary'
-                                        : 'border-transparent text-sidebar-foreground hover:bg-sidebar-accent',
-                                    )}
-                                  >
-                                    <span className="truncate">{label(child)}</span>
-                                  </Link>
+                                  {isComingSoon(child.href) ? (
+                                    <ComingSoon side="right">
+                                      <button type="button" className={cn(subItemClass(false), 'w-full text-left')}>
+                                        <span className="truncate">{label(child)}</span>
+                                      </button>
+                                    </ComingSoon>
+                                  ) : (
+                                    <Link href={child.href} onClick={onClose} aria-current={isActive ? 'page' : undefined} className={subItemClass(isActive)}>
+                                      <span className="truncate">{label(child)}</span>
+                                    </Link>
+                                  )}
                                 </li>
                               )
                             })}

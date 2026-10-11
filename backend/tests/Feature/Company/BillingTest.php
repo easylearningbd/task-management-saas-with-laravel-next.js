@@ -203,13 +203,13 @@ test('7. after approval the NEW limits apply: 3 projects → 25; after a downgra
     actAsBilling(User::factory()->superAdmin()->create());
     $this->patchJson(route('v1.admin.plan-orders.approve', $orderId))->assertOk();
 
-    expect(Tenancy::instance()->runAs($this->companyA, fn () => $limits->usage()['projects']))->toBe(['used' => 3, 'limit' => 25])->and($canCreate())->toBeTrue();
+    expect(Tenancy::instance()->runAs($this->companyA, fn () => $limits->usage()['projects']))->toBe(['used' => 3, 'limit' => 25, 'remaining' => 22])->and($canCreate())->toBeTrue();
     Tenancy::instance()->runAs($this->companyA, fn () => Project::factory()->count(2)->create()); // 5 now
 
     // Back down to Free: nothing is deleted, only new creates are blocked.
     actAsBilling($this->companyA);
     $this->postJson(route('v1.plan-orders.free'), ['plan_id' => $this->free->id, 'duration' => 'monthly'])->assertCreated();
-    expect(Tenancy::instance()->runAs($this->companyA, fn () => $limits->usage()['projects']))->toBe(['used' => 5, 'limit' => 3])->and($canCreate())->toBeFalse();
+    expect(Tenancy::instance()->runAs($this->companyA, fn () => $limits->usage()['projects']))->toBe(['used' => 5, 'limit' => 3, 'remaining' => 0])->and($canCreate())->toBeFalse();
 });
 
 test('8. editing the plan\'s price afterwards does NOT change a pending order\'s amount', function () {

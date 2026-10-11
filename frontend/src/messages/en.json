@@ -41,7 +41,8 @@
       "profileSettings": "Profile Settings",
       "createPlan": "Create Plan",
       "editPlan": "Edit Plan",
-      "companyDetails": "Company Details"
+      "companyDetails": "Company Details",
+      "planRequestsPage": "Plan Requests"
     },
     "impersonation": {
       "viewingAs": "You are viewing as <strong>{company}</strong>",
@@ -425,7 +426,7 @@
     },
     "usage": {
       "of": "{used} of {limit}",
-      "ofUnlimited": "{used} of Unlimited"
+      "unlimited": "Unlimited"
     },
     "kanban": {
       "instructions": "To pick up a card, press Space or Enter. Use the arrow keys to move it — left and right between columns, up and down within one — then Space or Enter to drop it, or Escape to cancel.",
@@ -471,6 +472,13 @@
       "remove": "Remove {name}",
       "badType": "This file type isn’t allowed.",
       "tooLarge": "This file is larger than {max}."
+    },
+    "receipt": {
+      "open": "Open receipt",
+      "openLabel": "Open receipt {name} (opens in a new tab)",
+      "imageAlt": "Payment receipt {name}",
+      "none": "No receipt attached",
+      "fallbackName": "receipt"
     }
   },
   "coupons": {
@@ -1762,6 +1770,18 @@
       "expenseDateRequired": "The date is required.",
       "expenseDateInvalid": "Enter a valid date.",
       "categoryRequired": "Select a category."
+    },
+    "usage": {
+      "label": "Projects used",
+      "of": "{used} of {limit, plural, one {# project} other {# projects}}",
+      "unlimited": "{used, plural, one {# project} other {# projects}}",
+      "remaining": "{remaining} remaining",
+      "near": "You’re close to your plan’s project limit.",
+      "full": "You’ve reached your plan’s project limit.",
+      "over": "You’re over your plan’s project limit — your existing projects stay, but new ones are blocked.",
+      "none": "Your plan doesn’t include projects.",
+      "upgrade": "Upgrade",
+      "upgradeLabel": "Upgrade your plan"
     }
   },
   "tasks": {
@@ -2211,6 +2231,66 @@
         "notReviewed": "Not reviewed yet",
         "rejectionReason": "Rejection Reason"
       }
+    }
+  },
+  "planRequests": {
+    "validation": {
+      "reasonRequired": "Give the company a reason for the rejection.",
+      "reasonMax": "The reason may not be longer than {max} characters."
+    },
+    "list": {
+      "title": "Plan Requests",
+      "subtitle": "View and manage all plan requests from companies.",
+      "tableLabel": "Plan requests",
+      "actions": "Actions",
+      "approve": "Review and approve {code}",
+      "approveTooltip": "Review & approve",
+      "reject": "Reject {code}",
+      "rejectTooltip": "Reject",
+      "openDetails": "View request {code}",
+      "filters": {
+        "planLabel": "Plan",
+        "allPlans": "All Plans"
+      },
+      "empty": {
+        "title": "No plan requests yet",
+        "description": "Requests and payments companies submit from their Plans page appear here.",
+        "noMatchTitle": "No requests match your filters",
+        "noMatchDescription": "Try a different search or clear the filters.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn’t load plan requests",
+        "retry": "Try again"
+      }
+    },
+    "review": {
+      "company": "Company",
+      "type": "Type",
+      "plan": "Plan",
+      "duration": "Plan Duration",
+      "amount": "Amount",
+      "paymentMethod": "Payment Method",
+      "reference": "Transaction / Reference No.",
+      "requestedAt": "Requested At",
+      "notes": "Notes",
+      "receipt": "Payment Receipt",
+      "reviewedBy": "Reviewed By",
+      "reviewedAt": "Reviewed At",
+      "rejectionReason": "Rejection Reason",
+      "summary": "{company} will move to {plan} ({duration}), valid until {date}.",
+      "summaryNoExpiry": "{company} will move to {plan} ({duration}), with no expiry date.",
+      "approve": "Approve",
+      "cancel": "Cancel",
+      "approved": "Approved — {company} is now on {plan}",
+      "failed": "Couldn’t approve this request"
+    },
+    "reject": {
+      "title": "Reject Plan Request",
+      "summary": "{code} · {company} · {plan} ({duration}) · {amount}",
+      "reason": "Reason for rejection",
+      "placeholder": "Explain why this payment was rejected",
+      "hint": "The company sees this on its Plan Requests page.",
+      "submit": "Reject",
+      "rejected": "Rejected — {company} can see the reason"
     }
   }
 }

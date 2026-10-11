@@ -96,10 +96,10 @@ class PlanOrder extends Model
     /**
      * The list filters shared by the company and admin lists: search (order code, payment
      * reference, plan name — and the company's name / email when `$withCompany`, admin side),
-     * status and type. The search term is LIKE-escaped.
+     * status, type and plan (`plan_id`, admin side). The search term is LIKE-escaped.
      *
      * @param  Builder<PlanOrder>  $query
-     * @param  array{search?: ?string, status?: ?string, type?: ?string}  $filters
+     * @param  array{search?: ?string, status?: ?string, type?: ?string, plan_id?: ?int}  $filters
      */
     public function scopeFilter(Builder $query, array $filters, bool $withCompany = false): void
     {
@@ -120,7 +120,8 @@ class PlanOrder extends Model
 
         $query
             ->when($filters['status'] ?? null, fn (Builder $q, string $status) => $q->where('plan_orders.status', $status))
-            ->when($filters['type'] ?? null, fn (Builder $q, string $type) => $q->where('plan_orders.type', $type));
+            ->when($filters['type'] ?? null, fn (Builder $q, string $type) => $q->where('plan_orders.type', $type))
+            ->when($filters['plan_id'] ?? null, fn (Builder $q, int $planId) => $q->where('plan_orders.plan_id', $planId));
     }
 
     public function isPending(): bool

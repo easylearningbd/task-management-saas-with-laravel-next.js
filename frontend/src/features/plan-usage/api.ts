@@ -12,7 +12,7 @@ export const planUsageKeys = {
   all: ['plan-usage'] as const,
 }
 
-export function usePlanUsage(options: { enabled?: boolean } = {}) {
+export function usePlanUsage(options: { enabled?: boolean; refetchOnMount?: boolean | 'always' } = {}) {
   return useQuery({
     queryKey: planUsageKeys.all,
     queryFn: async ({ signal }) => {
@@ -20,5 +20,8 @@ export function usePlanUsage(options: { enabled?: boolean } = {}) {
       return data.data
     },
     enabled: options.enabled ?? true,
+    // `always`: re-ask on every visit (the Projects page — a plan approved meanwhile, in another
+    // session, shows at once); otherwise the shared staleTime.
+    refetchOnMount: options.refetchOnMount ?? true,
   })
 }

@@ -83,17 +83,22 @@ class PlanLimitService
     }
 
     /**
-     * What the UI shows against the allowance (GET /api/v1/plan-usage).
+     * What the UI shows against the allowance (GET /api/v1/plan-usage) — the same count and limit
+     * ensureCanCreateProject() checks, so the hint and the guard can't disagree. Projects:
+     * `limit` -1 = unlimited (then `remaining` is null); otherwise `remaining` = limit - used,
+     * never below 0 (a downgraded company can be over its limit).
      *
-     * @return array{plan: array{id: int, name: string}|null, projects: array{used: int, limit: int}, storage: array{used_bytes: int, limit_bytes: int}, ai_integration: bool}
+     * @return array{plan: array{id: int, name: string}|null, projects: array{used: int, limit: int, remaining: int|null}, storage: array{used_bytes: int, limit_bytes: int}, ai_integration: bool}
      */
     public function usage(): array
     {
         $plan = $this->plan();
+        $used = Project::query()->count();
+        $limit = $this->projectLimit();
 
         return [
             'plan' => $plan ? ['id' => $plan->id, 'name' => $plan->name] : null,
-            'projects' => ['used' => Project::query()->count(), 'limit' => $this->projectLimit()],
+            'projects' => ['used' => $used, 'limit' => $limit, 'remaining' => $limit === Plan::UNLIMITED ? null : max(0, $limit - $used)],
             'storage' => ['used_bytes' => $this->usedStorageBytes(), 'limit_bytes' => $this->storageLimitBytes()],
             'ai_integration' => (bool) $plan?->ai_integration,
         ];

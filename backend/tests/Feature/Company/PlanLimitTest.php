@@ -117,10 +117,52 @@ test('plan-usage reports the plan and the usage against the allowance', function
 
     $this->getJson(route('v1.plan-usage'))->assertOk()->assertExactJson(['data' => [
         'plan' => ['id' => $this->company->refresh()->plan_id, 'name' => 'Free'],
-        'projects' => ['used' => 2, 'limit' => 3],
+        'projects' => ['used' => 2, 'limit' => 3, 'remaining' => 1],
         'storage' => ['used_bytes' => 2000, 'limit_bytes' => 1073741824],
         'ai_integration' => false,
     ]]);
+});
+
+test('plan-usage projects follow the real count: creates add, a delete (soft) frees a slot, another company\'s never count — and the guard agrees', function () {
+    onPlan($this->company, Plan::factory()->create(['max_projects' => 3]));
+    Tenancy::instance()->runAs($this->other, fn () => Project::factory()->count(4)->create());
+    actAsLimitedUser($this->company);
+    $projects = fn () => $this->getJson(route('v1.plan-usage'))->assertOk()->json('data.projects');
+
+    expect($projects())->toBe(['used' => 0, 'limit' => 3, 'remaining' => 3]);
+    $first = $this->postJson(route('v1.projects.store'), newProjectPayload($this->client->id, 'P1'))->assertCreated()->json('data.id');
+    $this->postJson(route('v1.projects.store'), newProjectPayload($this->client->id, 'P2'))->assertCreated();
+    expect($projects())->toBe(['used' => 2, 'limit' => 3, 'remaining' => 1]);
+    $this->postJson(route('v1.projects.store'), newProjectPayload($this->client->id, 'P3'))->assertCreated();
+    expect($projects())->toBe(['used' => 3, 'limit' => 3, 'remaining' => 0]);
+    // remaining 0 ⇔ the guard refuses.
+    $this->postJson(route('v1.projects.store'), newProjectPayload($this->client->id, 'P4'))->assertUnprocessable()->assertJsonPath('code', 'plan_limit_reached');
+
+    $this->deleteJson(route('v1.projects.destroy', $first))->assertNoContent();
+    expect($projects())->toBe(['used' => 2, 'limit' => 3, 'remaining' => 1]);
+});
+
+test('plan-usage: an unlimited plan (-1) reports limit -1 and remaining null', function () {
+    onPlan($this->company, Plan::factory()->create(['max_projects' => Plan::UNLIMITED]));
+    Tenancy::instance()->runAs($this->company, fn () => Project::factory()->count(7)->create());
+    actAsLimitedUser($this->company);
+
+    $this->getJson(route('v1.plan-usage'))->assertOk()->assertJsonPath('data.projects', ['used' => 7, 'limit' => -1, 'remaining' => null]);
+});
+
+test('plan-usage: over the limit (a downgraded company) → remaining 0, never negative; a 0 limit → 0 remaining', function () {
+    $small = Plan::factory()->create(['max_projects' => 3]);
+    onPlan($this->company, $small);
+    Tenancy::instance()->runAs($this->company, fn () => Project::factory()->count(5)->create());
+    actAsLimitedUser($this->company);
+
+    $this->getJson(route('v1.plan-usage'))->assertOk()->assertJsonPath('data.projects', ['used' => 5, 'limit' => 3, 'remaining' => 0]);
+
+    $small->forceFill(['max_projects' => 0])->save();
+    $this->getJson(route('v1.plan-usage'))->assertOk()->assertJsonPath('data.projects', ['used' => 5, 'limit' => 0, 'remaining' => 0]);
+    onPlan($this->other, $small);
+    actAsLimitedUser($this->other);
+    $this->getJson(route('v1.plan-usage'))->assertOk()->assertJsonPath('data.projects', ['used' => 0, 'limit' => 0, 'remaining' => 0]);
 });
 
 test('ensureCanStore: within the allowance passes; one byte over → storage_limit_reached with the numbers', function () {

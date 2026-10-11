@@ -5,8 +5,8 @@
 export interface PlanUsage {
   /** null only if no plan exists at all. */
   plan: { id: number; name: string } | null
-  /** limit -1 = unlimited */
-  projects: { used: number; limit: number }
+  /** -1 = unlimited (then `remaining` is null); `remaining` is never negative (an over-limit company gets 0). */
+  projects: { used: number; limit: number; remaining: number | null }
   /** Bytes, 1024-based GB. */
   storage: { used_bytes: number; limit_bytes: number }
   ai_integration: boolean

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /** PATCH /api/v1/admin/plan-orders/{order}/reject — the reason the company will read. */
 class RejectPlanOrderRequest extends FormRequest
 {
-    public const REASON_MAX = 1000;
+    public const REASON_MAX = 500;
 
     public function authorize(): bool
     {

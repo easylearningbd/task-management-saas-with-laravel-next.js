@@ -22,13 +22,15 @@ import { useProjectColumns } from '@/features/projects/components/project-column
 import { ProjectClientFilter, ProjectCreatedFilter, ProjectPriorityFilter } from '@/features/projects/components/project-filters'
 import { ProjectFormModal } from '@/features/projects/components/project-form-modal'
 import { ProjectStats } from '@/features/projects/components/project-stats'
+import { ProjectUsage } from '@/features/projects/components/project-usage'
 import { PROJECT_STATUS_TABS_ID, ProjectStatusTabs } from '@/features/projects/components/project-status-tabs'
 import type { Project } from '@/features/projects/types'
 import { useProjectListParams } from '@/features/projects/use-project-list-params'
 import { toApiError } from '@/lib/api-error'
 
 /* /projects — PAGE SPEC A and the Projects screenshots: the header (title, subtitle, green
-   "+ Add Project"), the four stat cards, the filter bar card (search · All Priority ·
+   "+ Add Project"), the four stat cards, the plan usage strip (ProjectUsage — projects used
+   against the plan's allowance; list and grid views alike), the filter bar card (search · All Priority ·
    All Clients · Filters → Created At range + Reset · list/grid toggle), the status tabs with
    counts, then the table (or the grid) with its footer. All list state — the status tab and the
    view included — lives in the URL.
@@ -160,6 +162,8 @@ export function ProjectsPage() {
 
       <div className="mt-4 flex flex-col gap-4">
         <ProjectStats stats={stats.data} />
+
+        <ProjectUsage />
 
         <FilterBar
           density="compact"

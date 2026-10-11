@@ -8,7 +8,8 @@ import { cn } from '@/lib/cn'
 
 /* A table row's actions — design-system/components/ButtonGhost.md + brand-book.md: a
    right-aligned run of `control-height-sm` ghost icon buttons (`icon-size` glyph in
-   `muted-foreground`, `accent` + `foreground` on hover; delete goes `danger` on `danger-soft`).
+   `muted-foreground`, `accent` + `foreground` on hover; delete / reject go `danger` on
+   `danger-soft`, approve goes `success` on `success-soft` — the Plan Requests ✓ / ✗ pair).
    Order is the caller's, following the spec: open, details, billing, credentials, edit,
    delete — delete always last. Six at most (past that, a DropdownMenu). Every button has an
    aria-label naming the action and its record, plus a tooltip.
@@ -31,7 +32,11 @@ export type RowAction = {
   disabledReason?: string
 }
 
-export function RowActions({ actions, className }: { actions: ReadonlyArray<RowAction>; className?: string }) {
+/** What RowActions renders: a RowAction, whose hover colour may also be `success` (approve) —
+ *  kept off RowAction itself, which other menus (the task card's) map to default / danger. */
+export type RowActionItem = Omit<RowAction, 'tone'> & { tone?: RowAction['tone'] | 'success' }
+
+export function RowActions({ actions, className }: { actions: ReadonlyArray<RowActionItem>; className?: string }) {
   return (
     <div className={cn('inline-flex items-center justify-end gap-1.5', className)}>
       {actions.map(({ id, label, tooltip, icon: Icon, onClick, tone = 'default', disabled, disabledReason }) => (
@@ -46,6 +51,7 @@ export function RowActions({ actions, className }: { actions: ReadonlyArray<RowA
             onClick={disabledReason ? undefined : onClick}
             className={cn(
               tone === 'danger' && 'hover:bg-danger-soft hover:text-danger',
+              tone === 'success' && 'hover:bg-success-soft hover:text-success',
               disabledReason && 'cursor-not-allowed opacity-disabled hover:bg-transparent hover:text-muted-foreground',
             )}
           >

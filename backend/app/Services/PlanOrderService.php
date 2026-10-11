@@ -38,7 +38,7 @@ class PlanOrderService
     /**
      * Every company's orders (the admin list), with the company, plan and reviewer.
      *
-     * @param  array{search?: ?string, status?: ?string, type?: ?string}  $filters
+     * @param  array{search?: ?string, status?: ?string, type?: ?string, plan_id?: ?int}  $filters
      * @return Builder<PlanOrder>
      */
     public function query(array $filters): Builder

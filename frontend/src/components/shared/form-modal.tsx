@@ -13,7 +13,8 @@ import { Dialog, DialogBody, DialogContent, DialogFooter } from '@/components/ui
    - Focus moves to the first field on open (not the X) and returns to the trigger on close.
    - Escape, a scrim click, the X and Cancel all close — except while a submit is in flight.
    - With unsaved changes (`dirty`), closing asks first ("Discard changes?").
-   - `error` shows a form-level alert above the fields (field errors go under each field). */
+   - `error` shows a form-level alert above the fields (field errors go under each field).
+   - `submitTone="destructive"`: the action fills `destructive` (a rejection, not a save). */
 
 export type FormModalProps = {
   open: boolean
@@ -37,6 +38,8 @@ export type FormModalProps = {
   error?: React.ReactNode
   /** A rule under the header (see DialogContent). */
   divided?: boolean
+  /** The submit button's fill: `primary` (Save) or `destructive` (e.g. Reject). */
+  submitTone?: 'primary' | 'destructive'
 }
 
 const FOCUSABLE =
@@ -59,6 +62,7 @@ export function FormModal({
   description,
   submitDisabled = false,
   toolbar,
+  submitTone = 'primary',
 }: FormModalProps) {
   const t = useTranslations('shared.modal')
   const bodyRef = React.useRef<HTMLDivElement>(null)
@@ -104,7 +108,7 @@ export function FormModal({
             <Button variant="outline" onClick={requestClose} disabled={pending}>
               {cancelLabel ?? t('cancel')}
             </Button>
-            <Button type="submit" loading={pending} disabled={submitDisabled}>
+            <Button type="submit" variant={submitTone === 'destructive' ? 'destructive' : undefined} loading={pending} disabled={submitDisabled}>
               {submitLabel ?? t('save')}
             </Button>
           </DialogFooter>

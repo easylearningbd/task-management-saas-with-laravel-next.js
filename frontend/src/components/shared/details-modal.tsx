@@ -12,10 +12,12 @@ import { Dialog, DialogBody, DialogContent, DialogFooter } from '@/components/ui
    tiles, on `primary-soft` with a `primary-strong` glyph; the default glyph is brand-book's
    `Info` ("details"). Fields are a two-column definition list (one column on phones): a
    `body-sm` `muted-foreground` label — with an optional leading icon — over a `body` value.
-   Empty values read "-". The footer has one outline Close button (plus optional extras).
+   Empty values read "-". The footer has one outline Close button (then any actions, e.g. Approve).
    `divided` draws the 1px rule under the header (Modal.md's divided header); `footer={false}`
    drops the Close footer when the header's × is enough. `children` replaces the field list
-   when a record needs its own body layout (badge rows, inset text) — built from DetailList. */
+   when a record needs its own body layout (badge rows, inset text) — built from DetailList.
+   `badge` sits after the title (a status); `closeLabel` renames the dismiss button ("Cancel" when
+   the footer's `actions` decide something, e.g. Approve). */
 
 export type { DetailItem }
 
@@ -30,13 +32,19 @@ export type DetailsModalProps = {
   children?: React.ReactNode
   /** Shows skeleton values (e.g. while the record loads). */
   loading?: boolean
-  /** Extra footer actions, placed before Close. */
+  /** Footer actions, after the dismiss button (Modal.md: Cancel, then the primary action). */
   actions?: React.ReactNode
   size?: 'sm' | 'md' | 'lg'
   /** A 1px rule under the header (as in the details screenshots). */
   divided?: boolean
   /** The Close footer; off when the header's × is the only way out (as in the details screenshots). */
   footer?: boolean
+  /** Next to the title in the header (e.g. the record's status badge). */
+  badge?: React.ReactNode
+  /** The footer's dismiss button (default "Close" — "Cancel" when `actions` decide something). */
+  closeLabel?: string
+  /** Disables the dismiss button (e.g. while an action saves). */
+  closeDisabled?: boolean
 }
 
 export function DetailsModal({
@@ -51,6 +59,9 @@ export function DetailsModal({
   size = 'lg',
   divided = false,
   footer = true,
+  badge,
+  closeLabel,
+  closeDisabled = false,
 }: DetailsModalProps) {
   const t = useTranslations('shared.modal')
 
@@ -65,7 +76,8 @@ export function DetailsModal({
             <span className="inline-flex size-tile shrink-0 items-center justify-center rounded-tile bg-primary-soft text-primary-strong">
               <Icon className="size-icon-lg" aria-hidden="true" />
             </span>
-            {title}
+            <span className="min-w-0">{title}</span>
+            {badge}
           </span>
         }
       >
@@ -74,10 +86,10 @@ export function DetailsModal({
         </DialogBody>
         {footer ? (
           <DialogFooter>
-            {actions}
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              {t('close')}
+            <Button variant="outline" onClick={() => onOpenChange(false)} disabled={closeDisabled}>
+              {closeLabel ?? t('close')}
             </Button>
+            {actions}
           </DialogFooter>
         ) : null}
       </DialogContent>

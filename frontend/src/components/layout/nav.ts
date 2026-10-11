@@ -24,6 +24,7 @@ export type NavLabelKey =
   | 'plans'
   | 'plan'
   | 'planRequests'
+  | 'planRequestsPage'
   | 'planOrders'
   | 'coupons'
   | 'currency'
@@ -91,6 +92,14 @@ const PAGE_TITLES: Record<UserRole, Record<string, NavLabelKey>> = {
   super_admin: { '/admin/profile': 'profileSettings' },
 }
 
+/** Admin destinations that exist in the tree but not yet as pages: the sidebar shows them as
+ *  "Coming soon" (ComingSoon, as on the company side) instead of a link to a 404. Only Plan Orders
+ *  for now (Admin Plan Requests Phase 0 decision 1); the other unbuilt admin items keep linking to
+ *  their final routes until their own tasks. */
+const ADMIN_COMING_SOON: ReadonlySet<string> = new Set(['/admin/plans/orders'])
+
+export const isComingSoon = (href: string) => ADMIN_COMING_SOON.has(href)
+
 /** One step of the top bar's breadcrumb; every step but the last links somewhere. A `dynamic`
  *  step shows the label its page provides (usePageCrumb — a record's name), else `labelKey`. */
 export type Crumb = { labelKey: NavLabelKey; href?: string; dynamic?: boolean }
@@ -102,6 +111,7 @@ const TRAILS: Record<UserRole, { match: RegExp; crumbs: Crumb[] }[]> = {
   company: [],
   super_admin: [
     { match: /^\/admin\/plans$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'plans' }] },
+    { match: /^\/admin\/plans\/requests$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'plans', href: '/admin/plans' }, { labelKey: 'planRequestsPage' }] },
     { match: /^\/admin\/plans\/create$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'plans', href: '/admin/plans' }, { labelKey: 'createPlan' }] },
     { match: /^\/admin\/plans\/\d+\/edit$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'plans', href: '/admin/plans' }, { labelKey: 'editPlan' }] },
     { match: /^\/admin\/coupons$/, crumbs: [ADMIN_DASHBOARD, { labelKey: 'coupons' }] },
