@@ -51,7 +51,7 @@ export interface Project {
   status_label: string
   /** The lock action applies (Active ⇄ Inactive only). */
   can_toggle: boolean
-  /** 0–100. TODO(tasks): tasks in a done stage ÷ all tasks — 0 until the tasks module ships. */
+  /** 0–100: tasks in a done stage ÷ the project's tasks (0 with no tasks). */
   progress: number
   created_at: string | null
   updated_at: string | null
@@ -59,11 +59,11 @@ export interface Project {
 
 /** GET /api/v1/projects/{id} — computed by App\Support\Projects\ProjectFigures. */
 export interface ProjectFigures {
-  /** TODO(tasks): 0 / 0 until the tasks module ships. */
+  /** The project's tasks, and how many are in a done stage. */
   tasks: { total: number; completed: number }
   progress: number
   health: { value: ProjectHealth; label: string }
-  /** Overdue milestones (TODO(tasks): + overdue tasks). */
+  /** Overdue milestones + overdue tasks (past due, not in a done stage). */
   overdue: number
   milestones: { total: number; completed: number; percent: number }
   budget: { total: string; spent: string; remaining: string; spent_percent: number; remaining_percent: number }

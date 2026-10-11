@@ -112,13 +112,14 @@ class MediaService
     }
 
     /**
-     * Removes the file from the library: its project links, the row (soft), then the stored file
+     * Removes the file from the library: its project and task links, the row (soft), then the stored file
      * — only after the database change has committed.
      */
     public function delete(Media $media): void
     {
         DB::transaction(function () use ($media): void {
             $media->projectFiles()->delete();
+            $media->taskFiles()->delete();
             $media->delete();
         });
 

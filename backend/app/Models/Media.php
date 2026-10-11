@@ -55,6 +55,12 @@ class Media extends Model
         return $this->hasMany(ProjectFile::class);
     }
 
+    /** The tasks this file is attached to (the links, not the tasks). */
+    public function taskFiles(): HasMany
+    {
+        return $this->hasMany(TaskFile::class);
+    }
+
     /** The original filename contains the term (LIKE-escaped). */
     public function scopeSearch(Builder $query, ?string $term): void
     {

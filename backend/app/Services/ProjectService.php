@@ -16,8 +16,9 @@ use Illuminate\Validation\ValidationException;
  * Project business logic (PRD §6.3). Every method works on the current company's projects only
  * (BelongsToCompany); nothing here takes or sets a `company_id`.
  *
- * Honest figures: tasks and contracts don't exist yet, so everything derived from them is 0
- * here, in one place each, marked TODO(tasks) / TODO(contracts). Nothing is estimated.
+ * Figures: progress is tasks in a done stage ÷ the project's tasks (TaskService counts them —
+ * one grouped query for a whole list page); 0% with no tasks. Contracts don't exist yet, so
+ * their figures are 0, marked TODO(contracts). Nothing is estimated.
  * Money math is bcmath on decimal strings, never floats.
  */
 class ProjectService
@@ -27,6 +28,7 @@ class ProjectService
     public function __construct(
         private readonly ExpenseService $expenses,
         private readonly PlanLimitService $limits,
+        private readonly TaskService $tasks,
     ) {}
 
     /**
@@ -48,14 +50,18 @@ class ProjectService
     }
 
     /**
-     * Sets `progress` (0–100) on each listed project.
+     * Sets `progress` (0–100) on each listed project — one query for all of them.
      *
      * @param  iterable<Project>  $projects
      */
     public function withProgress(iterable $projects): void
     {
+        $projects = collect($projects);
+        $completion = $this->tasks->completionByProject($projects->map(fn (Project $p) => (int) $p->getKey())->all());
+
         foreach ($projects as $project) {
-            $project->setAttribute('progress', $this->progress($project));
+            $counts = $completion[(int) $project->getKey()] ?? ['total' => 0, 'completed' => 0];
+            $project->setAttribute('progress', $this->percent((string) $counts['completed'], (string) $counts['total']));
         }
     }
 
@@ -131,7 +137,8 @@ class ProjectService
      * Soft-deletes the project and its children in one transaction. A soft delete never fires
      * the foreign keys' ON DELETE CASCADE, so the children are handled here (Phase 0 decision 4):
      * milestones, items, notes and expenses are soft-deleted with it; the file links are removed
-     * (the media themselves stay in the library).
+     * (the media themselves stay in the library); its tasks go as if deleted one by one
+     * (TaskService::deleteForProject — checklists and task file links removed, columns closed up).
      */
     public function delete(Project $project): void
     {
@@ -141,6 +148,7 @@ class ProjectService
             $project->notes()->delete();
             $project->expenses()->delete();
             $project->files()->delete();
+            $this->tasks->deleteForProject($project);
             $project->delete();
         });
     }
@@ -148,10 +156,10 @@ class ProjectService
     /** Everything the details page shows, computed once. */
     public function figures(Project $project): ProjectFigures
     {
-        // TODO(tasks): the tasks table doesn't exist yet — no tasks, none completed.
-        $tasksTotal = 0;
-        $tasksCompleted = 0;
-        $progress = $this->progress($project);
+        $tasks = $this->tasks->completionByProject([(int) $project->getKey()])[(int) $project->getKey()] ?? ['total' => 0, 'completed' => 0];
+        $tasksTotal = $tasks['total'];
+        $tasksCompleted = $tasks['completed'];
+        $progress = $this->percent((string) $tasksCompleted, (string) $tasksTotal);
 
         $milestones = Milestone::query()
             ->where('milestones.project_id', $project->getKey())
@@ -161,9 +169,10 @@ class ProjectService
         $milestonesTotal = (int) $milestones?->getAttribute('total');
         $milestonesCompleted = (int) $milestones?->getAttribute('completed');
 
-        // Overdue: milestones past their due date and not completed.
-        // TODO(tasks): add overdue tasks once they exist.
-        $overdue = Milestone::query()->where('milestones.project_id', $project->getKey())->overdue()->count();
+        // Overdue: milestones past their due date and not completed, plus tasks past their due
+        // date and not in a done stage.
+        $overdue = Milestone::query()->where('milestones.project_id', $project->getKey())->overdue()->count()
+            + $this->tasks->overdueCount((int) $project->getKey());
 
         $budget = (string) $project->budget;
         $spent = $this->spent($project);
@@ -190,13 +199,6 @@ class ProjectService
             contractsActive: $contractsActive,
             contractsTotal: $contractsTotal,
         );
-    }
-
-    /** Overall progress: tasks in a done stage ÷ all tasks (PRD §6.3). */
-    private function progress(Project $project): int
-    {
-        // TODO(tasks): tasks in a done stage ÷ the project's tasks. No tasks yet → 0%.
-        return 0;
     }
 
     /** The project's spending so far: the exact sum of its expenses. */

@@ -425,6 +425,38 @@
     "usage": {
       "of": "{used} of {limit}",
       "ofUnlimited": "{used} of Unlimited"
+    },
+    "kanban": {
+      "instructions": "To pick up a card, press Space or Enter. Use the arrow keys to move it — left and right between columns, up and down within one — then Space or Enter to drop it, or Escape to cancel.",
+      "roleDescription": "draggable card",
+      "pickedUp": "Picked up {item}, in {column} at position {position} of {total}.",
+      "movedOver": "{item} moved to {column}, position {position} of {total}.",
+      "dropped": "{item} dropped in {column} at position {position} of {total}.",
+      "cancelled": "Move cancelled. {item} is back in its place."
+    },
+    "checklist": {
+      "edit": "Edit {item}",
+      "editShort": "Edit",
+      "delete": "Delete {item}",
+      "deleteShort": "Delete",
+      "editField": "New text for {item}",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "attachedFiles": {
+      "add": "Add files",
+      "empty": {
+        "title": "No files yet",
+        "description": "Attach images and documents from your media library."
+      },
+      "download": "Download",
+      "downloadLabel": "Download {name}",
+      "detach": "Detach",
+      "attached": "{name} attached",
+      "alreadyAttached": "{name} is already attached",
+      "attachFailed": "Couldn’t attach the file",
+      "detached": "{name} detached",
+      "detachFailed": "Couldn’t detach the file"
     }
   },
   "coupons": {
@@ -1673,20 +1705,7 @@
     },
     "files": {
       "title": "Project Files",
-      "add": "Add files",
-      "empty": {
-        "title": "No files yet",
-        "description": "Attach images and documents from your media library."
-      },
-      "download": "Download",
-      "downloadLabel": "Download {name}",
-      "detach": "Detach",
-      "detachLabel": "Detach {name} from this project",
-      "attached": "{name} attached",
-      "alreadyAttached": "{name} is already attached",
-      "attachFailed": "Couldn’t attach the file",
-      "detached": "{name} detached",
-      "detachFailed": "Couldn’t detach the file"
+      "detachLabel": "Detach {name} from this project"
     },
     "validation": {
       "nameRequired": "The project name is required.",
@@ -1727,6 +1746,242 @@
       "expenseDateRequired": "The date is required.",
       "expenseDateInvalid": "Enter a valid date.",
       "categoryRequired": "Select a category."
+    }
+  },
+  "tasks": {
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "stats": {
+      "total": "Total Tasks",
+      "high": "High Priority",
+      "low": "Low Priority",
+      "overdue": "Overdue"
+    },
+    "list": {
+      "title": "Tasks",
+      "subtitle": "Manage your project tasks efficiently.",
+      "add": "Add Task",
+      "boardLabel": "Task board",
+      "tableLabel": "Tasks",
+      "emptyColumn": "No tasks",
+      "columns": {
+        "title": "Title",
+        "project": "Project",
+        "milestone": "Milestone",
+        "stage": "Stage",
+        "priority": "Priority",
+        "start": "Start Date",
+        "due": "Due Date",
+        "progress": "Progress",
+        "actions": "Actions"
+      },
+      "tabs": {
+        "label": "Task priority",
+        "all": "All",
+        "urgent": "Urgent",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "filters": {
+        "projectLabel": "Project",
+        "allProjects": "All Projects",
+        "unknownProject": "Selected project",
+        "milestoneLabel": "Milestone",
+        "allMilestones": "All Milestones",
+        "milestoneNeedsProject": "Choose a project first to filter by its milestones.",
+        "unknownMilestone": "Selected milestone",
+        "stageLabel": "Stage",
+        "allStages": "All Stages",
+        "unknownStage": "Selected stage",
+        "panelNote": "Search and the filters above narrow both the board and the list."
+      },
+      "view": {
+        "label": "View",
+        "board": "Board view",
+        "list": "List view"
+      },
+      "dragDisabled": "Dragging is off while a search, a priority tab or a filter is active — a filtered column only shows some of its cards, so a move could not be placed correctly. Clear them to reorder.",
+      "clearToDrag": "Clear filters",
+      "noValue": "—",
+      "percent": "{value}%",
+      "progress": "Progress",
+      "progressLabel": "{title} progress",
+      "startDate": "Start date {date}",
+      "dueDate": "Due date {date}",
+      "dueOverdue": "Due date {date}, overdue",
+      "menu": "Actions for {title}",
+      "actions": {
+        "view": "View details of {title}",
+        "viewTip": "View details",
+        "viewShort": "View",
+        "edit": "Edit {title}",
+        "editTip": "Edit",
+        "editShort": "Edit",
+        "delete": "Delete {title}",
+        "deleteTip": "Delete",
+        "deleteShort": "Delete"
+      },
+      "move": {
+        "failed": "Couldn’t move the task"
+      },
+      "delete": {
+        "title": "Delete Task",
+        "body": "Delete “{title}”? Its checklist is deleted with it. Its files stay in your media library.",
+        "confirm": "Delete Task",
+        "deleted": "Task deleted"
+      },
+      "dialog": {
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "empty": {
+        "title": "No tasks yet",
+        "description": "Add your first task and move it across your stages as the work progresses.",
+        "noMatchTitle": "No tasks match your filters",
+        "noMatchDescription": "Try a different search or clear the filters.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn’t load tasks",
+        "retry": "Try again",
+        "noProjectsTitle": "Add a project first",
+        "noProjectsDescription": "Every task belongs to a project. Create a project, then come back to plan its tasks.",
+        "goToProjects": "Go to Projects",
+        "noStagesTitle": "No active task stages",
+        "noStagesDescription": "The board has one column per active stage. Add or activate a stage on the Task Stages page.",
+        "goToStages": "Go to Task Stages"
+      },
+      "overdue": "Overdue"
+    },
+    "form": {
+      "createTitle": "Add New Task",
+      "editTitle": "Edit Task",
+      "title": "Task Title",
+      "titlePlaceholder": "enter task title",
+      "description": "Description",
+      "descriptionPlaceholder": "enter description",
+      "project": "Project",
+      "projectPlaceholder": "select project",
+      "projectsLoading": "Loading projects…",
+      "noProjects": "No projects yet",
+      "noProjectsHint": "Add a project on the <link>Projects page</link> first.",
+      "milestone": "Milestone",
+      "milestonePlaceholder": "Select Milestone (Optional)",
+      "noMilestone": "No milestone",
+      "milestoneNeedsProject": "Choose a project first.",
+      "stage": "Stage",
+      "stagePlaceholder": "select stage",
+      "stagesLoading": "Loading stages…",
+      "startDate": "Start Date",
+      "dueDate": "Due Date",
+      "priority": "Priority",
+      "progress": "Progress (%)",
+      "progressPlaceholder": "enter progress",
+      "progressDone": "A task in the done stage is always 100%.",
+      "save": "Save",
+      "cancel": "Cancel",
+      "created": "Task created",
+      "updated": "Task updated"
+    },
+    "details": {
+      "metaTitle": "Task",
+      "subtitle": "View and manage task details.",
+      "edit": "Edit Task",
+      "back": "Back",
+      "loading": "Loading task…",
+      "error": {
+        "title": "Couldn’t load the task",
+        "retry": "Try again"
+      },
+      "notFound": {
+        "heading": "Task not found",
+        "title": "This task doesn’t exist",
+        "description": "It may have been deleted, or the link is wrong.",
+        "back": "Back to Tasks"
+      },
+      "info": {
+        "project": "Project",
+        "milestone": "Milestone",
+        "stage": "Stage",
+        "priority": "Priority",
+        "none": "—"
+      },
+      "tabs": {
+        "label": "Task sections",
+        "details": "Details",
+        "checklist": "Checklist",
+        "files": "Files"
+      },
+      "tabError": "Couldn’t load this tab",
+      "overview": {
+        "description": "Task Description",
+        "noDescription": "No description yet.",
+        "timeline": "Timeline",
+        "created": "Created",
+        "startDate": "Start Date",
+        "dueDate": "Due Date",
+        "information": "Task Information",
+        "stage": "Stage",
+        "priority": "Priority",
+        "project": "Project",
+        "milestone": "Milestone",
+        "createdBy": "Created By",
+        "none": "—"
+      },
+      "checklist": {
+        "title": "Checklist",
+        "add": "Add Item",
+        "summary": "{done} of {total} complete",
+        "listLabel": "Checklist items",
+        "reorderHandle": "Reorder {item}",
+        "inputLabel": "New checklist item",
+        "inputPlaceholder": "enter item",
+        "addSubmit": "Add",
+        "cancel": "Cancel",
+        "empty": {
+          "title": "No checklist items yet",
+          "description": "Break the task into steps and tick them off as you go."
+        },
+        "added": "Item added",
+        "updated": "Item updated",
+        "deleted": "Item deleted",
+        "addFailed": "Couldn’t add the item",
+        "toggleFailed": "Couldn’t update the item",
+        "reorderFailed": "Couldn’t reorder the checklist",
+        "deleteFailed": "Couldn’t delete the item",
+        "delete": {
+          "title": "Delete Item",
+          "body": "Delete “{item}” from the checklist?",
+          "confirm": "Delete Item"
+        },
+        "dialog": {
+          "cancel": "Cancel",
+          "close": "Close"
+        }
+      },
+      "files": {
+        "title": "Task Files",
+        "detachLabel": "Detach {name} from this task"
+      }
+    },
+    "validation": {
+      "titleRequired": "The task title is required.",
+      "titleMax": "The task title may not be longer than {max} characters.",
+      "descriptionMax": "The description may not be longer than {max} characters.",
+      "projectRequired": "Select a project.",
+      "stageRequired": "Select a stage.",
+      "startRequired": "The start date is required.",
+      "startInvalid": "Enter a valid start date.",
+      "dueRequired": "The due date is required.",
+      "dueInvalid": "Enter a valid due date.",
+      "dueBeforeStart": "The due date can't be before the start date.",
+      "progressInteger": "The progress must be a whole number.",
+      "progressRange": "The progress must be between 0 and 100.",
+      "checklistTitleRequired": "The item is required.",
+      "checklistTitleMax": "The item may not be longer than {max} characters."
     }
   }
 }

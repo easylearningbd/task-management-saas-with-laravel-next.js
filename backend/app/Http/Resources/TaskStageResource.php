@@ -9,8 +9,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * A task stage as the workflow list, the form and the details modal need it. `color` is always
  * uppercase `#RRGGBB`; `status_label` is derived here so the UI never re-derives it.
- * `tasks_count` is set by TaskStageService::withTaskCounts() (0 until the Tasks module —
- * see the TODO there). `company_id` is not exposed: it is always the signed-in company.
+ * `tasks_count` (the stage's live tasks) is set by TaskStageService::withTaskCounts().
+ * `company_id` is not exposed: it is always the signed-in company.
  *
  * @mixin TaskStage
  */

@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
  * GET /api/v1/projects/{project} — the project plus everything the details page header, the
  * summary cards, the tab bar and the Overview tab need: `figures` (ProjectService::figures —
  * tasks, progress, health, overdue, milestones, budget, contracts) and `counts` per tab.
- * Tasks- and contracts-derived numbers are honest zeros (TODO(tasks) / TODO(contracts) in
- * ProjectService); the contracts tab count is 0 for the same reason.
+ * Task figures are real (ProjectService via TaskService); contracts-derived numbers are honest
+ * zeros (TODO(contracts) in ProjectService), and the contracts tab count is 0 for the same reason.
  *
  * Expects `figures` passed in and the tab counts loaded (milestones_count, items_count,
  * notes_count, expenses_count, files_count).

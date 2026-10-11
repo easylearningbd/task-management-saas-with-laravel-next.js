@@ -1,10 +1,13 @@
 <?php
 
 use App\Models\Company;
+use App\Models\Project;
+use App\Models\Task;
 use App\Models\TaskStage;
 use App\Models\User;
 use App\Services\CompanySetupService;
 use App\Support\Tenancy\Tenancy;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,6 +20,16 @@ beforeEach(function () {
 });
 
 /** A valid Add Stage payload. */
+/** Tasks in a stage of that company (each on a project of its own). */
+function stageTasks(User $company, TaskStage $stage, int $count, array $attributes = []): Collection
+{
+    return Tenancy::instance()->runAs($company, fn () => Task::factory()->count($count)->create([
+        'project_id' => Project::factory(),
+        'task_stage_id' => $stage->id,
+        ...$attributes,
+    ]));
+}
+
 function stagePayload(array $overrides = []): array
 {
     return [
@@ -387,14 +400,68 @@ test('13. stats: total, active, inactive and the done stage\'s name', function (
     $this->getJson(route('v1.task-stages.stats'))->assertExactJson(['data' => ['total' => 0, 'active' => 0, 'inactive' => 0, 'done_stage' => null]]);
 });
 
-test('14. tasks_count is 0 on every stage — list, show, create and reorder (TODO(tasks): flip when the Tasks module lands)', function () {
+test('14. tasks_count is each stage\'s real count of live tasks — list, show, create and reorder; never another company\'s', function () {
     $stages = workflowFor($this->companyA);
+    stageTasks($this->companyA, $stages['To Do'], 3);
+    stageTasks($this->companyA, $stages['Done'], 2);
+    $deleted = stageTasks($this->companyA, $stages['In Progress'], 1)->first();
+    Tenancy::instance()->runAs($this->companyA, fn () => $deleted->delete());
+    $other = workflowFor($this->companyB);
+    stageTasks($this->companyB, $other['To Do'], 5);
     actAsStageUser($this->companyA);
 
-    expect(collect($this->getJson(route('v1.task-stages.index'))->json('data'))->pluck('tasks_count')->all())->toBe([0, 0, 0, 0]);
-    $this->getJson(route('v1.task-stages.show', $stages['Done']))->assertJsonPath('data.tasks_count', 0);
+    expect(collect($this->getJson(route('v1.task-stages.index'))->json('data'))->pluck('tasks_count', 'name')->all())
+        ->toBe(['To Do' => 3, 'In Progress' => 0, 'Cancelled' => 0, 'Done' => 2]);
+    $this->getJson(route('v1.task-stages.show', $stages['Done']))->assertJsonPath('data.tasks_count', 2);
     $this->postJson(route('v1.task-stages.store'), stagePayload())->assertJsonPath('data.tasks_count', 0);
-    expect(collect($this->patchJson(route('v1.task-stages.reorder'), ['ids' => array_reverse(collect(stageRows($this->companyA))->map(fn ($r) => DB::table('task_stages')->where('company_id', $this->companyA->id)->where('name', $r[0])->value('id'))->all())])->json('data'))->pluck('tasks_count')->unique()->all())->toBe([0]);
+    $ids = collect($stages)->pluck('id')->reverse()->values()->push(TaskStage::withoutGlobalScopes()->where('company_id', $this->companyA->id)->max('id'))->all();
+    expect(collect($this->patchJson(route('v1.task-stages.reorder'), ['ids' => $ids])->json('data'))->pluck('tasks_count', 'name')->only(['To Do', 'Done'])->all())
+        ->toBe(['Done' => 2, 'To Do' => 3]);
+});
+
+test('14b. a stage with tasks can\'t be deleted (422 naming the count); once its tasks have moved, it can', function () {
+    $stages = workflowFor($this->companyA);
+    $tasks = stageTasks($this->companyA, $stages['Cancelled'], 2);
+    stageTasks($this->companyA, $stages['In Progress'], 1);
+    actAsStageUser($this->companyA);
+
+    $this->deleteJson(route('v1.task-stages.destroy', $stages['Cancelled']))
+        ->assertUnprocessable()->assertJsonValidationErrors(['stage' => 'This stage has 2 tasks. Move them to another stage first.']);
+    $this->deleteJson(route('v1.task-stages.destroy', $stages['In Progress']))
+        ->assertUnprocessable()->assertJsonValidationErrors(['stage' => 'This stage has 1 task. Move it to another stage first.']);
+    expect(DB::table('task_stages')->where('id', $stages['Cancelled']->id)->value('deleted_at'))->toBeNull();
+
+    foreach ($tasks as $task) {
+        $this->patchJson(route('v1.tasks.move', $task), ['task_stage_id' => $stages['To Do']->id, 'position' => 1])->assertOk();
+    }
+    $this->deleteJson(route('v1.task-stages.destroy', $stages['Cancelled']))->assertNoContent();
+});
+
+test('14c. a stage with tasks can\'t be deactivated — toggle or edit — so its tasks never vanish from the board', function () {
+    $stages = workflowFor($this->companyA);
+    stageTasks($this->companyA, $stages['In Progress'], 3);
+    actAsStageUser($this->companyA);
+
+    $message = 'This stage has 3 tasks. Move them to another stage before deactivating this one.';
+    $this->patchJson(route('v1.task-stages.toggle-status', $stages['In Progress']))->assertUnprocessable()->assertJsonValidationErrors(['stage' => $message]);
+    $this->putJson(route('v1.task-stages.update', $stages['In Progress']), stagePayload(['name' => 'In Progress', 'status' => 'inactive']))
+        ->assertUnprocessable()->assertJsonValidationErrors(['stage' => $message]);
+    $this->patchJson(route('v1.task-stages.toggle-status', $stages['Cancelled']))->assertOk()->assertJsonPath('data.status', 'inactive');
+});
+
+test('14d. moving the done flag to another stage: its tasks become complete (100%, completed_at); the old done stage\'s tasks are not', function () {
+    $stages = workflowFor($this->companyA);
+    $wasDone = stageTasks($this->companyA, $stages['Done'], 1)->first();
+    $nowDone = stageTasks($this->companyA, $stages['Cancelled'], 1, ['progress' => 30])->first();
+    expect(DB::table('tasks')->where('id', $wasDone->id)->value('completed_at'))->not->toBeNull();
+    actAsStageUser($this->companyA);
+
+    $this->putJson(route('v1.task-stages.update', $stages['Cancelled']), stagePayload(['name' => 'Cancelled', 'is_done_stage' => true]))->assertOk();
+
+    $old = DB::table('tasks')->where('id', $wasDone->id)->first();
+    $new = DB::table('tasks')->where('id', $nowDone->id)->first();
+    expect([$old->completed_at, $old->progress])->toBe([null, 100])
+        ->and($new->completed_at)->not->toBeNull()->and($new->progress)->toBe(100);
 });
 
 // ───────────────────────────── new companies get the defaults
@@ -492,8 +559,10 @@ test('the resource exposes the form fields, order, the done flag and tasks_count
         ->and($data['order'])->toBe(4);
 });
 
-test('TaskStage::tasks() is an honest stub until the Tasks module exists', function () {
+test('TaskStage::tasks() is a real relation now (keyed on task_stage_id)', function () {
     $stage = workflowFor($this->companyA)['Done'];
 
-    expect(fn () => $stage->tasks())->toThrow(LogicException::class, 'the tasks table does not exist');
+    expect($stage->tasks())->toBeInstanceOf(HasMany::class)
+        ->and($stage->tasks()->getForeignKeyName())->toBe('task_stage_id')
+        ->and(Tenancy::instance()->runAs($this->companyA, fn () => $stage->tasks()->count()))->toBe(0);
 });

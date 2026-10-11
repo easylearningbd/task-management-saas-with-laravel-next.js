@@ -1,5 +1,5 @@
-import type { ComponentType } from 'react'
 import type { Messages } from 'next-intl'
+import { resolveTab, type TabDef } from '@/components/shared/tab-registry'
 import type { ProjectCounts, ProjectDetail } from '@/features/projects/types'
 import { ExpensesTab } from '@/features/projects/tabs/expenses-tab'
 import { FilesTab } from '@/features/projects/tabs/files-tab'
@@ -8,7 +8,8 @@ import { MilestonesTab } from '@/features/projects/tabs/milestones-tab'
 import { NotesTab } from '@/features/projects/tabs/notes-tab'
 import { OverviewTab } from '@/features/projects/tabs/overview-tab'
 
-/* The project details tab bar, as a typed registry (Phase 0 design). Order is the screenshot's:
+/* The project details tab bar, as a typed registry (the shared TabDef — the task details page
+   uses the same). Order is the screenshot's:
      Overview · Milestones (n) · Items (n) · Notes (n) · Expenses (n) · Contracts · Files (n)
    Each entry names its label, where its count comes from (the details payload's `counts`), and
    whether it is `live` (with the component that renders it) or `soon` (rendered disabled with
@@ -23,14 +24,8 @@ export type ProjectTabProps = { project: ProjectDetail }
 
 type LabelKey = keyof Messages['projects']['details']['tabs']
 
-type Base = {
-  id: ProjectTabId
-  labelKey: LabelKey
-  /** The count shown beside the label, from the details payload; none for Overview. */
-  count?: keyof ProjectCounts
-}
-
-export type ProjectTabDef = Base & ({ status: 'live'; component: ComponentType<ProjectTabProps> } | { status: 'soon' })
+/** `count`: a key of the details payload's `counts`; none for Overview. */
+export type ProjectTabDef = TabDef<ProjectTabId, ProjectTabProps, LabelKey, keyof ProjectCounts>
 
 export const PROJECT_TABS: ReadonlyArray<ProjectTabDef> = [
   { id: 'overview', labelKey: 'overview', status: 'live', component: OverviewTab },
@@ -47,6 +42,5 @@ export const DEFAULT_PROJECT_TAB: ProjectTabId = 'overview'
 
 /** The `?tab=` value if it names a live tab, else the default. */
 export function resolveProjectTab(value: string | null): ProjectTabId {
-  const tab = PROJECT_TABS.find((entry) => entry.id === value)
-  return tab && tab.status === 'live' ? tab.id : DEFAULT_PROJECT_TAB
+  return resolveTab(PROJECT_TABS, value, DEFAULT_PROJECT_TAB)
 }

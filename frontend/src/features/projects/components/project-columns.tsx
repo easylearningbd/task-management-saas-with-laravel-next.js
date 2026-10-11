@@ -20,7 +20,7 @@ import type { Project, ProjectSortKey } from '@/features/projects/types'
    wraps to two lines at most (full name in the title), the client cell is capped and truncates
    its email, and the progress bar is shorter; from `2xl` up the client and bar widen and the name
    takes whatever is left.
-   TODO(tasks): Progress is the API's figure — 0% until the tasks module ships. */
+   Progress is the API's figure: tasks in a done stage ÷ the project's tasks. */
 
 export function useProjectColumns(actionsFor: (project: Project) => RowAction[]): DataTableColumn<Project, ProjectSortKey>[] {
   const t = useTranslations('projects.list')

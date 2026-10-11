@@ -16,7 +16,7 @@ import { cn } from '@/lib/cn'
    the task count (20px/700) over "tasks" (`caption`, muted) · the eye, pencil, lock and trash.
    A `radius-xl` `card` with a 1px border and `shadow-xs`, 70px tall at desktop width; on a phone
    the count and actions wrap onto a second line. The task count is the API's `tasks_count`
-   — 0 until the Tasks module exists (backend TODO(tasks)); nothing is made up here. */
+   (the stage's live tasks); nothing is made up here. */
 
 export function TaskStageCard({
   stage,

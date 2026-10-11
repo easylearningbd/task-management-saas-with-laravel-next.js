@@ -14,8 +14,8 @@ import type { ProjectDetail } from '@/features/projects/types'
      Expenses (DollarSign, emerald) — money spent + "Budget utilization"
      Milestones (Target, violet) — "{done}/{total}" + "{x}% complete"
      Contracts (FileText, amber) — "{active}/{total}" + "Active contracts"
-   Every figure is the API's (ProjectFigures). Honest zeros:
-   TODO(tasks): Total Tasks reads 0 / "0 completed" until the tasks module ships.
+   Every figure is the API's (ProjectFigures); Total Tasks and "{n} completed" are the project's
+   real tasks. Honest zeros:
    TODO(contracts): Contracts reads 0/0 until the contracts module ships. */
 
 export function ProjectSummaryCards({ project }: { project: ProjectDetail }) {

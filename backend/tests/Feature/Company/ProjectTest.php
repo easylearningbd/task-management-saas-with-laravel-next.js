@@ -15,6 +15,7 @@ use App\Models\ProjectItem;
 use App\Models\ProjectNote;
 use App\Models\User;
 use App\Support\Tenancy\Tenancy;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -332,7 +333,7 @@ test('delete soft-deletes the project and its milestones, items, notes and expen
 
 // ───────────────────────────── details + honest figures
 
-test('details: progress is 0 and health "Low" with no tasks (asserted explicitly), tasks and contracts 0, real milestone and budget figures, tab counts', function () {
+test('details of a project without tasks: progress 0% and health "Low" (no division by zero), tasks and contracts 0, real milestone and budget figures, tab counts', function () {
     $project = projectsFor($this->companyA, 1, ['client_id' => $this->clientA->id, 'budget' => '850000.00'])->first();
     Tenancy::instance()->runAs($this->companyA, function () use ($project) {
         Milestone::factory()->for($project)->completed()->create();
@@ -370,10 +371,11 @@ test('the list resource exposes display-ready fields and never the owner', funct
         ->and(array_keys($row['client']))->toBe(['id', 'name', 'email', 'initials']);
 });
 
-test('Project::tasks() and contracts() are honest stubs until those modules exist', function () {
+test('Project::tasks() is a real relation now; contracts() stays an honest stub until that module exists', function () {
     $project = projectsFor($this->companyA)->first();
 
-    expect(fn () => $project->tasks())->toThrow(LogicException::class)
+    expect($project->tasks())->toBeInstanceOf(HasMany::class)
+        ->and(Tenancy::instance()->runAs($this->companyA, fn () => $project->tasks()->count()))->toBe(0)
         ->and(fn () => $project->contracts())->toThrow(LogicException::class);
 });
 

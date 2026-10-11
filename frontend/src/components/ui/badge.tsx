@@ -23,6 +23,8 @@ const badgeVariants = cva('inline-flex items-center gap-1 rounded-md whitespace-
       violet: 'bg-stat-violet text-stat-violet-label',
       primary: 'bg-primary-soft text-primary',
       amber: 'bg-stat-amber text-stat-amber-icon',
+      // The project chip on a task card (Tasks Phase 0 decision 6): one indigo for every project.
+      indigo: 'bg-stat-indigo text-stat-indigo-label',
       solid: 'bg-success-solid text-primary-foreground',
     },
     size: {

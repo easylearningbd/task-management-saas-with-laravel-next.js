@@ -23,6 +23,9 @@ use App\Http\Controllers\Api\V1\Company\ProjectController;
 use App\Http\Controllers\Api\V1\Company\ProjectFileController;
 use App\Http\Controllers\Api\V1\Company\ProjectItemController;
 use App\Http\Controllers\Api\V1\Company\ProjectNoteController;
+use App\Http\Controllers\Api\V1\Company\TaskChecklistItemController;
+use App\Http\Controllers\Api\V1\Company\TaskController;
+use App\Http\Controllers\Api\V1\Company\TaskFileController;
 use App\Http\Controllers\Api\V1\Company\TaskStageController;
 use App\Http\Controllers\Api\V1\Profile\AvatarController;
 use App\Http\Controllers\Api\V1\Profile\PasswordController;
@@ -126,6 +129,19 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('projects/{project}/files', [ProjectFileController::class, 'index'])->name('projects.files.index');
         Route::post('projects/{project}/files', [ProjectFileController::class, 'store'])->name('projects.files.store');
         Route::delete('project-files/{file}', [ProjectFileController::class, 'destroy'])->name('project-files.destroy');
+
+        // Tasks (the Kanban board) — tenant-scoped the same way; `stats` comes before {task}.
+        Route::get('tasks/stats', [TaskController::class, 'stats'])->name('tasks.stats');
+        Route::apiResource('tasks', TaskController::class);
+        Route::patch('tasks/{task}/move', [TaskController::class, 'move'])->name('tasks.move');
+        Route::get('tasks/{task}/checklist-items', [TaskChecklistItemController::class, 'index'])->name('tasks.checklist-items.index');
+        Route::post('tasks/{task}/checklist-items', [TaskChecklistItemController::class, 'store'])->name('tasks.checklist-items.store');
+        Route::patch('tasks/{task}/checklist-items/reorder', [TaskChecklistItemController::class, 'reorder'])->name('tasks.checklist-items.reorder');
+        Route::put('task-checklist-items/{checklistItem}', [TaskChecklistItemController::class, 'update'])->name('task-checklist-items.update');
+        Route::delete('task-checklist-items/{checklistItem}', [TaskChecklistItemController::class, 'destroy'])->name('task-checklist-items.destroy');
+        Route::get('tasks/{task}/files', [TaskFileController::class, 'index'])->name('tasks.files.index');
+        Route::post('tasks/{task}/files', [TaskFileController::class, 'store'])->name('tasks.files.store');
+        Route::delete('task-files/{file}', [TaskFileController::class, 'destroy'])->name('task-files.destroy');
 
         // The media library (private disk; files are read only through media/{media}/file).
         Route::get('media', [MediaController::class, 'index'])->name('media.index');

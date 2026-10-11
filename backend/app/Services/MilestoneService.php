@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Milestone;
 use App\Models\Project;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Milestone business logic (PRD §6.3 Milestones tab). A milestone is always created through
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class MilestoneService
 {
+    public function __construct(private readonly TaskService $tasks) {}
+
     /**
      * @return Collection<int, Milestone>
      */
@@ -41,8 +44,12 @@ class MilestoneService
     }
 
     /** Soft delete. */
+    /** Soft delete; its tasks stay, no longer linked to it (a soft delete fires no FK cascade). */
     public function delete(Milestone $milestone): void
     {
-        $milestone->delete();
+        DB::transaction(function () use ($milestone): void {
+            $this->tasks->detachMilestone($milestone);
+            $milestone->delete();
+        });
     }
 }

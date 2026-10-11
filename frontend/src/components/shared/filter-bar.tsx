@@ -16,6 +16,9 @@ import { cn } from '@/lib/cn'
    Density: `default` follows the specs (16px padding, 40px search); `compact` matches the
    Coupons screenshot (12px padding, 32px search).
 
+   `footer`: content under everything else, after a full-bleed 1px rule — the Tasks page's
+   priority tabs, which sit inside the filter card on its bottom edge.
+
    Search is controlled by the page (usually from the URL) and reported debounced; typing
    keeps a local draft so the field stays instant. The X clears at once. External changes
    (Reset, back/forward) overwrite the draft. */
@@ -39,6 +42,8 @@ export type FilterBarProps = {
    *  sits "at the right end of a filter bar". */
   actions?: React.ReactNode
   density?: 'default' | 'compact'
+  /** Under the row (and the advanced panel), after a full-bleed rule — e.g. a tab bar. */
+  footer?: React.ReactNode
   className?: string
 }
 
@@ -55,6 +60,7 @@ export function FilterBar({
   canReset = true,
   actions,
   density = 'default',
+  footer,
   className,
 }: FilterBarProps) {
   const compact = density === 'compact'
@@ -134,6 +140,10 @@ export function FilterBar({
             ) : null}
           </div>
         </div>
+      ) : null}
+
+      {footer ? (
+        <div className={cn('border-t border-border', compact ? '-mx-3 mt-3 -mb-3 px-3' : '-mx-4 mt-4 -mb-4 px-4')}>{footer}</div>
       ) : null}
     </div>
   )

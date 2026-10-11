@@ -13,18 +13,26 @@ import { cn } from '@/lib/cn'
    1px `border`, `radius-xl`, `shadow-xs`, 20px padding; a `body` muted label over the 24px/700
    figure in `foreground`; the 20px icon in the hue's `icon` colour, inside a quarter-circle of
    the hue's `icon-bg` (a 160px circle centred on the card's top-right corner), as measured.
-   The figure may be a word (a stage name): it truncates before the corner. */
+   The figure may be a word (a stage name): it truncates before the corner.
+   The corner variant also takes `danger` (Tasks Phase 0 decision 5 — the Overdue card): the
+   quarter-circle in `danger-soft`, the glyph in `danger`. The tinted cards keep the five hues.
+   `valueKind="text"` shows a name instead of a figure, at `title-section` (the task details info
+   cards: Project · Milestone · Stage · Priority); `valueMuted` greys a placeholder ("—"). */
 
 /** The corner variant's quarter-circle and glyph, per hue. */
-const CORNER: Record<StatHue, { circle: string; icon: string }> = {
+const CORNER: Record<CornerHue, { circle: string; icon: string }> = {
   emerald: { circle: 'bg-stat-emerald-icon-bg', icon: 'text-stat-emerald-icon' },
   blue: { circle: 'bg-stat-blue-icon-bg', icon: 'text-stat-blue-icon' },
   violet: { circle: 'bg-stat-violet-icon-bg', icon: 'text-stat-violet-icon' },
   indigo: { circle: 'bg-stat-indigo-icon-bg', icon: 'text-stat-indigo-icon' },
   amber: { circle: 'bg-stat-amber-icon-bg', icon: 'text-stat-amber-icon' },
+  danger: { circle: 'bg-danger-soft', icon: 'text-danger' },
 }
 
 export type StatHue = 'emerald' | 'blue' | 'violet' | 'indigo' | 'amber'
+
+/** The corner variant's hues: the five, plus `danger`. */
+export type CornerHue = StatHue | 'danger'
 
 const SIZES = {
   default: {
@@ -80,18 +88,7 @@ const HUE: Record<StatHue, { card: string; tile: string; label: string; value: s
   },
 }
 
-export function StatCard({
-  hue,
-  icon: Icon,
-  label,
-  value,
-  caption,
-  corner,
-  size = 'default',
-  variant = 'tinted',
-  className,
-}: {
-  hue: StatHue
+type StatCardProps = {
   icon: LucideIcon
   label: string
   value: string
@@ -100,22 +97,44 @@ export function StatCard({
   /** Top-right extra: an arrow glyph, or the `warning` "Action needed" chip. */
   corner?: React.ReactNode
   size?: keyof typeof SIZES
-  /** `tinted` (the dashboards) or `corner` (a white card, the icon in a quarter-circle). */
-  variant?: 'tinted' | 'corner'
   className?: string
-}) {
-  const h = HUE[hue]
+} & (
+  | {
+      /** `tinted` (the dashboards) or `corner` (a white card, the icon in a quarter-circle). */
+      variant?: 'tinted'
+      hue: StatHue
+    }
+  | {
+      variant: 'corner'
+      hue: CornerHue
+      /** `figure` (default): the 24px/700 number. `text`: a name ("Workflow Automation
+       *  Platform") at `title-section`, as on the task details screenshot. */
+      valueKind?: 'figure' | 'text'
+      /** A placeholder value ("—") in `muted-foreground`. */
+      valueMuted?: boolean
+    }
+)
+
+export function StatCard(props: StatCardProps) {
+  const { icon: Icon, label, value, caption, corner, size = 'default', className } = props
   const z = SIZES[size]
 
-  if (variant === 'corner') {
-    const c = CORNER[hue]
+  if (props.variant === 'corner') {
+    const c = CORNER[props.hue]
     return (
       <div className={cn('relative overflow-hidden rounded-xl border border-border bg-card p-5 shadow-xs', className)}>
         <span aria-hidden="true" className={cn('absolute -top-20 -right-20 size-40 rounded-full', c.circle)} />
         <Icon className={cn('absolute top-7.5 right-7.5 size-icon-lg', c.icon)} strokeWidth={1.75} aria-hidden="true" />
         <div className="relative min-w-0 pr-20">
           <p className="text-body text-muted-foreground">{label}</p>
-          <p className="mt-1 truncate text-2xl leading-8 font-bold tracking-[-0.01em] text-foreground" title={value}>
+          <p
+            className={cn(
+              'mt-1 truncate',
+              props.valueKind === 'text' ? 'text-title-section' : 'text-2xl leading-8 font-bold tracking-[-0.01em]',
+              props.valueMuted ? 'text-muted-foreground' : 'text-foreground',
+            )}
+            title={value}
+          >
             {value}
           </p>
           {caption ? <p className="mt-0.5 text-caption text-muted-foreground">{caption}</p> : null}
@@ -124,6 +143,7 @@ export function StatCard({
     )
   }
 
+  const h = HUE[props.hue]
   return (
     <div className={cn('relative overflow-hidden rounded-xl border shadow-xs', z.card, h.card, className)}>
       {/* decorative circles take the tile color through `currentColor` */}

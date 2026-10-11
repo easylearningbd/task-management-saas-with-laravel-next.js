@@ -8,8 +8,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * A project as the list, the grid and the form need it — display-ready, so the UI computes
- * nothing: labels, the client's name / email / initials, `progress` (set by
- * ProjectService::withProgress — 0 until tasks exist, TODO(tasks) there) and `can_toggle`
+ * nothing: labels, the client's name / email / initials, `progress` (tasks in a done stage ÷
+ * the project's tasks, set by ProjectService::withProgress in one query per page) and `can_toggle`
  * (the lock only switches Active ⇄ Inactive). Dates are `YYYY-MM-DD`; money is a decimal
  * string. `company_id` is never exposed.
  *

@@ -20,8 +20,11 @@ use Illuminate\Validation\ValidationException;
  *     stages move down); an edit can move a stage; delete closes the gap; reorder rewrites the
  *     whole sequence. Positions past the end mean "at the end".
  *  4. Name uniqueness is the requests' job (case-insensitive, within the company).
- *  5. Status toggle refuses the done stage and the last active stage.
- *  6. Delete is soft, with the extension point for "a stage with tasks can't be deleted".
+ *  5. Status toggle refuses the done stage and the last active stage — and a stage that still
+ *     has tasks (the board shows active stages only, so its tasks would vanish from it).
+ *  6. Delete is soft, and refused while the stage has tasks (422 naming how many).
+ *  7. When the done flag moves to another stage, the tasks follow the board's rules: those in
+ *     the new done stage are completed (100%, `completed_at`), those in the old one are not.
  *
  * Rule violations are 422s under the `stage` key — not a form field, so the UI shows them as a
  * form-level message. Tenancy is the model's (BelongsToCompany): nothing here takes or sets a
@@ -30,6 +33,8 @@ use Illuminate\Validation\ValidationException;
 class TaskStageService
 {
     public const ERROR_KEY = 'stage';
+
+    public function __construct(private readonly TaskService $tasks) {}
 
     /**
      * The list query: search (name, description), status and created-date filters, in
@@ -49,17 +54,14 @@ class TaskStageService
     }
 
     /**
-     * Sets `tasks_count` on each stage.
+     * Sets `tasks_count` on each stage — its live tasks, counted in one query for the whole list.
      *
      * @param  Collection<int, TaskStage>  $stages
      * @return Collection<int, TaskStage>
      */
     public function withTaskCounts(Collection $stages): Collection
     {
-        // TODO(tasks): the tasks table doesn't exist yet, so every stage honestly has 0 tasks.
-        // When it lands, load real counts with `->withCount('tasks')` on the list query (see
-        // TaskStage::tasks()) and delete this method.
-        return $stages->each(fn (TaskStage $stage) => $stage->setAttribute('tasks_count', 0));
+        return $stages->loadCount('tasks');
     }
 
     /**
@@ -224,20 +226,17 @@ class TaskStageService
         });
     }
 
-    /**
-     * EXTENSION POINT — PRD §6.13: "a stage with tasks cannot be deleted (move tasks first)".
-     * The Tasks module doesn't exist yet, so no stage has tasks and every non-done stage is
-     * deletable. When it lands (see TaskStage::tasks()), throw here, e.g.:
-     *
-     *     if ($stage->tasks()->exists()) {
-     *         $this->fail(__('This stage has tasks. Move them to another stage first.'));
-     *     }
-     *
-     * and add the matching tests. Deliberately not faked before then.
-     */
+    /** PRD §6.13: "a stage with tasks cannot be deleted (move tasks first)". */
     private function ensureDeletable(TaskStage $stage): void
     {
-        // Intentionally empty until the Tasks module exists.
+        $count = $stage->tasks()->count();
+        if ($count > 0) {
+            $this->fail(trans_choice(
+                '{1} This stage has :count task. Move it to another stage first.|[2,*] This stage has :count tasks. Move them to another stage first.',
+                $count,
+                ['count' => $count],
+            ));
+        }
     }
 
     /** Last-active first: when the done stage is the only active one, that is the real reason. */
@@ -248,6 +247,15 @@ class TaskStageService
         }
         if ($stage->is_done_stage) {
             $this->fail(__('The done stage can\'t be deactivated. Mark another stage as the done stage first.'));
+        }
+        // The board shows active stages only: a deactivated stage's tasks would vanish from it.
+        $count = $stage->tasks()->count();
+        if ($count > 0) {
+            $this->fail(trans_choice(
+                '{1} This stage has :count task. Move it to another stage before deactivating this one.|[2,*] This stage has :count tasks. Move them to another stage before deactivating this one.',
+                $count,
+                ['count' => $count],
+            ));
         }
     }
 
@@ -262,11 +270,14 @@ class TaskStageService
         return $done ? TaskStageStatus::Active : $status;
     }
 
-    /** The done flag moves here; every other stage loses it. */
+    /** The done flag moves here; every other stage loses it, and the tasks follow (rule 7). */
     private function makeDone(TaskStage $stage): void
     {
+        $previous = TaskStage::query()->whereKeyNot($stage->getKey())->where('is_done_stage', true)->first();
         TaskStage::query()->whereKeyNot($stage->getKey())->where('is_done_stage', true)->update(['is_done_stage' => false]);
         $stage->forceFill(['is_done_stage' => true, 'status' => TaskStageStatus::Active])->save();
+
+        $this->tasks->doneStageMoved($previous, $stage);
     }
 
     /** Puts `$stage` at position `$order` (1-based; null or past the end = last). */

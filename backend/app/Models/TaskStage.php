@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use LogicException;
 
 /**
  * A company's task stage — a column of its workflow (PRD §6.13). BelongsToCompany limits every
@@ -105,15 +105,11 @@ class TaskStage extends Model
     }
 
     /**
-     * STUB — the tasks in this stage (PRD §6.4 Kanban). The `tasks` table does not exist yet, so
-     * there is no relation to return. When the Tasks module lands, replace the body with
-     * `return $this->hasMany(Task::class, 'stage_id');` (and a HasMany return type), switch
-     * TaskStageService::withTaskCounts() to `->withCount('tasks')`, and wire the delete guard in
-     * TaskStageService::ensureDeletable(). Deliberately throws rather than pretending there are
-     * none.
+     * The tasks in this stage (PRD §6.4 Kanban column) — counted on the Task Stages page
+     * (TaskStageService::withTaskCounts) and blocking delete / deactivate while there are any.
      */
-    public function tasks(): never
+    public function tasks(): HasMany
     {
-        throw new LogicException('Task stages have no tasks relation yet: the tasks table does not exist.');
+        return $this->hasMany(Task::class, 'task_stage_id');
     }
 }

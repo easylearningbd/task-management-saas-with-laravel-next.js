@@ -19,7 +19,7 @@ export interface TaskStage {
   status: TaskStageStatus
   /** "Active" | "Inactive" */
   status_label: string
-  /** Always 0 until the Tasks module exists (backend TODO(tasks)). */
+  /** The stage's live tasks. A stage with tasks can't be deleted or deactivated (422). */
   tasks_count: number
   created_at: string | null
   updated_at: string | null

@@ -21,7 +21,11 @@ import { cn } from '@/lib/cn'
    `automatic` selects on arrow. A disabled tab can carry a hint ("Coming soon") shown as a
    tooltip on hover and read with the tab's name.
    Every tab controls one panel: render <TabPanel idBase=… value=…> with the same `idBase`.
-   On narrow screens the row scrolls sideways; the focused tab is kept in view. */
+   On narrow screens the row scrolls sideways; the focused tab is kept in view.
+   `rule={false}` makes the underline row's own 1px rule transparent (same geometry, so the
+   active bar still sits on it) — for a tab bar on the bottom edge of a card that already
+   draws one (the Tasks filter card).
+   `stretch` (pill): the tabs share the track's width equally (the task details screenshot). */
 
 export type TabItem<T extends string> = {
   value: T
@@ -45,6 +49,8 @@ export function Tabs<T extends string>({
   idBase,
   variant = 'underline',
   activation = 'manual',
+  rule = true,
+  stretch = false,
   className,
 }: {
   items: ReadonlyArray<TabItem<T>>
@@ -56,6 +62,10 @@ export function Tabs<T extends string>({
   idBase: string
   variant?: 'underline' | 'pill'
   activation?: 'manual' | 'automatic'
+  /** Underline variant: draw the 1px rule under the row (default). */
+  rule?: boolean
+  /** Pill variant: every tab takes an equal share of the track. */
+  stretch?: boolean
   className?: string
 }) {
   const t = useTranslations('shared.tabs')
@@ -95,7 +105,7 @@ export function Tabs<T extends string>({
         aria-orientation="horizontal"
         className={cn(
           'flex w-max min-w-full items-center',
-          pill ? 'h-11 gap-1 rounded-tile bg-muted p-1' : 'h-[42px] gap-6 border-b border-border',
+          pill ? 'h-11 gap-1 rounded-tile bg-muted p-1' : cn('h-[42px] gap-6 border-b', rule ? 'border-border' : 'border-transparent'),
         )}
       >
         {items.map((item) => {
@@ -129,10 +139,13 @@ export function Tabs<T extends string>({
                 pill
                   ? cn(
                       'h-full rounded-lg px-4',
+                      stretch && 'flex-1 justify-center',
                       selected ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground enabled:hover:text-foreground',
                     )
                   : cn(
-                      'h-[42px] rounded-sm',
+                      // The row's height minus its 1px rule (a 42px tab overflowed the row by 1px
+                      // and showed a scrollbar); the active bar sits on the rule.
+                      'h-full rounded-sm',
                       selected
                         ? 'text-foreground after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:rounded-sm after:bg-primary'
                         : 'text-muted-foreground enabled:hover:text-foreground',
@@ -158,7 +171,7 @@ export function Tabs<T extends string>({
           // A disabled button fires no pointer events, so its tooltip rides on a wrapper.
           return item.disabled && item.disabledHint ? (
             <Tooltip key={item.value} content={item.disabledHint}>
-              <span className={cn('inline-flex shrink-0', pill && 'h-full')}>{tab}</span>
+              <span className={cn('inline-flex shrink-0', pill && 'h-full', stretch && 'flex-1 [&>button]:w-full')}>{tab}</span>
             </Tooltip>
           ) : (
             tab

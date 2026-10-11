@@ -9,19 +9,25 @@ import { cn } from '@/lib/cn'
    `radius-lg`, `shadow-lg` (brand-book.md lists tooltips among the shadow-lg surfaces) and
    `body-sm` text. Shows on hover and on keyboard focus; Escape dismisses it.
    A tooltip only repeats a visible control's accessible name — always give the trigger its
-   own `aria-label` too. */
+   own `aria-label` too (TruncatedBadge's text is its own name: the tooltip only shows what
+   the ellipsis cut).
+   `disabled`: render the trigger alone, with no tooltip. */
 function Tooltip({
   content,
   children,
   side = 'top',
   delayDuration = 300,
+  disabled = false,
 }: {
   content: React.ReactNode
   /** A single focusable element (rendered with asChild). */
   children: React.ReactElement
   side?: React.ComponentProps<typeof TooltipPrimitive.Content>['side']
   delayDuration?: number
+  disabled?: boolean
 }) {
+  if (disabled) return children
+
   return (
     <TooltipPrimitive.Provider delayDuration={delayDuration}>
       <TooltipPrimitive.Root>

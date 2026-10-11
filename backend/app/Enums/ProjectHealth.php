@@ -4,8 +4,8 @@ namespace App\Enums;
 
 /**
  * Project Health (PRD §6.3): the overall progress, banded — Low < 40%, Medium 40–74%,
- * High ≥ 75%. Overall progress is task completion, so with no Tasks module every project reads
- * 0% / Low (honestly).
+ * High ≥ 75%. Overall progress is task completion (tasks in a done stage ÷ the project's tasks),
+ * so a project without tasks reads 0% / Low.
  */
 enum ProjectHealth: string
 {

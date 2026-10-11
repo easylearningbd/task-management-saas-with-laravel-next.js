@@ -29,8 +29,8 @@ import type { ProjectTabProps } from '@/features/projects/tabs/registry'
       40–74 amber, High ≥ 75 green) beside Tasks Complete, Overdue (a `danger` pill when > 0)
       and Milestones.
    Tile hues are the stat set (blue is the screenshot's; the rest are a Phase 8 choice).
-   Every figure is the API's (ProjectFigures) — nothing is computed here.
-   TODO(tasks): progress, health and Tasks Complete read 0% / Low / 0/0 until tasks ship. */
+   Every figure is the API's (ProjectFigures) — nothing is computed here. Progress, health and
+   Tasks Complete come from the project's tasks (done stage ÷ all); 0% / Low with none. */
 
 export function OverviewTab({ project }: ProjectTabProps) {
   const t = useTranslations('projects.details.overview')
@@ -101,11 +101,9 @@ export function OverviewTab({ project }: ProjectTabProps) {
 
         <SectionCard icon={ChartColumn} hue="blue" title={t('health')}>
           <div className="flex flex-wrap items-center gap-5">
-            {/* TODO(tasks): the ring is tasks-based progress — 0% / "Low" until tasks ship. */}
             <ProgressRing size="md" tone="health" value={f.progress} unit={f.health.label} label={t('healthLabel', { percent: f.progress, level: f.health.label })} />
             <dl className="flex min-w-0 flex-1 basis-36 flex-col gap-3">
               <InfoRow label={t('tasksComplete')}>
-                {/* TODO(tasks): 0/0 until the tasks module ships. */}
                 <span className="text-body font-medium tabular-nums">{t('ratio', { done: f.tasks.completed, total: f.tasks.total })}</span>
               </InfoRow>
               <InfoRow label={t('overdue')}>

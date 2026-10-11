@@ -20,9 +20,9 @@ use LogicException;
  * to the current company and stamps `company_id` on create; `company_id` is deliberately not
  * fillable. `client_id` is validated against the company's own clients by the requests.
  *
- * Its tabs: milestones, items, notes, expenses and files (links to media). Tasks and contracts
- * don't exist yet: `tasks()` / `contracts()` are marked stubs that throw, and the figures that
- * depend on them are honest zeros in ProjectService.
+ * Its tabs: milestones, items, notes, expenses and files (links to media); its tasks (the Kanban
+ * board). Contracts don't exist yet: `contracts()` is a marked stub that throws, and the figures
+ * that depend on it are honest zeros in ProjectService.
  *
  * @property int $id
  * @property int $company_id
@@ -130,14 +130,10 @@ class Project extends Model
         $query->where('projects.client_id', (int) $clientId);
     }
 
-    /**
-     * STUB — the project's tasks (PRD §6.4). The `tasks` table does not exist yet. When it lands,
-     * return `$this->hasMany(Task::class)` and replace the honest zeros marked TODO(tasks) in
-     * ProjectService. Deliberately throws rather than pretending there are none.
-     */
-    public function tasks(): never
+    /** The project's tasks (PRD §6.4) — soft-deleted with the project by ProjectService. */
+    public function tasks(): HasMany
     {
-        throw new LogicException('Projects have no tasks relation yet: the tasks table does not exist.');
+        return $this->hasMany(Task::class);
     }
 
     /**

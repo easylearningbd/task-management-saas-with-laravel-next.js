@@ -9,7 +9,8 @@ import { cn } from '@/lib/cn'
    then a head row of a 32px `radius-lg` tile in a stat hue — StatCard's compact tile, the hue's
    `icon-bg` ground with its `icon` glyph at `icon-size` — and the `title-card` title, an
    optional action on the right; the body under it at `card-padding`. The hues are the stat set
-   and carry no meaning (brand-book.md). */
+   and carry no meaning (brand-book.md). `divided`: a full-bleed 1px rule under the head (the
+   task details screenshot's Timeline and Task Information cards). */
 
 const TILE: Record<StatHue, string> = {
   emerald: 'bg-stat-emerald-icon-bg text-stat-emerald-icon',
@@ -27,6 +28,7 @@ export function SectionCard({
   children,
   className,
   bodyClassName,
+  divided = false,
 }: {
   icon: LucideIcon
   hue: StatHue
@@ -35,12 +37,14 @@ export function SectionCard({
   children: React.ReactNode
   className?: string
   bodyClassName?: string
+  /** A rule under the heading. */
+  divided?: boolean
 }) {
   const headingId = React.useId()
   return (
     <Card className={cn('flex flex-col', className)}>
       <section aria-labelledby={headingId} className="flex flex-1 flex-col">
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 p-card pb-0">
+        <div className={cn('flex flex-wrap items-center justify-between gap-x-4 gap-y-2 p-card', divided ? 'border-b border-border' : 'pb-0')}>
           <div className="flex min-w-0 items-center gap-3">
             <span className={cn('inline-flex size-8 shrink-0 items-center justify-center rounded-lg', TILE[hue])}>
               <Icon className="size-icon" strokeWidth={1.75} aria-hidden="true" />
