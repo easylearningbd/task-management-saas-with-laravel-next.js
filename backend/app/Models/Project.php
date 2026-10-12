@@ -136,6 +136,12 @@ class Project extends Model
         return $this->hasMany(Task::class);
     }
 
+    /** The project's invoices (PRD §6.8). */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     /**
      * STUB — the project's contracts (PRD §6.10). The `contracts` table does not exist yet. When
      * it lands, return `$this->hasMany(Contract::class)` and replace the zeros marked

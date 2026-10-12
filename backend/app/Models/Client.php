@@ -96,6 +96,12 @@ class Client extends Model
         return $this->hasMany(Project::class);
     }
 
+    /** The client's invoices (PRD §6.8) — a client with invoices can't be deleted. */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     /** "microsoft.com" for "https://microsoft.com/path" — the website badge text. */
     protected function websiteHost(): Attribute
     {

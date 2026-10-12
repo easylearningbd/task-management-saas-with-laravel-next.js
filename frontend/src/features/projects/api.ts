@@ -66,7 +66,7 @@ const isId = (id: number | null | undefined): id is number => typeof id === 'num
 /* ── Projects ── */
 
 /** One page of the list. The previous page stays on screen while the next one loads. */
-export function useProjects(params: ProjectListParams) {
+export function useProjects(params: ProjectListParams, options: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: projectKeys.list(params),
     queryFn: async ({ signal }) => {
@@ -74,6 +74,7 @@ export function useProjects(params: ProjectListParams) {
       return data
     },
     placeholderData: keepPreviousData,
+    enabled: options.enabled ?? true,
   })
 }
 

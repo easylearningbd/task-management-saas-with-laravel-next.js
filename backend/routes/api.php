@@ -17,6 +17,9 @@ use App\Http\Controllers\Api\V1\Company\ClientController;
 use App\Http\Controllers\Api\V1\Company\DashboardController as CompanyDashboardController;
 use App\Http\Controllers\Api\V1\Company\ExpenseCategoryController;
 use App\Http\Controllers\Api\V1\Company\ExpenseController;
+use App\Http\Controllers\Api\V1\Company\InvoiceController;
+use App\Http\Controllers\Api\V1\Company\InvoicePaymentController;
+use App\Http\Controllers\Api\V1\Company\InvoiceSettingsController;
 use App\Http\Controllers\Api\V1\Company\MediaController;
 use App\Http\Controllers\Api\V1\Company\MilestoneController;
 use App\Http\Controllers\Api\V1\Company\PlanCatalogController;
@@ -30,9 +33,11 @@ use App\Http\Controllers\Api\V1\Company\TaskChecklistItemController;
 use App\Http\Controllers\Api\V1\Company\TaskController;
 use App\Http\Controllers\Api\V1\Company\TaskFileController;
 use App\Http\Controllers\Api\V1\Company\TaskStageController;
+use App\Http\Controllers\Api\V1\Company\TaxController;
 use App\Http\Controllers\Api\V1\Profile\AvatarController;
 use App\Http\Controllers\Api\V1\Profile\PasswordController;
 use App\Http\Controllers\Api\V1\Profile\ProfileController;
+use App\Http\Controllers\Api\V1\Public\InvoiceController as PublicInvoiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('v1.')->group(function () {
@@ -41,6 +46,12 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::post('auth/register', RegisterController::class)->middleware('throttle:6,1')->name('auth.register');
         Route::post('auth/login', LoginController::class)->name('auth.login');
         Route::post('admin/auth/login', AdminLoginController::class)->name('admin.auth.login');
+    });
+
+    // Public — no authentication. The invoice share page: the unguessable token is the only key,
+    // and the payload exposes only what the document shows. Rate-limited.
+    Route::prefix('public')->name('public.')->middleware('throttle:60,1')->group(function () {
+        Route::get('invoices/{token}', PublicInvoiceController::class)->name('invoices.show');
     });
 
     // Any authenticated user.
@@ -164,6 +175,16 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::get('tasks/{task}/files', [TaskFileController::class, 'index'])->name('tasks.files.index');
         Route::post('tasks/{task}/files', [TaskFileController::class, 'store'])->name('tasks.files.store');
         Route::delete('task-files/{file}', [TaskFileController::class, 'destroy'])->name('task-files.destroy');
+
+        // Invoices (PRD §6.8) — tenant-scoped by BelongsToCompany (another company's id → 404).
+        // Payments are listed / added under the invoice and deleted by their own id.
+        Route::apiResource('invoices', InvoiceController::class);
+        Route::get('invoices/{invoice}/payments', [InvoicePaymentController::class, 'index'])->name('invoices.payments.index');
+        Route::post('invoices/{invoice}/payments', [InvoicePaymentController::class, 'store'])->middleware('throttle:30,1')->name('invoices.payments.store');
+        Route::delete('invoice-payments/{payment}', [InvoicePaymentController::class, 'destroy'])->name('invoice-payments.destroy');
+        Route::get('taxes', [TaxController::class, 'index'])->name('taxes.index');
+        Route::get('settings/invoice-details', [InvoiceSettingsController::class, 'show'])->name('settings.invoice-details.show');
+        Route::put('settings/invoice-details', [InvoiceSettingsController::class, 'update'])->name('settings.invoice-details.update');
 
         // The media library (private disk; files are read only through media/{media}/file).
         Route::get('media', [MediaController::class, 'index'])->name('media.index');

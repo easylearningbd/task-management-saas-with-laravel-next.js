@@ -122,7 +122,9 @@ export function DataTable<T, K extends string = string>({
           role="region"
           aria-label={label}
           tabIndex={0}
-          className={cn('overflow-auto focus-visible:shadow-focus focus-visible:outline-none', scrollAreaClassName)}
+          // `relative`: absolutely positioned cell content (screen-reader text) stays inside the
+          // scroll area instead of widening the page.
+          className={cn('relative overflow-auto focus-visible:shadow-focus focus-visible:outline-none', scrollAreaClassName)}
         >
           <table className="w-full text-body" aria-busy={loading || busy || undefined}>
             <caption className="sr-only">{label}</caption>

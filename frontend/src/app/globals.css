@@ -7,7 +7,11 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------------------------------------------------------------- LIGHT */
-:root {
+/* `.theme-light` re-applies these light values to one element inside the dark theme — for what
+   must stay light to work: a QR code (dark modules on a light ground scan reliably) and the public
+   invoice document (Invoices Phase 0 decisions A, D). */
+:root,
+.theme-light {
   /* Surfaces & text */
   --background:                 #f8fafe;
   --foreground:                 #0a0a0a;
@@ -163,6 +167,14 @@
   --opacity-chart-fill:         0.7;
   --opacity-overlay:            0.25;
   --opacity-muted-icon:         0.6;
+
+  /* Document — the public invoice / print page (Invoices Phase 0 decision A). Aliases of the
+     design system's blues, never new values; used inside `.theme-light`, so always light. */
+  --doc-accent:                 var(--stat-blue-icon);
+  --doc-accent-strong:          var(--info);
+  --doc-highlight:              var(--info-soft);
+  --doc-panel:                  var(--muted);
+  --doc-on-accent:              var(--primary-foreground);
 }
 
 /* ----------------------------------------------------------------- DARK */
@@ -346,6 +358,11 @@
   --color-stat-blue-icon:             var(--stat-blue-icon);
   --color-stat-blue-label:            var(--stat-blue-label);
   --color-stat-blue-value:            var(--stat-blue-value);
+  --color-doc-accent:                 var(--doc-accent);
+  --color-doc-accent-strong:          var(--doc-accent-strong);
+  --color-doc-highlight:              var(--doc-highlight);
+  --color-doc-panel:                  var(--doc-panel);
+  --color-doc-on-accent:              var(--doc-on-accent);
   --color-stat-violet:                var(--stat-violet);
   --color-stat-violet-icon-bg:        var(--stat-violet-icon-bg);
   --color-stat-violet-icon:           var(--stat-violet-icon);

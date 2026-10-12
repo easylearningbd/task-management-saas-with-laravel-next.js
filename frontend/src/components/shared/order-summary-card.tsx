@@ -1,42 +1,48 @@
 import * as React from 'react'
+import type { LucideIcon } from 'lucide-react'
 import { Card, CardHeading } from '@/components/ui/card'
 import { cn } from '@/lib/cn'
 
-/* A purchase summary (the checkout's "Order Summary") — not in the design system; Card.md with the
-   divided heading, then a definition list of rows (`body` muted label left, `body` value right;
-   money in the caller's `text-money` / font-mono), a 1px `border` rule, and the total row in bold
-   (`title-card`). `children` render under it — the submit button and its note. Sticky placement
-   is the caller's (`className`, e.g. `lg:sticky lg:top-…`). */
+/* A purchase summary (the checkout's "Order Summary", the invoice form's "Invoice Summary") — not in
+   the design system; Card.md with the divided heading (an optional `icon` tile — CardHeading), then a
+   definition list of rows (`body` muted label left, `body` value right; money in the caller's
+   `text-money` / font-mono), a 1px `border` rule, and the total row in bold (`title-card`). A row
+   with `tone: 'danger'` reads its value in `danger` (the invoice's negative discount); the total's
+   value takes `total.className` (e.g. the invoice's green total). `children` render under it — the
+   submit button and its note. Sticky placement is the caller's (`className`, e.g. `lg:sticky
+   lg:top-…`). */
 
-export type SummaryRow = { id: string; label: string; value: React.ReactNode }
+export type SummaryRow = { id: string; label: string; value: React.ReactNode; tone?: 'default' | 'danger' }
 
 export function OrderSummaryCard({
   title,
+  icon,
   rows,
   total,
   children,
   className,
 }: {
   title: string
+  icon?: LucideIcon
   rows: ReadonlyArray<SummaryRow>
-  total: { label: string; value: React.ReactNode }
+  total: { label: string; value: React.ReactNode; className?: string }
   children?: React.ReactNode
   className?: string
 }) {
   return (
     <Card className={cn('flex flex-col', className)}>
-      <CardHeading divided title={title} />
+      <CardHeading divided title={title} icon={icon} />
       <div className="p-card">
         <dl className="flex flex-col gap-3">
           {rows.map((row) => (
             <div key={row.id} className="flex items-baseline justify-between gap-4">
               <dt className="text-body text-muted-foreground">{row.label}</dt>
-              <dd className="min-w-0 text-right text-body break-words">{row.value}</dd>
+              <dd className={cn('min-w-0 text-right text-body break-words', row.tone === 'danger' && 'text-danger')}>{row.value}</dd>
             </div>
           ))}
           <div className="mt-1 flex items-baseline justify-between gap-4 border-t border-border pt-4">
             <dt className="text-title-card">{total.label}</dt>
-            <dd className="text-right text-title-card">{total.value}</dd>
+            <dd className={cn('text-right text-title-card', total.className)}>{total.value}</dd>
           </div>
         </dl>
         {children ? <div className="mt-6 flex flex-col gap-3">{children}</div> : null}

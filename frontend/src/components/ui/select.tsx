@@ -104,4 +104,4 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
   )
 }
 
-export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem }
+export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem, triggerVariants as selectTriggerVariants }

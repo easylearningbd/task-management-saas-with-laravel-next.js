@@ -4,6 +4,7 @@ import * as React from 'react'
 import { Check, Copy } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
+import { toast } from '@/components/ui/toast'
 import { Tooltip } from '@/components/ui/tooltip'
 import { cn } from '@/lib/cn'
 
@@ -13,7 +14,9 @@ import { cn } from '@/lib/cn'
    live region say "Copied" for 2 s; a failure says "Couldn't copy". Uses the async Clipboard API,
    falling back to a hidden textarea + execCommand where it isn't available.
    `label` names WHAT is copied ("Account number") — the button's accessible name is
-   "Copy Account number". */
+   "Copy Account number".
+   `variant="button"`: the outline `sm` Button with the glyph and its own text (the invoice page's
+   "Copy Link"), and `toastMessage` confirms with a toast as well. */
 
 const RESET_MS = 2000
 
@@ -34,7 +37,23 @@ async function writeClipboard(text: string): Promise<void> {
   if (!ok) throw new Error('copy failed')
 }
 
-export function CopyButton({ value, label, className }: { value: string; label: string; className?: string }) {
+export function CopyButton({
+  value,
+  label,
+  variant = 'icon',
+  children,
+  toastMessage,
+  className,
+}: {
+  value: string
+  label: string
+  /** `button`: an outline button with the Copy glyph and `children` as its text ("Copy Link"). */
+  variant?: 'icon' | 'button'
+  children?: React.ReactNode
+  /** Also confirm with a toast (success: this text; failure: "Couldn't copy"). */
+  toastMessage?: string
+  className?: string
+}) {
   const t = useTranslations('shared.copy')
   const [state, setState] = React.useState<'idle' | 'copied' | 'failed'>('idle')
   const timer = React.useRef<number | null>(null)
@@ -47,14 +66,31 @@ export function CopyButton({ value, label, className }: { value: string; label: 
     try {
       await writeClipboard(value)
       setState('copied')
+      if (toastMessage) toast.success(toastMessage)
     } catch {
       setState('failed')
+      if (toastMessage) toast.error(t('failed'))
     }
     if (timer.current !== null) window.clearTimeout(timer.current)
     timer.current = window.setTimeout(() => setState('idle'), RESET_MS)
   }
 
   const tip = state === 'copied' ? t('copied') : state === 'failed' ? t('failed') : t('copyTip')
+  const glyph = state === 'copied' ? <Check className="size-icon" aria-hidden="true" /> : <Copy className="size-icon" aria-hidden="true" />
+
+  if (variant === 'button') {
+    return (
+      <>
+        <Button type="button" variant="outline" size="sm" onClick={onCopy} className={className}>
+          {glyph}
+          {children}
+        </Button>
+        <span role="status" aria-live="polite" className="sr-only">
+          {state === 'copied' ? t('copiedLabel', { label }) : state === 'failed' ? t('failed') : ''}
+        </span>
+      </>
+    )
+  }
 
   return (
     <>
@@ -67,7 +103,7 @@ export function CopyButton({ value, label, className }: { value: string; label: 
           onClick={onCopy}
           className={cn(state === 'copied' && 'text-success hover:text-success', className)}
         >
-          {state === 'copied' ? <Check className="size-icon" aria-hidden="true" /> : <Copy className="size-icon" aria-hidden="true" />}
+          {glyph}
         </Button>
       </Tooltip>
       <span role="status" aria-live="polite" className="sr-only">

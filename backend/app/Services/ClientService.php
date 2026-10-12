@@ -64,15 +64,19 @@ class ClientService
     }
 
     /**
-     * PRD §6.7: "a client with projects or invoices cannot be deleted". Projects: any live
-     * project of this client blocks it. TODO(invoices): add the invoices check when that module
-     * exists.
+     * PRD §6.7: "a client with projects or invoices cannot be deleted". Any live project or
+     * invoice of this client blocks it.
      */
     private function ensureDeletable(Client $client): void
     {
         if ($client->projects()->exists()) {
             throw ValidationException::withMessages([
                 'client' => __('This client has projects. Delete or move them to another client first.'),
+            ]);
+        }
+        if ($client->invoices()->exists()) {
+            throw ValidationException::withMessages([
+                'client' => __('This client has invoices, so it can\'t be deleted.'),
             ]);
         }
     }

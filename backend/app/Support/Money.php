@@ -21,6 +21,18 @@ final class Money
         return ($negative ? '-' : '').$symbol.$int.'.'.$dec;
     }
 
+    /**
+     * Round a decimal string to 2 places, half away from zero ("1.005" → "1.01", "-1.005" →
+     * "-1.01") — bcmath only, so "0.1 × 3" stays exact. Used for line totals and tax amounts.
+     */
+    public static function round(string $value): string
+    {
+        $negative = str_starts_with($value, '-');
+        $rounded = bcadd(ltrim($value, '-'), '0.005', 2); // bcadd truncates at scale 2
+
+        return $negative && bccomp($rounded, '0', 2) !== 0 ? '-'.$rounded : $rounded;
+    }
+
     /** "50.00" → "50", "12.50" → "12.5" — for percentages. */
     public static function trimZeros(string $amount): string
     {

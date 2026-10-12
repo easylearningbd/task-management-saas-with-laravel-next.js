@@ -479,6 +479,9 @@
       "imageAlt": "Payment receipt {name}",
       "none": "No receipt attached",
       "fallbackName": "receipt"
+    },
+    "multiSelect": {
+      "empty": "Nothing to choose from"
     }
   },
   "coupons": {
@@ -2291,6 +2294,334 @@
       "hint": "The company sees this on its Plan Requests page.",
       "submit": "Reject",
       "rejected": "Rejected — {company} can see the reason"
+    }
+  },
+  "invoices": {
+    "validation": {
+      "clientRequired": "Select a client.",
+      "projectRequired": "Select a project.",
+      "invoiceDateRequired": "Enter the invoice date.",
+      "dueDateRequired": "Enter the due date.",
+      "dueBeforeInvoice": "The due date can’t be before the invoice date.",
+      "discountInvalid": "Enter an amount with at most 2 decimals.",
+      "discountTooHigh": "The discount can’t be more than the subtotal (${subtotal}).",
+      "notesMax": "Keep it under {max} characters.",
+      "descriptionMax": "Keep it under {max} characters.",
+      "itemsRequired": "Add at least one line item.",
+      "itemRequired": "Choose an item.",
+      "taskRequired": "Choose a task.",
+      "quantityInvalid": "The quantity must be greater than 0.",
+      "priceInvalid": "Enter a price of 0 or more, with at most 2 decimals.",
+      "amountRequired": "Enter the payment amount.",
+      "amountInvalid": "Enter an amount with at most 2 decimals.",
+      "amountPositive": "The payment amount must be greater than 0.",
+      "amountTooHigh": "The payment can’t be more than the balance due of {balance}.",
+      "companyNameRequired": "Enter the company name.",
+      "emailRequired": "Enter the email address.",
+      "emailInvalid": "Enter a valid email address.",
+      "fieldMax": "Keep it under {max} characters."
+    },
+    "list": {
+      "title": "Invoices",
+      "subtitle": "Manage and track your invoices and billing across clients and projects.",
+      "create": "Create Invoice",
+      "tableLabel": "Invoices",
+      "overdue": "overdue",
+      "columns": {
+        "number": "Invoice Number",
+        "client": "Client",
+        "project": "Project",
+        "invoiceDate": "Invoice Date",
+        "dueDate": "Due Date",
+        "total": "Total Amount",
+        "balance": "Balance Due",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "filters": {
+        "statusLabel": "Status",
+        "allStatus": "All Status",
+        "status": {
+          "draft": "Draft",
+          "sent": "Sent",
+          "partial": "Partial",
+          "paid": "Paid"
+        },
+        "clientLabel": "Client",
+        "allClients": "All Clients",
+        "projectLabel": "Project",
+        "allProjects": "All Projects",
+        "dateFrom": "Invoice date from",
+        "dateTo": "Invoice date to",
+        "overdueOnly": "Overdue only"
+      },
+      "actions": {
+        "view": "View invoice {number}",
+        "viewTip": "View",
+        "edit": "Edit invoice {number}",
+        "editTip": "Edit",
+        "delete": "Delete invoice {number}",
+        "deleteTip": "Delete"
+      },
+      "delete": {
+        "title": "Delete this invoice?",
+        "body": "Invoice {number} for {client} will be deleted. This can’t be undone.",
+        "confirm": "Delete Invoice",
+        "cancel": "Cancel",
+        "close": "Close",
+        "deleted": "Invoice {number} deleted"
+      },
+      "empty": {
+        "title": "No invoices yet",
+        "description": "Create your first invoice to bill a client for a project.",
+        "noMatchTitle": "No invoices match your filters",
+        "noMatchDescription": "Try a different search or clear the filters.",
+        "clearFilters": "Clear filters",
+        "errorTitle": "Couldn’t load invoices",
+        "retry": "Try again"
+      }
+    },
+    "form": {
+      "createTitle": "Create Invoice",
+      "createSubtitle": "Create a new invoice with line items, taxes, and discounts.",
+      "editTitle": "Edit Invoice",
+      "editSubtitle": "Update the invoice’s line items, taxes, and discounts.",
+      "back": "Back",
+      "loading": "Loading the invoice form…",
+      "details": {
+        "title": "Invoice Details",
+        "invoiceDate": "Invoice Date",
+        "dueDate": "Due Date",
+        "client": "Client",
+        "clientPlaceholder": "Select client",
+        "project": "Project",
+        "projectPlaceholder": "Select project",
+        "projectHint": "Select a client first.",
+        "noProjects": "This client has no projects yet.",
+        "tax": "Tax",
+        "taxPlaceholder": "Select taxes",
+        "noTaxes": "No active taxes.",
+        "taxesDropped": "{names} {count, plural, one {is} other {are}} no longer active and {count, plural, one {was} other {were}} removed.",
+        "discount": "Discount Amount"
+      },
+      "items": {
+        "title": "Invoice Items",
+        "type": "Type",
+        "source": "Item / Task",
+        "qty": "Qty",
+        "price": "Price",
+        "total": "Total",
+        "action": "Action",
+        "types": {
+          "item": "Item",
+          "task": "Task"
+        },
+        "chooseItem": "Choose item",
+        "chooseTask": "Choose task",
+        "noItems": "This project has no items.",
+        "noTasks": "This project has no tasks.",
+        "projectFirst": "Select a client and a project first — the items and tasks come from the project.",
+        "description": "Description of line {line}",
+        "descriptionPlaceholder": "Enter item description",
+        "add": "Add another item",
+        "showDescription": "Show the description of line {line}",
+        "hideDescription": "Hide the description of line {line}",
+        "remove": "Remove line {line}",
+        "lastLine": "An invoice needs at least one line item."
+      },
+      "summary": {
+        "title": "Invoice Summary",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "tax": "Tax ({rate}%)",
+        "total": "Total"
+      },
+      "notes": {
+        "title": "Notes",
+        "label": "Notes",
+        "placeholder": "Additional notes..."
+      },
+      "footer": {
+        "count": "{count, plural, one {# item added} other {# items added}}",
+        "cancel": "Cancel",
+        "create": "Create Invoice",
+        "update": "Update Invoice"
+      },
+      "created": "Invoice {number} created.",
+      "updated": "Invoice {number} updated.",
+      "leave": {
+        "title": "Leave without saving?",
+        "body": "Your changes to this invoice haven’t been saved. If you leave now, they’re lost.",
+        "confirm": "Leave",
+        "cancel": "Keep editing",
+        "close": "Close"
+      },
+      "blocked": {
+        "title": "This invoice can’t be edited",
+        "description": "{number} is {status, select, paid {fully paid} partial {partially paid} other {locked}}. Once a payment is recorded, an invoice’s items and amounts are locked — only Draft and Sent invoices can be edited.",
+        "back": "Back to Invoices",
+        "view": "View Invoice"
+      },
+      "notFound": {
+        "heading": "Invoice",
+        "title": "Invoice not found",
+        "description": "It may have been deleted, or the link is wrong.",
+        "back": "Back to Invoices"
+      },
+      "error": {
+        "title": "Couldn’t load the invoice form",
+        "retry": "Try again"
+      }
+    },
+    "paymentTypes": {
+      "credit_card": "Credit Card",
+      "bank_transfer": "Bank Transfer",
+      "cash": "Cash",
+      "cheque": "Cheque",
+      "other": "Other"
+    },
+    "details": {
+      "title": "Invoice #{number}",
+      "subtitle": "View an invoice’s full details, payment history, and send invoices and reminders.",
+      "loading": "Loading the invoice…",
+      "actions": {
+        "print": "Print",
+        "addPayment": "Add Payment",
+        "fullyPaid": "This invoice is fully paid — there’s no balance left to pay.",
+        "sendInvoice": "Send Invoice",
+        "copyLink": "Copy Link",
+        "linkCopied": "Share link copied.",
+        "sendReminder": "Send Reminder",
+        "back": "Back"
+      },
+      "billing": {
+        "title": "Billing & Addresses",
+        "billedFrom": "Billed From",
+        "billedTo": "Billed To",
+        "project": "Project",
+        "editFrom": "Edit billing details",
+        "notSet": "No billing details yet.",
+        "noClient": "The client is no longer available.",
+        "noDescription": "No description.",
+        "qrLabel": "QR code — scan to view invoice {number} online",
+        "qrCaption": "Scan to view online"
+      },
+      "items": {
+        "title": "Invoice Items",
+        "tableLabel": "Invoice line items",
+        "description": "Description",
+        "qty": "Qty",
+        "unitPrice": "Unit Price",
+        "total": "Total",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "tax": "Tax ({rate}%)",
+        "totalAmount": "Total Amount",
+        "paidAmount": "Paid Amount",
+        "balanceDue": "Balance Due"
+      },
+      "payments": {
+        "title": "Payment History",
+        "tableLabel": "Payments of invoice {number}",
+        "date": "Date",
+        "amount": "Amount",
+        "type": "Payment Type",
+        "reference": "Reference",
+        "status": "Status",
+        "receipt": "Receipt",
+        "description": "Description",
+        "action": "Action",
+        "noReceipt": "No receipt",
+        "delete": "Delete payment {reference}",
+        "deleteTip": "Delete payment",
+        "emptyTitle": "No payments yet",
+        "emptyDescription": "Payments you record against this invoice appear here.",
+        "confirmTitle": "Delete this payment?",
+        "confirmBody": "{reference} for {amount} will be removed, and the invoice’s paid amount, balance due and status recalculated.",
+        "confirm": "Delete Payment",
+        "cancel": "Cancel",
+        "close": "Close",
+        "deleted": "Payment {reference} deleted."
+      },
+      "customer": {
+        "title": "Customer Info",
+        "none": "No client"
+      },
+      "info": {
+        "title": "Invoice Details",
+        "number": "Invoice Number",
+        "invoiceDate": "Invoice Date",
+        "dueDate": "Due Date",
+        "overdue": "Overdue"
+      },
+      "notes": {
+        "title": "Additional Notes",
+        "empty": "No notes."
+      }
+    },
+    "payment": {
+      "title": "Add Payment",
+      "amount": "Payment Amount",
+      "amountPlaceholder": "Enter amount",
+      "amountHint": "Up to {balance} — the balance due.",
+      "method": "Payment Method",
+      "notes": "Notes",
+      "notesPlaceholder": "Payment notes (optional)",
+      "cancel": "Cancel",
+      "submit": "Add Payment",
+      "added": "Payment of {amount} recorded."
+    },
+    "billingDetails": {
+      "title": "Billing Details",
+      "description": "Shown as “Billed From” on every invoice.",
+      "companyName": "Company Name",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "city": "City",
+      "state": "State",
+      "zip": "ZIP Code",
+      "country": "Country",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saved": "Billing details updated."
+    },
+    "public": {
+      "metaTitle": "Invoice {number}",
+      "print": "Print",
+      "heading": "INVOICE",
+      "phone": "Phone: {value}",
+      "email": "Email: {value}",
+      "number": "Invoice Number",
+      "invoiceDate": "Invoice Date",
+      "dueDate": "Due Date",
+      "scan": "SCAN TO SHARE",
+      "qrLabel": "QR code — the link to invoice {number}",
+      "billTo": "Bill To",
+      "project": "Project",
+      "noClient": "—",
+      "table": {
+        "label": "Items of invoice {number}",
+        "description": "Description",
+        "qty": "Qty",
+        "unitPrice": "Unit Price",
+        "total": "Total"
+      },
+      "notes": "Notes",
+      "noNotes": "No notes.",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "tax": "{name} ({rate}%)",
+      "total": "Total",
+      "paid": "Paid",
+      "balanceDue": "BALANCE DUE:",
+      "thanks": "Thank you for your business!",
+      "help": "Need help?",
+      "notFound": {
+        "metaTitle": "Invoice not found",
+        "title": "Invoice not found",
+        "description": "This link is invalid, or the invoice is no longer available. Ask the sender for a new link."
+      }
     }
   }
 }

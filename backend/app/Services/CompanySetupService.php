@@ -8,7 +8,9 @@ use App\Enums\TaskStageStatus;
 use App\Models\Company;
 use App\Models\ExpenseCategory;
 use App\Models\Plan;
+use App\Models\Setting;
 use App\Models\TaskStage;
+use App\Models\Tax;
 use App\Support\Tenancy\Tenancy;
 use Illuminate\Support\Carbon;
 
@@ -16,8 +18,9 @@ use Illuminate\Support\Carbon;
  * Everything a brand-new company gets (CLAUDE.md §7: "On company creation, CompanySetupService
  * seeds default task stages, expense categories and settings, and assigns the default plan").
  *
- * Today: the default plan, the four default task stages and the five default expense categories.
- * TODO(settings): seed per-company settings once the settings module exists.
+ * Today: the default plan, the four default task stages, the five default expense categories, the
+ * three default tax rates and the invoice "Billed From" settings (the company's own name and email,
+ * placeholder address lines — editable from the invoice page until the Settings page exists).
  *
  * Must run inside the caller's transaction (CompanyService::create and
  * AuthService::registerCompany do). Safe to run again: nothing is duplicated.
@@ -51,11 +54,86 @@ class CompanySetupService
         ['name' => 'Done', 'color' => '#10B981', 'description' => 'Tasks that are completed', 'is_done_stage' => true],
     ];
 
+    /**
+     * Every company's tax rates (Invoices Phase 0 decision C) — offered on the invoice form.
+     *
+     * @var list<array{name: string, rate: string}>
+     */
+    public const DEFAULT_TAXES = [
+        ['name' => 'VAT', 'rate' => '10.00'],
+        ['name' => 'Sales Tax', 'rate' => '5.00'],
+        ['name' => 'Service Tax', 'rate' => '15.00'],
+    ];
+
+    /**
+     * The invoice "Billed From" placeholders, beside the company's own name and email.
+     *
+     * @var array<string, string>
+     */
+    public const DEFAULT_INVOICE_ADDRESS = [
+        'invoice_phone' => '+1-555-0123',
+        'invoice_address' => '123 Business Street',
+        'invoice_city' => 'New York',
+        'invoice_state' => 'NY',
+        'invoice_zip' => '10001',
+        'invoice_country' => 'United States',
+    ];
+
     public function setUp(Company $company): void
     {
         $this->assignDefaultPlan($company);
         $this->seedTaskStages($company);
         $this->seedExpenseCategories($company);
+        $this->seedTaxes($company);
+        $this->seedInvoiceSettings($company);
+    }
+
+    /**
+     * The three default tax rates, in the company's tenancy context. Idempotent: a default is
+     * created only when the company has no tax of that name, deleted ones included (a tax the
+     * company removed isn't brought back). Returns how many were created.
+     */
+    public function seedTaxes(Company $company): int
+    {
+        return Tenancy::instance()->runAs($company, function (): int {
+            $created = 0;
+            foreach (self::DEFAULT_TAXES as $default) {
+                if (Tax::withTrashed()->named($default['name'])->exists()) {
+                    continue;
+                }
+
+                Tax::create([...$default, 'is_active' => true]);
+                $created++;
+            }
+
+            return $created;
+        });
+    }
+
+    /**
+     * The invoice "Billed From" settings: the company's name and email, and placeholder phone and
+     * address lines. Idempotent: only a key the company doesn't have yet is written — a value the
+     * company already edited is never overwritten. Returns how many keys were created.
+     */
+    public function seedInvoiceSettings(Company $company): int
+    {
+        $existing = Setting::query()->forCompany($company->id)->whereIn('key', Setting::INVOICE_KEYS)->pluck('key')->all();
+        $defaults = [
+            'invoice_company_name' => $company->name,
+            'invoice_email' => $company->email,
+            ...self::DEFAULT_INVOICE_ADDRESS,
+        ];
+
+        $created = 0;
+        foreach (Setting::INVOICE_KEYS as $key) {
+            if (in_array($key, $existing, true)) {
+                continue;
+            }
+            Setting::putForCompany($company->id, $key, $defaults[$key]);
+            $created++;
+        }
+
+        return $created;
     }
 
     /**

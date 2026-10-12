@@ -78,7 +78,8 @@ export function PageHeader({ title, subtitle, action }: { title: string; subtitl
         <h1 className="text-title-page">{title}</h1>
         {subtitle ? <p className="mt-1 text-caption font-normal text-muted-foreground">{subtitle}</p> : null}
       </div>
-      {action ? <div className="flex shrink-0 items-center gap-2">{action}</div> : null}
+      {/* Wraps when the buttons outgrow a narrow screen (the invoice page has six). */}
+      {action ? <div className="flex min-w-0 flex-wrap items-center gap-2">{action}</div> : null}
     </div>
   )
 }
